@@ -1,4 +1,5 @@
 const { Model } = require("sequelize");
+const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {}
@@ -6,9 +7,12 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
+        validate: {
+          isUUID: 4,
+        },
+        defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
       UserName: {
         type: DataTypes.STRING,
