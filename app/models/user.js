@@ -14,12 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
-      UserName: {
+      userName: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      Email: {
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
           isEmail: true,
         },
       },
-      Password: {
+      password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
