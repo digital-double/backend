@@ -2,7 +2,22 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {}
+  class User extends Model {
+    static associate(models) {
+      this.hasOne(models.FacialData, {
+        foreignKey: {
+          name: "userID",
+          type: DataTypes.UUID,
+        },
+      });
+      this.hasOne(models.InstagramCredentials, {
+        foreignKey: {
+          name: "userID",
+          type: DataTypes.UUID,
+        },
+      });
+    }
+  }
 
   User.init(
     {

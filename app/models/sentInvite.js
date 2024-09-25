@@ -4,11 +4,17 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class SentInvite extends Model {
     static associate(models) {
-      SentInvite.belongsTo(models.VoidanceInvite, {
-        foreignKey: "voidanceInviteID",
+      this.belongsTo(models.VoidanceInvite, {
+        foreignKey: {
+          name: "voidanceInviteID",
+          type: DataTypes.UUID,
+        },
       });
-      SentInvite.belongsTo(models.Advertisement, {
-        foreignKey: "companyID",
+      this.belongsTo(models.Advertisement, {
+        foreignKey: {
+          name: "companyID",
+          type: DataTypes.UUID,
+        },
       });
     }
   }
@@ -26,18 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       voidanceInviteID: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: {
-          model: "VoidanceInvites",
-          key: "id",
-        },
       },
       companyID: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: {
-          model: "Advertisements",
-          key: "id",
-        },
       },
       createdAt: DataTypes.DATE,
       deletedAt: DataTypes.DATE,

@@ -4,7 +4,12 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class InstagramCredentials extends Model {
     static associate(model) {
-      InstagramCredentials.belongsTo(model.User, { foreignKey: "userID" });
+      this.belongsTo(model.User, {
+        foreignKey: {
+          name: "userID",
+          type: DataTypes.UUID,
+        },
+      });
     }
   }
 
@@ -22,10 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
         unique: true,
-        references: {
-          model: "Users",
-          key: "id",
-        },
       },
       userName: {
         type: DataTypes.STRING,

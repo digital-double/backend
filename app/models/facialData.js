@@ -4,7 +4,12 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class FacialData extends Model {
     static associate(model) {
-      FacialData.belongsTo(model.User, { foreignKey: "userID" });
+      this.belongsTo(model.User, {
+        foreignKey: {
+          name: "userID",
+          type: DataTypes.UUID,
+        },
+      });
     }
   }
 
@@ -22,14 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
         unique: true,
-        references: {
-          model: "Users",
-          key: "id",
-        },
       },
       facialImage: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
