@@ -53,12 +53,12 @@ module.exports = {
       engagementScore: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: false,
+        defaultValue: 1,
       },
       balance: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: false,
+        defaultValue: 0,
       },
       createdAt: {
         type: Sequelize.DATE,
