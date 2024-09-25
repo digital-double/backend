@@ -8,6 +8,12 @@ Install postgres, by running `brew install postgres` on Mac and `sudo apt instal
 
 Afterwards you'll have access to `psql`, which will log you into the PostgreSQL prompt, and from there you are free to interact with the database management system right away.
 
+to setup database simply run the following commmand:
+`npm run setup:db`
+
+if you have path issue that states ERROR: ENOENT: no such file or directory, scandir 'C:\Digital Double\backend\migrations' use the following command
+`npx sequelize db:migrate --migrations-path db/migration`
+
 ## Working in the PostgreSQL prompt
 
 [Docs](https://www.postgresql.org/docs/9.5/app-psql.html)
