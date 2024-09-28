@@ -1,16 +1,10 @@
-const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    static associate(models) {
-      this.hasOne(models.FacialData, {
-        foreignKey: {
-          name: "userID",
-          type: DataTypes.UUID,
-        },
-      });
-      this.hasOne(models.InstagramCredentials, {
+  class InstagramCredentials extends Model {
+    static associate(model) {
+      this.belongsTo(model.User, {
         foreignKey: {
           name: "userID",
           type: DataTypes.UUID,
@@ -19,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  User.init(
+  InstagramCredentials.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -29,39 +23,27 @@ module.exports = (sequelize, DataTypes) => {
         },
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
+      userID: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        unique: true,
+      },
       userName: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          isEmail: true,
-        },
-      },
-      password: {
+      igEmail: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      name: DataTypes.STRING,
-      avatar: DataTypes.STRING,
-      address: DataTypes.STRING,
-      country: DataTypes.STRING,
-      city: DataTypes.STRING,
-      banned: {
+      accessToken: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      accountLinked: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      engagementScore: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0,
-      },
-      balance: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0,
+        allowNull: false,
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
@@ -69,11 +51,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "InstagramCredentials",
       paranoid: true,
       timestamps: true,
     }
   );
 
-  return User;
+  return InstagramCredentials;
 };
