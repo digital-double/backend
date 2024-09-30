@@ -2,7 +2,7 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Users extends Model {
     static associate(models) {
       this.hasOne(models.FacialData, {
         foreignKey: {
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  User.init(
+  Users.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -69,11 +69,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "Users",
       paranoid: true,
       timestamps: true,
     }
   );
 
-  return User;
+  return Users;
 };
