@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Companies', [
+    await queryInterface.bulkInsert('Company', [
       {
         companyName: 'Tech Innovations Inc.',
         logo: 'tech_innovations_logo.png',
@@ -45,6 +45,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Companies', null, {});
+    await queryInterface.bulkDelete('Company', null, {});
   }
 };

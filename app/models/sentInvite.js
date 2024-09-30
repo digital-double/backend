@@ -10,12 +10,6 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.UUID,
         },
       });
-      this.belongsTo(models.Advertisement, {
-        foreignKey: {
-          name: "companyID",
-          type: DataTypes.UUID,
-        },
-      });
     }
   }
 
@@ -32,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       voidanceInviteID: {
         type: DataTypes.UUID,
         allowNull: false,
+        references: {
+          model: 'VoidanceInvite', 
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       companyID: {
         type: DataTypes.UUID,

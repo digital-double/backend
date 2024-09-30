@@ -8,13 +8,13 @@ module.exports = {
         userName: 'Omar_Badawy',
         email: 'omar.badawy@digitaldouble.com',
         name: "omar",
-        passwordHash: await bcrypt.hash('OmarBadawy', 12),
+        password: await bcrypt.hash('OmarBadawy', 12),
       },
       {
         userName: 'masterignazio69',
         email: 'ignazio@digitaldouble.com',
         name:"ignazio",
-        passwordHash: await bcrypt.hash('ignazio', 12),
+        password: await bcrypt.hash('ignazio', 12),
       },
     ]);
   },

@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.UUID,
         },
       });
+      this.hasMany(models.VoidanceInvite, {
+        foreignKey: {
+          name: "userID",
+          type: DataTypes.UUID,
+        },
+      });
     }
   }
 

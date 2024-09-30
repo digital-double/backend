@@ -103,7 +103,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Company',
-      tableName: 'Companies',
       timestamps: true, // createdAt, updatedAt managed automatically
       paranoid: true,   // Enables soft deletion with deletedAt
     }

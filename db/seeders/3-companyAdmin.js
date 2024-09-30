@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface) => {
     // Fetch company IDs from the "Companies" table
     const companyIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Companies";`
+      `SELECT id FROM "Company";`
     );
 
     // companyIds[0] contains the actual rows of companies

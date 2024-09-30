@@ -33,7 +33,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Companies', // refers to table name 'Companies'
+          model: 'Company', // refers to table name 'Companies'
           key: 'id',          // refers to column name 'id' in 'Companies'
         },
         onUpdate: 'CASCADE',
