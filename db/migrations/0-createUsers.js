@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.sequelize.query(
       'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
     );
-    await queryInterface.createTable('User', {
+    await queryInterface.createTable('Users', {
       id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
@@ -20,7 +20,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      passwordHash: {
+      password: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -71,17 +71,17 @@ module.exports = {
         defaultValue: Sequelize.fn('now'),
       },
     });
-    await queryInterface.addConstraint('User', {
+    await queryInterface.addConstraint('Users', {
       fields: ['email'],
       type: 'unique',
     });
-    await queryInterface.addConstraint('User', {
+    await queryInterface.addConstraint('Users', {
       fields: ['userName'],
       type: 'unique',
     });
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('User');
+    await queryInterface.dropTable('Users');
   },
 };

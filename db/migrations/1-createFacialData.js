@@ -5,32 +5,26 @@ module.exports = {
     await queryInterface.sequelize.query(
       'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
     );
-    await queryInterface.createTable("CompanyAdmin", {
+    await queryInterface.createTable("FacialData", {
       id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
         primaryKey: true,
         allowNull: false,
       },
-      companyID: {
+      userID: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "Companies",
+          model: "Users",
           key: "id",
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
-      email: {
+      facialImage: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      accessRights: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -47,13 +41,13 @@ module.exports = {
         allowNull: true,
       },
     });
-    await queryInterface.addConstraint("CompanyAdmin", {
-      fields: ["email"],
+    await queryInterface.addConstraint("FacialData", {
+      fields: ["userID"],
       type: "unique",
     });
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable("CompanyAdmin");
+    await queryInterface.dropTable("FacialData");
   },
 };
