@@ -2,13 +2,13 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class CompanyAdmin extends Model {
+  class InstagramVoidance extends Model {
     static associate(models) {
-      this.belongsTo(models.Company, { foreignKey: 'companyID' });
+      this.hasOne(models.Users, { foreignKey: 'userID' });
     }
   }
 
-  CompanyAdmin.init({
+  InstagramVoidance.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -17,26 +17,28 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
-    companyID: {
+    userID: {
       type:  DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'Company',
+        model: 'User',
         key: 'id',
       },
     },
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    accessRights: DataTypes.STRING,
+    fileType: DataTypes.STRING,
+    fileLength: DataTypes.STRING,
+    fileName: DataTypes.STRING,
+    description: DataTypes.STRING,
+    uploadDate: DataTypes.DATE,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'CompanyAdmin',
+    modelName: 'InstagramVoidance',
     paranoid: true,
     timestamps: true,
   });
 
-  return CompanyAdmin;
+  return InstagramVoidance;
 };

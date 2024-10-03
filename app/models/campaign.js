@@ -2,16 +2,16 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Company extends Model {
+  class Campaign extends Model {
     static associate(models) {
-      this.hasMany(models.Campaign, {
+      this.belongsTo(models.Company, {
         foreignKey: {
           name: 'companyID',
           type: DataTypes.UUID,
         },
         allowNull: true,
       });
-      this.hasMany(models.Faq, {
+      this.hasMany(models.Advertisement, {
         foreignKey: {
           name: 'companyID',
           type: DataTypes.UUID,
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Company.init({
+  Campaign.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -30,30 +30,37 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
-    companyName: DataTypes.STRING,
-    logo: DataTypes.STRING,
+    companyID: {
+      type:  DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Company',
+        key: 'id',
+      },
+    },
+    title: DataTypes.STRING,
+    likes: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    banner: DataTypes.STRING,
-    websiteUrl: DataTypes.STRING,
-    industry: DataTypes.STRING,
-    verification: DataTypes.STRING,
-    numOfRunningAds: DataTypes.INTEGER,
-    bankName: DataTypes.STRING,
-    bankAccName: DataTypes.STRING,
-    bankAccNo: DataTypes.STRING,
-    bankRoutingNo: DataTypes.INTEGER,
-    paypalAcc: DataTypes.STRING,
-    bankIban: DataTypes.STRING,
-    bankPaymentStatus: DataTypes.BOOLEAN,
+    totalBudget: DataTypes.FLOAT,
+    campaignStatus: DataTypes.BOOLEAN,
+    campaignStart: DataTypes.DATE,
+    campaignEnd: DataTypes.DATE,
+    avgCPC: DataTypes.FLOAT,
+    numOfAds: DataTypes.INTEGER,
+    numOfConversions: DataTypes.INTEGER,
+    numOfModels: DataTypes.INTEGER,
+    potentialReach: DataTypes.INTEGER,
+    potentialEngagement: DataTypes.INTEGER,
+    actualEngagement: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'Company',
+    modelName: 'Campaign',
     paranoid: true,
     timestamps: true,
   });
 
-  return Company;
+  return Campaign;
 };

@@ -4,96 +4,59 @@ const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class VoidanceInvite extends Model {
     static associate(models) {
-      // Association with the User model
-      VoidanceInvite.belongsTo(models.Users, {
-        foreignKey: 'userID',
-        as: 'user',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      // Association with the sentInvite model
-      VoidanceInvite.hasMany(models.SentInvite, {
-        foreignKey: 'companyID',
-        as: 'company',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
+      this.belongsTo(models.Users, { foreignKey: 'userID' });
+      this.belongsTo(models.Company, { foreignKey: 'companyID' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
     }
   }
 
-  VoidanceInvite.init(
-    {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        validate: {
-          isUUID: 4,
-        },
-        defaultValue: Sequelize.literal("uuid_generate_v4()"),
+  VoidanceInvite.init({
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      validate: {
+        isUUID: 4,
       },
-      userID: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      companyID: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: 'Company', 
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      subject: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      message: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      CPC: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-      campaignName: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-      },
-      acceptance: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
+      defaultValue: Sequelize.literal('uuid_generate_v4()'),
+    },
+    userID: {
+      type:  DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
       },
     },
-    {
-      sequelize,
-      modelName: 'VoidanceInvite',
-      timestamps: true,
-      paranoid: true, // Enables soft deletion with `deletedAt`
-    }
-  );
+    companyID: {
+      type:  DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Company',
+        key: 'id',
+      },
+    },
+    advertisementID: {
+      type:  DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Advertisement',
+        key: 'id',
+      },
+    },
+    subject: DataTypes.STRING,
+    message: DataTypes.STRING,
+    CPC: DataTypes.FLOAT,
+    campaignName: DataTypes.BOOLEAN,
+    acceptance: DataTypes.STRING,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+    deletedAt: DataTypes.DATE,
+  }, {
+    sequelize,
+    modelName: 'VoidanceInvite',
+    paranoid: true,
+    timestamps: true,
+  });
 
   return VoidanceInvite;
 };
