@@ -1,0 +1,59 @@
+const { Model } = require("sequelize");
+const Sequelize = require("sequelize");
+
+module.exports = (sequelize, DataTypes) => {
+  class Voidances extends Model {
+    static associate(models) {
+      this.belongsTo(models.Users, { foreignKey: 'userID'});
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
+      this.belongsTo(models.Company, { foreignKey: 'companyID' });
+      this.hasOne(models.InstagramVoidance, { foreignKey: 'voidanceID' });
+    }
+  }
+
+  Voidances.init({
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      validate: {
+        isUUID: 4,
+      },
+      defaultValue: Sequelize.literal('uuid_generate_v4()'),
+    },
+    userID:  DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id',
+    },
+    advertisementID:  DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'Avertisement',
+      key: 'id',
+    },
+    companyID:  DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'Company',
+      key: 'id',
+    },
+    affiliatedLink: DataTypes.STRING,
+    numbOfClicks: DataTypes.INTEGER,
+    fileType: DataTypes.STRING,
+    fileLength: DataTypes.STRING,
+    fileName: DataTypes.STRING,
+    qualityScore: DataTypes.FLOAT,
+    UploadStatus: DataTypes.BOOLEAN,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+    deletedAt: DataTypes.DATE,
+  }, {
+    sequelize,
+    modelName: 'Voidances',
+    paranoid: true,
+    timestamps: true,
+  });
+
+  return Voidances;
+};

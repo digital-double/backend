@@ -2,13 +2,13 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class CompanyAdmin extends Model {
+  class Faq extends Model {
     static associate(models) {
       this.belongsTo(models.Company, { foreignKey: 'companyID' });
     }
   }
 
-  CompanyAdmin.init({
+  Faq.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -25,18 +25,17 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    accessRights: DataTypes.STRING,
+    question: DataTypes.STRING,
+    answer: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'CompanyAdmin',
+    modelName: 'Faq',
     paranoid: true,
     timestamps: true,
   });
 
-  return CompanyAdmin;
+  return Faq;
 };

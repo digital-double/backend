@@ -2,13 +2,14 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class CompanyAdmin extends Model {
+  class ContactUs extends Model {
     static associate(models) {
-      this.belongsTo(models.Company, { foreignKey: 'companyID' });
+      this.belongsTo(models.Users, { foreignKey: 'userID' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
     }
   }
 
-  CompanyAdmin.init({
+  ContactUs.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -16,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         isUUID: 4,
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
+    },
+    userID: {
+      type:  DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'User',
+        key: 'id',
+      },
     },
     companyID: {
       type:  DataTypes.UUID,
@@ -25,18 +34,25 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    accessRights: DataTypes.STRING,
+    advertisementID: {
+      type:  DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Advertisement',
+        key: 'id',
+      },
+    },
+    subject: DataTypes.STRING,
+    message: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'CompanyAdmin',
+    modelName: 'ContactUs',
     paranoid: true,
     timestamps: true,
   });
 
-  return CompanyAdmin;
+  return ContactUs;
 };
