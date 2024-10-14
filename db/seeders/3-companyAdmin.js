@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { Sequelize } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface) => {
@@ -13,6 +14,7 @@ module.exports = {
     // Insert data for company admins linked to the fetched company IDs
     await queryInterface.bulkInsert("CompanyAdmin", [
       {
+        id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[0].id,
         adminName: "masterChief",
         email: "admin1@company1.com",
@@ -22,10 +24,21 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[1].id,
         adminName: "gorgon",
         email: "admin2@company2.com",
         password: await bcrypt.hash("adminPassword2", 12), 
+        accessRights: "limited",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: Sequelize.literal('uuid_generate_v4()'),
+        companyID: companyRows[2].id,
+        adminName: "dicki",
+        email: "admin3@company3.com",
+        password: await bcrypt.hash("adminPassword3", 12), 
         accessRights: "limited",
         createdAt: new Date(),
         updatedAt: new Date(),
