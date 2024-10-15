@@ -2,74 +2,77 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Ensure the extension for UUID generation is created
-    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-
-    await queryInterface.createTable('Company', {
+    await queryInterface.createTable('Campaigns', {
       id: {
-        type: DataTypes.UUID, // Change from INTEGER to UUID
-        defaultValue: Sequelize.UUIDV4,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
-      companyName: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      companyID: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'Company',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
-      logo: {
+      title: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      likes: {
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       description: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      banner: {
-        type: Sequelize.STRING,
+      totalBudget: {
+        type: Sequelize.FLOAT,
         allowNull: true,
       },
-      websiteUrl: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      industry: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      verification: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      numOfRunningAds: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      bankName: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccName: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccNo: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankRoutingNo: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      paypalAcc: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankIban: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankPaymentStatus: {
+      campaignStatus: {
         type: Sequelize.BOOLEAN,
+        allowNull: true,
+      },
+      campaignStart: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      campaignEnd: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      avgCPC: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      numOfAds: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      numOfConversions: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      numOfModels: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      potentialReach: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      potentialEngagement: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      actualEngagement: {
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       createdAt: {
@@ -90,6 +93,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Company');
+    await queryInterface.dropTable('Campaigns');
   }
 };
