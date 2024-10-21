@@ -16,7 +16,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "User",
+          model: "Users",
           key: "id",
         },
         onUpdate: 'CASCADE',
