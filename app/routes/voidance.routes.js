@@ -1,74 +1,49 @@
 const express = require('express');
 const router = express.Router();
+const voidanceController = require('../controllers/voidance.controller');
 // const { isLoggedIn } = require('../middlewares/authorization.middleware');
 
 // Voidance Invite Routes
 
 // Get all voidance invites
-router.get('/invites', (req, res) => {
-  res.send('Get all voidance invites route');
-});
+router.get('/invites', voidanceController.getAllVoidanceInvites);
 
 // Get a specific voidance invite
-router.get('/invites/:id', (req, res) => {
-  res.send(`Get voidance invite with id: ${req.params.id}`);
-});
+router.get('/invites/:id', voidanceController.getVoidanceInvite);
 
 // Create a new voidance invite
-router.post('/invites', (req, res) => {
-  res.send('Create new voidance invite route');
-});
+router.post('/invites', voidanceController.createVoidanceInvite);
 
 // Update a voidance invite
-router.put('/invites/:id', (req, res) => {
-  res.send(`Update voidance invite with id: ${req.params.id}`);
-});
+router.put('/invites/:id', voidanceController.updateVoidanceInvite);
 
 // Delete a voidance invite
-router.delete('/invites/:id', (req, res) => {
-  res.send(`Delete voidance invite with id: ${req.params.id}`);
-});
+router.delete('/invites/:id', voidanceController.deleteVoidanceInvite);
 
 // Update voidance invite acceptance status
-router.patch('/invites/:id/acceptance', (req, res) => {
-  res.send(`Update acceptance status for voidance invite with id: ${req.params.id}`);
-});
+router.patch('/invites/:id/acceptance', voidanceController.updateVoidanceInviteAcceptance);
 
 // Voidance Generated Routes
 
 // Get all generated voidances
-router.get('/generated', (req, res) => {
-  res.send('Get all generated voidances route');
-});
+router.get('/generated', voidanceController.getAllGeneratedVoidances);
 
 // Get a specific generated voidance
-router.get('/generated/:id', (req, res) => {
-  res.send(`Get generated voidance with id: ${req.params.id}`);
-});
+router.get('/generated/:id', voidanceController.getGeneratedVoidance);
 
 // Create a new generated voidance
-router.post('/generated', (req, res) => {
-  res.send('Create new generated voidance route');
-});
+router.post('/generated', voidanceController.createGeneratedVoidance);
 
 // Update a generated voidance
-router.put('/generated/:id', (req, res) => {
-  res.send(`Update generated voidance with id: ${req.params.id}`);
-});
+router.put('/generated/:id', voidanceController.updateGeneratedVoidance);
 
 // Delete a generated voidance
-router.delete('/generated/:id', (req, res) => {
-  res.send(`Delete generated voidance with id: ${req.params.id}`);
-});
+router.delete('/generated/:id', voidanceController.deleteGeneratedVoidance);
 
 // Update generated voidance upload status
-router.patch('/generated/:id/upload-status', (req, res) => {
-  res.send(`Update upload status for generated voidance with id: ${req.params.id}`);
-});
+router.patch('/generated/:id/upload-status', voidanceController.updateGeneratedVoidanceUploadStatus);
 
 // Update generated voidance quality score
-router.patch('/generated/:id/quality-score', (req, res) => {
-  res.send(`Update quality score for generated voidance with id: ${req.params.id}`);
-});
+router.patch('/generated/:id/quality-score', voidanceController.updateGeneratedVoidanceQualityScore);
 
 module.exports = router;
