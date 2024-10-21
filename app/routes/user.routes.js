@@ -1,6 +1,26 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
-// const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const user = require( '../controllers/user.controller.js');
+const session = require('../controllers/session.controller.js');
+const mailer = require('../controllers/mailer.controller.js');
+const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
+const {
+  checkUsername,
+  checkEmail,
+} = require('../middlewares/validation.middleware.js');
+
+
+
+// express signup
+router.post(
+  '/signup',
+  checkUsername,
+  checkEmail,
+  user.expressSignup,
+  passport.authenticate('local'),
+  session.validationResponse
+);
 
 // Get all users
 router.get('/', (req, res) => {
@@ -12,10 +32,6 @@ router.get('/:id', (req, res) => {
   res.send(`Get user with id: ${req.params.id}`);
 });
 
-// Create a new user
-router.post('/', (req, res) => {
-  res.send('Create new user route');
-});
 
 // Update user profile
 router.put('/:id', (req, res) => {
