@@ -1,178 +1,194 @@
 const db = require('../models');
-const Voidance = db.Voidances;
-const VoidanceInvite = db.VoidanceInvite;
-
+const { Voidance, VoidanceInvite } = db;
 // Voidance Invite Controllers
 
-exports.getAllVoidanceInvites = async (req, res) => {
-  try {
-    const voidanceInvites = await VoidanceInvite.findAll();
-    res.status(200).json(voidanceInvites);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving voidance invites', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.getAllVoidanceInvites = (req, res, next) => {
+  VoidanceInvite.findAll()
+    .then((voidanceInvites) => {
+      res.status(200).send({
+        message: 'Voidance invites retrieved successfully',
+        voidanceInvites
+      });
+    })
+    .catch((err) => next(err));
 };
 
-exports.getVoidanceInvite = async (req, res) => {
-  try {
-    const voidanceInvite = await VoidanceInvite.findByPk(req.params.id);
-    if (voidanceInvite) {
-      res.status(200).json(voidanceInvite);
-    } else {
-      res.status(404).json({ message: 'Voidance invite not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving voidance invite', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.getVoidanceInvite = (req, res, next) => {
+  VoidanceInvite.findByPk(req.params.id)
+    .then((voidanceInvite) => {
+      if (voidanceInvite) {
+        res.status(200).send({
+          message: 'Voidance invite retrieved successfully',
+          voidanceInvite
+        });
+      } else {
+        res.status(404).send({ message: 'Voidance invite not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.createVoidanceInvite = async (req, res) => {
-  try {
-    const newVoidanceInvite = await VoidanceInvite.create(req.body);
-    res.status(201).json(newVoidanceInvite);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating voidance invite', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.createVoidanceInvite = (req, res, next) => {
+  VoidanceInvite.create(req.body)
+    .then((newVoidanceInvite) => {
+      res.status(201).send({
+        message: 'Voidance invite created successfully',
+        voidanceInvite: newVoidanceInvite
+      });
+    })
+    .catch((err) => next(err));
 };
 
-exports.updateVoidanceInvite = async (req, res) => {
-  try {
-    const updated = await VoidanceInvite.update(req.body, {
-      where: { id: req.params.id }
-    });
-    if (updated[0] === 1) {
-      res.status(200).json({ message: 'Voidance invite updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Voidance invite not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating voidance invite', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.updateVoidanceInvite = (req, res, next) => {
+  VoidanceInvite.update(req.body, {
+    where: { id: req.params.id }
+  })
+    .then(([updated]) => {
+      if (updated === 1) {
+        res.status(200).send({ message: 'Voidance invite updated successfully' });
+      } else {
+        res.status(404).send({ message: 'Voidance invite not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.deleteVoidanceInvite = async (req, res) => {
-  try {
-    const deleted = await VoidanceInvite.destroy({
-      where: { id: req.params.id }
-    });
-    if (deleted) {
-      res.status(200).json({ message: 'Voidance invite deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'Voidance invite not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting voidance invite', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.deleteVoidanceInvite = (req, res, next) => {
+  VoidanceInvite.destroy({
+    where: { id: req.params.id }
+  })
+    .then((deleted) => {
+      if (deleted) {
+        res.status(200).send({ message: 'Voidance invite deleted successfully' });
+      } else {
+        res.status(404).send({ message: 'Voidance invite not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.updateVoidanceInviteAcceptance = async (req, res) => {
-  try {
-    const updated = await VoidanceInvite.update(
-      { acceptance: req.body.acceptance },
-      { where: { id: req.params.id } }
-    );
-    if (updated[0] === 1) {
-      res.status(200).json({ message: 'Voidance invite acceptance status updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Voidance invite not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating voidance invite acceptance status', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.updateVoidanceInviteAcceptance = (req, res, next) => {
+  VoidanceInvite.update(
+    { acceptance: req.body.acceptance },
+    { where: { id: req.params.id } }
+  )
+    .then(([updated]) => {
+      if (updated === 1) {
+        res.status(200).send({ message: 'Voidance invite acceptance status updated successfully' });
+      } else {
+        res.status(404).send({ message: 'Voidance invite not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
 // Generated Voidance Controllers
 
-exports.getAllGeneratedVoidances = async (req, res) => {
-  try {
-    const generatedVoidances = await Voidance.findAll();
-    res.status(200).json(generatedVoidances);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving generated voidances', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.getAllGeneratedVoidances = (req, res, next) => {
+  Voidance.findAll()
+    .then((generatedVoidances) => {
+      res.status(200).send({
+        message: 'Generated voidances retrieved successfully',
+        generatedVoidances
+      });
+    })
+    .catch((err) => next(err));
 };
 
-exports.getGeneratedVoidance = async (req, res) => {
-  try {
-    const generatedVoidance = await Voidance.findByPk(req.params.id);
+// @middleware: isLoggedIn  
+exports.getGeneratedVoidance = (req, res, next) => {
+  Voidance.findByPk(req.params.id)
+    .then((generatedVoidance) => {
     if (generatedVoidance) {
-      res.status(200).json(generatedVoidance);
-    } else {
-      res.status(404).json({ message: 'Generated voidance not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving generated voidance', error: error.message });
-  }
+        res.status(200).send({
+          message: 'Generated voidance retrieved successfully',
+          generatedVoidance
+        });
+      } else {
+        res.status(404).send({ message: 'Generated voidance not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.createGeneratedVoidance = async (req, res) => {
-  try {
-    const newGeneratedVoidance = await Voidance.create(req.body);
-    res.status(201).json(newGeneratedVoidance);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating generated voidance', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.createGeneratedVoidance = (req, res, next) => {
+  Voidance.create(req.body)
+    .then((newGeneratedVoidance) => {
+      res.status(201).send({
+        message: 'Generated voidance created successfully',
+        voidance: newGeneratedVoidance
+      });
+    })
+    .catch((err) => next(err)); 
 };
 
-exports.updateGeneratedVoidance = async (req, res) => {
-  try {
-    const updated = await Voidance.update(req.body, {
-      where: { id: req.params.id }
-    });
-    if (updated[0] === 1) {
-      res.status(200).json({ message: 'Generated voidance updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Generated voidance not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating generated voidance', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.updateGeneratedVoidance = (req, res, next) => {
+  Voidance.update(req.body, {
+    where: { id: req.params.id }
+  })
+    .then(([updated]) => {
+      if (updated === 1) {
+        res.status(200).send({ message: 'Generated voidance updated successfully' });
+      } else {
+        res.status(404).send({ message: 'Generated voidance not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.deleteGeneratedVoidance = async (req, res) => {
-  try {
-    const deleted = await Voidance.destroy({
-      where: { id: req.params.id }
-    });
-    if (deleted) {
-      res.status(200).json({ message: 'Generated voidance deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'Generated voidance not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting generated voidance', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.deleteGeneratedVoidance = (req, res, next) => {
+  Voidance.destroy({
+    where: { id: req.params.id }
+  })
+    .then((deleted) => {
+      if (deleted) {
+        res.status(200).send({ message: 'Generated voidance deleted successfully' });
+      } else {
+        res.status(404).send({ message: 'Generated voidance not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.updateGeneratedVoidanceUploadStatus = async (req, res) => {
-  try {
-    const updated = await Voidance.update(
-      { UploadStatus: req.body.UploadStatus },
-      { where: { id: req.params.id } }
-    );
-    if (updated[0] === 1) {
-      res.status(200).json({ message: 'Generated voidance upload status updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Generated voidance not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating generated voidance upload status', error: error.message });
-  }
+// @middleware: isLoggedIn
+exports.updateGeneratedVoidanceUploadStatus = (req, res, next) => {
+  Voidance.update(
+    { UploadStatus: req.body.UploadStatus },
+    { where: { id: req.params.id } }
+  )
+    .then(([updated]) => {
+      if (updated === 1) {
+        res.status(200).send({ message: 'Generated voidance upload status updated successfully' });
+      } else {
+        res.status(404).send({ message: 'Generated voidance not found' });
+      }
+    })
+    .catch((err) => next(err));
 };
 
-exports.updateGeneratedVoidanceQualityScore = async (req, res) => {
-  try {
-    const updated = await Voidance.update(
-      { qualityScore: req.body.qualityScore },
-      { where: { id: req.params.id } }
-    );
-    if (updated[0] === 1) {
-      res.status(200).json({ message: 'Generated voidance quality score updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Generated voidance not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating generated voidance quality score', error: error.message });
-  }
-};
 
+// @middleware: isLoggedIn
+exports.updateGeneratedVoidanceQualityScore = (req, res, next) => {
+  Voidance.update(
+    { qualityScore: req.body.qualityScore },
+    { where: { id: req.params.id } }
+  )
+    .then(([updated]) => {
+      if (updated === 1) {
+        res.status(200).send({ message: 'Generated voidance quality score updated successfully' });
+      } else {
+        res.status(404).send({ message: 'Generated voidance not found' });
+      }
+    })
+    .catch((err) => next(err));
+};
