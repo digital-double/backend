@@ -6,7 +6,7 @@ const { Users } = db;
 exports.updateOne = (req, res, next) => {
   const { user } = req;
 
-  Users
+  user
     .update(req.body)
     .then((updatedUser) => {
       return res.status(200).send({
@@ -61,7 +61,7 @@ exports.updatePassword = (req, res, next) => {
     body: { oldPassword, newPassword },
   } = req;
 
-  Users
+  user
     .replacePassword(oldPassword, newPassword)
     .then(() => {
       return res.status(200).send({

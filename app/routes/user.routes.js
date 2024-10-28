@@ -17,7 +17,7 @@ router.post('/login', passport.authenticate('local'), session.login);
 router.post('/logout', isLoggedIn, session.logout);
 
 // patch User Password
-router.patch('/updatePassword', isLoggedIn, user.updatePassword);
+router.patch('/updatePassword', isLoggedIn, user.updatePassword); 
 
 // Update a User with id
 router.patch('/:userName/update', isLoggedIn, user.updateOne);
@@ -33,10 +33,10 @@ router.post(
 router.post('/updatePassword/:token', user.replacePassword);
 
 // Validate session cookie
-router.get('/session', session.validateSession);
+router.get('/session', session.validateSession); 
 
 // Get User object
-router.get('/:userName', isLoggedIn, user.retrieveOne);
+router.get('/:userName', isLoggedIn, user.retrieveOne); 
 
 // express signup
 router.post(
