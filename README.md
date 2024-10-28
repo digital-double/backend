@@ -80,6 +80,16 @@ You need to install the following things to be able to run this project on your 
 3. Run `npm run lint` for linting with ESLint
 4. Run `npm run format` for formatting with Prettier
 
+
+### How to login using seeded data on postman
+
+1. Run `npm run start` 
+2. Copy either the `userName` or `email` of a chosen Users data entry from the seeders file
+3. On postman create `userCredential` key, paste the userName or email as an attribute
+4. Copy  the `password` of the chosen Users data entry from the seeders file
+5. On postman create a `password` key and then paste the copied password as an 
+6. Login using `POST` at http://localhost:3000/users/login
+
 authors
 Omar Badawy
 Ignazio Balistreri

@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 module.exports = {
   up: async (queryInterface) => {
      const userIds = await queryInterface.sequelize.query(
-        `SELECT id FROM "User";`
+        `SELECT id FROM "Users";`
       );
       const companyIds = await queryInterface.sequelize.query(
         `SELECT id FROM "Company";`

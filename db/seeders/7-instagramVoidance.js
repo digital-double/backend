@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Fetch user IDs from the "Users" table
     const userIds = await queryInterface.sequelize.query(
-        `SELECT id FROM "User";`
+        `SELECT id FROM "Users";`
       );
   
       // userIds[0] contains the actual rows of users
