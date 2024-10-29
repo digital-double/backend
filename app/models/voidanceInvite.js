@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
-    userID: {
+    userId: {
       type:  DataTypes.UUID,
       allowNull: false,
       references: {
@@ -46,11 +46,21 @@ module.exports = (sequelize, DataTypes) => {
     subject: DataTypes.STRING,
     message: DataTypes.STRING,
     CPC: DataTypes.FLOAT,
-    campaignName: DataTypes.BOOLEAN,
-    acceptance: DataTypes.STRING,
+    campaignName: DataTypes.STRING,
+    acceptance: DataTypes.BOOLEAN,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
+    status: {
+      type: DataTypes.ENUM(
+        'pending_user',     // Waiting for user acceptance
+        'pending_company',  // Waiting for company acceptance
+        'accepted',
+        'declined'
+      ),
+      defaultValue: 'pending_user',
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'VoidanceInvite',

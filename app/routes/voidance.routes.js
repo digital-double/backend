@@ -18,7 +18,7 @@ router.post('/invites', isLoggedIn, voidanceController.createVoidanceInvite);
 router.delete('/invites/:id', isLoggedIn, voidanceController.deleteVoidanceInvite);
 
 // Update voidance invite acceptance status
-router.patch('/invites/:id/acceptance', isLoggedIn, voidanceController.voidanceUpdateStatus);
+router.patch('/invites/:id', isLoggedIn, voidanceController.voidanceUpdateStatus);
 
 // Voidance Generated Routes
 

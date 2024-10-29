@@ -9,17 +9,17 @@ module.exports = {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false,
       },
-      userID: {
+      userId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'User',
+          model: 'Users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      advertisementID: {
+      advertisementId: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -29,7 +29,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      companyID: {
+      companyId: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -45,7 +45,8 @@ module.exports = {
       },
       numbOfClicks: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 0
       },
       fileType: {
         type: DataTypes.STRING,
@@ -63,8 +64,29 @@ module.exports = {
         type: DataTypes.FLOAT,
         allowNull: true,
       },
-      UploadStatus: {
+      uploadStatus: {
+        type: DataTypes.ENUM('pending', 'processing', 'completed', 'failed'),
+        defaultValue: 'pending',
+        allowNull: false,
+      },
+      campaignName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      CPC: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+      },
+      createdFromInvite: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      subject: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      message: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       createdAt: {
@@ -83,8 +105,8 @@ module.exports = {
       },
     });
   },
-
+  
   down: async (queryInterface) => {
     await queryInterface.dropTable('Voidances');
-  },
+  }
 };
