@@ -47,7 +47,6 @@ module.exports = (sequelize, DataTypes) => {
     message: DataTypes.STRING,
     CPC: DataTypes.FLOAT,
     campaignName: DataTypes.STRING,
-    acceptance: DataTypes.BOOLEAN,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
