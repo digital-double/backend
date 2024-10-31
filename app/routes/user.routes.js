@@ -1,75 +1,53 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
-// const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const user = require( '../controllers/user.controller.js');
+const session = require('../controllers/session.controller.js');
+const mailer = require('../controllers/mailer.controller.js');
+const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
+const {
+  checkUsername,
+  checkEmail,
+} = require('../middlewares/validation.middleware.js');
 
-// Get all users
-router.get('/', (req, res) => {
-  res.send('Get all users route');
-});
+// Post login request
+router.post('/login', passport.authenticate('local'), session.login);
 
-// Get a specific user
-router.get('/:id', (req, res) => {
-  res.send(`Get user with id: ${req.params.id}`);
-});
+// Post logout request
+router.post('/logout', isLoggedIn, session.logout);
 
-// Create a new user
-router.post('/', (req, res) => {
-  res.send('Create new user route');
-});
+// patch User Password
+router.patch('/updatePassword', isLoggedIn, user.updatePassword); 
 
-// Update user profile
-router.put('/:id', (req, res) => {
-  res.send(`Update user with id: ${req.params.id}`);
-});
+// Update a User with id
+router.patch('/:userName/update', isLoggedIn, user.updateOne);
 
-// Update user address
-router.patch('/:id/address', (req, res) => {
-  res.send(`Update address for user with id: ${req.params.id}`);
-});
+// Set resetPassword attributes & send resetPasswordMail
+router.post(
+  '/resetPassword',
+  user.setResetToken,
+  mailer.sendResetPasswordInstructions
+);
 
-// Delete a user
-router.delete('/:id', (req, res) => {
-  res.send(`Delete user with id: ${req.params.id}`);
-});
+// update User password & login
+router.post('/updatePassword/:token', user.replacePassword);
 
-// Ban/Unban a user
-router.patch('/:id/ban', (req, res) => {
-  res.send(`Ban/Unban user with id: ${req.params.id}`);
-});
+// Validate session cookie
+router.get('/session', session.validateSession); 
 
-// Update user's engagement score
-router.patch('/:id/engagement', (req, res) => {
-  res.send(`Update engagement score for user with id: ${req.params.id}`);
-});
+// Get User object
+router.get('/:userName', isLoggedIn, user.retrieveOne); 
 
-// Update user's balance
-router.patch('/:id/balance', (req, res) => {
-  res.send(`Update balance for user with id: ${req.params.id}`);
-});
+// express signup
+router.post(
+  '/signup',
+  checkUsername,
+  checkEmail,
+  user.expressSignup,
+  passport.authenticate('local'),
+  session.validationResponse
+);
 
-// Get user settings
-router.get('/:id/settings', (req, res) => {
-  res.send(`Get settings for user with id: ${req.params.id}`);
-});
 
-// Update user settings
-router.put('/:id/settings', (req, res) => {
-  res.send("Update settings");
-});
-
-// Get all FAQs for a user
-router.get('/:id/faq', (req, res) => {
-  res.send(`Get all FAQs for user with id: ${req.params.id}`);
-});
-
-// Update a FAQ for a user
-router.put('/:id/faq', (req, res) => {
-  res.send("Update FAQ ");
-});
-
-// Delete a FAQ for a user
-router.delete('/:id/faq', (req, res) => {
-  res.send("Delete FAQ");
-});
 
 module.exports = router;
