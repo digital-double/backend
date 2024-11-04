@@ -4,9 +4,9 @@ const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class VoidanceInvite extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userID' });
-      this.belongsTo(models.Company, { foreignKey: 'companyID' });
-      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
+      this.belongsTo(models.Users, { foreignKey: 'userId' });
+      this.belongsTo(models.Company, { foreignKey: 'companyId' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementId' });
     }
   }
 
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    companyID: {
+    companyId: {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    advertisementID: {
+    advertisementId: {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {

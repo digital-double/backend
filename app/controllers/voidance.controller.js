@@ -1,6 +1,6 @@
 const { where } = require('sequelize');
 const db = require('../models');
-const { Voidance, VoidanceInvite } = db;
+const { Voidances, VoidanceInvite, Users } = db;
 // Voidance Invite Controllers
 
 // @middleware: isLoggedIn
@@ -8,15 +8,17 @@ exports.getAllVoidanceInvites = async (req, res, next) => {
   try {
     const voidanceInvites = await VoidanceInvite.findAll({
       where: { userId: req.user.id },
-      include: [{
-        model: User,
-        attributes: ['userId']
-      }]
+      include: [
+        {
+          model: Users,
+          attributes: ['id', 'userName'],
+        },
+      ],
     });
 
     return res.status(200).send({
       message: 'All voidance invites retrieved successfully',
-      voidanceInvites
+      voidanceInvites,
     });
   } catch (err) {
     return next(err);
@@ -30,10 +32,12 @@ exports.getVoidanceInvite = async (req, res, next) => {
 
     const voidanceInvite = await VoidanceInvite.findOne({
       where: { id },
-      include: [{
-        model: User,
-        attributes: ['userId']
-      }]
+      include: [
+        {
+          model: Users,
+          attributes: ['id', 'userName'],
+        },
+      ],
     });
 
     if (!voidanceInvite) {
@@ -42,7 +46,7 @@ exports.getVoidanceInvite = async (req, res, next) => {
 
     return res.status(200).send({
       message: 'Voidance invite retrieved successfully',
-      voidanceInvite
+      voidanceInvite,
     });
   } catch (err) {
     return next(err);
@@ -52,23 +56,23 @@ exports.getVoidanceInvite = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.createVoidanceInvite = async (req, res, next) => {
   const t = await db.sequelize.transaction();
-  
+
   try {
-    const { 
-      subject, 
-      message, 
-      CPC, 
-      campaignName, 
-      companyId, 
+    const {
+      subject,
+      message,
+      CPC,
+      campaignName,
+      companyId,
       advertisementId,
-      isCompanyInvite // boolean instead of string type
+      isCompanyInvite, // boolean instead of string type
     } = req.body;
-    
+
     // Validation based on invite source
     if (isCompanyInvite) {
       if (!companyId || !advertisementId) {
         return res.status(400).send({
-          message: 'Company voidances require companyId and advertisementId'
+          message: 'Company voidances require companyId and advertisementId',
         });
       }
     }
@@ -76,7 +80,7 @@ exports.createVoidanceInvite = async (req, res, next) => {
     // Base required fields
     if (!subject || !message || !campaignName) {
       return res.status(400).send({
-        message: 'Subject, message, and campaignName are required'
+        message: 'Subject, message, and campaignName are required',
       });
     }
 
@@ -86,35 +90,38 @@ exports.createVoidanceInvite = async (req, res, next) => {
         userId: req.user.id,
         ...(companyId && { companyId }),
         ...(advertisementId && { advertisementId }),
-        campaignName
+        campaignName,
       },
-      transaction: t
+      transaction: t,
     });
 
     if (existingInvite) {
       await t.rollback();
-      return res.status(409).send({ 
-        message: 'Voidance invite already exists for this campaign' 
+      return res.status(409).send({
+        message: 'Voidance invite already exists for this campaign',
       });
     }
 
     // Create new invite
-    const invite = await VoidanceInvite.create({
-      userId: req.user.id,
-      subject,
-      message,
-      CPC,
-      campaignName,
-      companyId: companyId || null,
-      advertisementId: advertisementId || null,
-      status: isCompanyInvite ? 'pending_user' : 'pending_company'
-    }, { transaction: t });
+    const invite = await VoidanceInvite.create(
+      {
+        userId: req.user.id,
+        subject,
+        message,
+        CPC,
+        campaignName,
+        companyId: companyId || null,
+        advertisementId: advertisementId || null,
+        status: isCompanyInvite ? 'pending_user' : 'pending_company',
+      },
+      { transaction: t }
+    );
 
     await t.commit();
 
     return res.status(201).send({
       message: 'Voidance invite created successfully',
-      voidanceInvite: invite
+      voidanceInvite: invite,
     });
   } catch (err) {
     await t.rollback();
@@ -128,18 +135,18 @@ exports.deleteVoidanceInvite = async (req, res, next) => {
     const { id } = req.params;
 
     const deleted = await VoidanceInvite.destroy({
-      where: { 
+      where: {
         id,
-        userId: req.user.id 
-      }
+        userId: req.user.id,
+      },
     });
 
     if (!deleted) {
       return res.status(404).send({ message: 'Voidance invite not found' });
     }
 
-    return res.status(200).send({ 
-      message: 'Voidance invite deleted successfully' 
+    return res.status(200).send({
+      message: 'Voidance invite deleted successfully',
     });
   } catch (err) {
     return next(err);
@@ -149,27 +156,27 @@ exports.deleteVoidanceInvite = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.voidanceUpdateStatus = async (req, res, next) => {
   const t = await db.sequelize.transaction();
-  
+
   try {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     const validStatuses = ['accepted', 'declined'];
     if (!validStatuses.includes(status)) {
       return res.status(400).send({
-        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
+        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
       });
     }
 
     const voidanceInvite = await VoidanceInvite.findOne({
       where: { id },
-      transaction: t
+      transaction: t,
     });
 
     if (!voidanceInvite) {
       await t.rollback();
       return res.status(404).send({
-        message: 'Voidance invite not found'
+        message: 'Voidance invite not found',
       });
     }
 
@@ -183,7 +190,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
     ) {
       await t.rollback();
       return res.status(403).send({
-        message: 'Not authorized to update this invite status'
+        message: 'Not authorized to update this invite status',
       });
     }
 
@@ -191,25 +198,28 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 
     // If accepted, create the actual voidance
     if (status === 'accepted') {
-      await Voidance.create({
-        userId: voidanceInvite.userId,
-        companyId: voidanceInvite.companyId,
-        advertisementId: voidanceInvite.advertisementId,
-        campaignName: voidanceInvite.campaignName,
-        CPC: voidanceInvite.CPC,
-        uploadStatus: 'pending',
-        // Voidance inviteId for user & company? // Neccessary at all?
-        createdFormInvite: true,
-        subject: voidanceInvite.subject,
-        message: voidanceInvite.message
-      }, { transaction: t });
+      await Voidances.create(
+        {
+          userId: voidanceInvite.userId,
+          companyId: voidanceInvite.companyId,
+          advertisementId: voidanceInvite.advertisementId,
+          campaignName: voidanceInvite.campaignName,
+          CPC: voidanceInvite.CPC,
+          uploadStatus: 'pending',
+          // Voidance inviteId for user & company? // Neccessary at all?
+          createdFormInvite: true,
+          subject: voidanceInvite.subject,
+          message: voidanceInvite.message,
+        },
+        { transaction: t }
+      );
     }
 
     await t.commit();
 
     return res.status(200).send({
       message: 'Voidance invite status updated successfully',
-      voidanceInvite
+      voidanceInvite,
     });
   } catch (err) {
     await t.rollback();
@@ -222,29 +232,29 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.getAllGeneratedVoidances = async (req, res, next) => {
   try {
-    const generatedVoidances = await Voidance.findAll({
-      where: { userId: req.user.id }
+    const generatedVoidances = await Voidances.findAll({
+      where: { userId: req.user.id },
     });
 
     return res.status(200).send({
       message: 'Generated voidances retrieved successfully',
-      generatedVoidances
+      generatedVoidances,
     });
   } catch (err) {
     return next(err);
   }
 };
 
-// @middleware: isLoggedIn  
+// @middleware: isLoggedIn
 exports.getGeneratedVoidance = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const generatedVoidance = await Voidance.findOne({
+    const generatedVoidance = await Voidances.findOne({
       where: {
         id,
-        userId: req.user.id
-      }
+        userId: req.user.id,
+      },
     });
 
     if (!generatedVoidance) {
@@ -253,7 +263,7 @@ exports.getGeneratedVoidance = async (req, res, next) => {
 
     return res.status(200).send({
       message: 'Generated voidance retrieved successfully',
-      generatedVoidance
+      generatedVoidance,
     });
   } catch (err) {
     return next(err);
@@ -263,14 +273,14 @@ exports.getGeneratedVoidance = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.createVoidance = async (req, res, next) => {
   try {
-    const newGeneratedVoidance = await Voidance.create({
+    const newGeneratedVoidance = await Voidances.create({
       ...req.body,
-      userId: req.user.id
+      userId: req.user.id,
     });
 
     return res.status(201).send({
       message: 'Generated voidance created successfully',
-      voidance: newGeneratedVoidance
+      voidance: newGeneratedVoidance,
     });
   } catch (err) {
     return next(err);
@@ -282,19 +292,19 @@ exports.deleteGeneratedVoidance = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const deleted = await Voidance.destroy({
+    const deleted = await Voidances.destroy({
       where: {
         id,
-        userId: req.user.id
-      }
+        userId: req.user.id,
+      },
     });
 
     if (!deleted) {
       return res.status(404).send({ message: 'Generated voidance not found' });
     }
 
-    return res.status(200).send({ 
-      message: 'Generated voidance deleted successfully' 
+    return res.status(200).send({
+      message: 'Generated voidance deleted successfully',
     });
   } catch (err) {
     return next(err);
@@ -307,13 +317,13 @@ exports.updateGeneratedVoidanceUploadStatus = async (req, res, next) => {
     const { id } = req.params;
     const { UploadStatus } = req.body;
 
-    const [updated] = await Voidance.update(
+    const [updated] = await Voidances.update(
       { UploadStatus },
-      { 
-        where: { 
+      {
+        where: {
           id,
-          userId: req.user.id 
-        } 
+          userId: req.user.id,
+        },
       }
     );
 
@@ -321,8 +331,8 @@ exports.updateGeneratedVoidanceUploadStatus = async (req, res, next) => {
       return res.status(404).send({ message: 'Generated voidance not found' });
     }
 
-    return res.status(200).send({ 
-      message: 'Generated voidance upload status updated successfully' 
+    return res.status(200).send({
+      message: 'Generated voidance upload status updated successfully',
     });
   } catch (err) {
     return next(err);
@@ -335,13 +345,13 @@ exports.updateGeneratedVoidanceQualityScore = async (req, res, next) => {
     const { id } = req.params;
     const { qualityScore } = req.body;
 
-    const [updated] = await Voidance.update(
+    const [updated] = await Voidances.update(
       { qualityScore },
-      { 
-        where: { 
+      {
+        where: {
           id,
-          userId: req.user.id 
-        } 
+          userId: req.user.id,
+        },
       }
     );
 
@@ -349,8 +359,8 @@ exports.updateGeneratedVoidanceQualityScore = async (req, res, next) => {
       return res.status(404).send({ message: 'Generated voidance not found' });
     }
 
-    return res.status(200).send({ 
-      message: 'Generated voidance quality score updated successfully' 
+    return res.status(200).send({
+      message: 'Generated voidance quality score updated successfully',
     });
   } catch (err) {
     return next(err);
