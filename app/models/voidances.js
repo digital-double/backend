@@ -1,13 +1,25 @@
-const { DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
+const Sequelize = require('sequelize');
 
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Voidances', {
+module.exports = (sequelize, DataTypes) => {
+  class Voidances extends Model {
+    static associate(models) {
+      this.belongsTo(models.Users, { foreignKey: 'userId' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementId' });
+      this.belongsTo(models.Company, { foreignKey: 'companyId' });
+      this.hasOne(models.InstagramVoidance, { foreignKey: 'voidanceId' });
+    }
+  }
+
+  Voidances.init(
+    {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
+        validate: {
+          isUUID: 4,
+        },
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
-        allowNull: false,
       },
       userId: {
         type: DataTypes.UUID,
@@ -16,8 +28,6 @@ module.exports = {
           model: 'Users',
           key: 'id',
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       advertisementId: {
         type: DataTypes.UUID,
@@ -26,8 +36,6 @@ module.exports = {
           model: 'Advertisements',
           key: 'id',
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       },
       companyId: {
         type: DataTypes.UUID,
@@ -36,8 +44,6 @@ module.exports = {
           model: 'Company',
           key: 'id',
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       },
       affiliatedLink: {
         type: DataTypes.STRING,
@@ -45,8 +51,7 @@ module.exports = {
       },
       numbOfClicks: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       fileType: {
         type: DataTypes.STRING,
@@ -69,44 +74,17 @@ module.exports = {
         defaultValue: 'pending',
         allowNull: false,
       },
-      campaignName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      CPC: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-      },
-      createdFromInvite: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      subject: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      message: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-    });
-  },
-  
-  down: async (queryInterface) => {
-    await queryInterface.dropTable('Voidances');
-  }
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      deletedAt: DataTypes.DATE,
+    },
+    {
+      sequelize,
+      modelName: 'Voidances',
+      paranoid: true,
+      timestamps: true,
+    }
+  );
+
+  return Voidances;
 };

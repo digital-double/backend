@@ -4,8 +4,8 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class SentInvite extends Model {
     static associate(models) {
-      this.belongsTo(models.VoidanceInvite, { foreignKey: 'voidanceInviteID' });
-      this.belongsTo(models.Company, { foreignKey: 'companyID' });
+      this.belongsTo(models.VoidanceInvite, { foreignKey: 'voidanceInviteId' });
+      this.belongsTo(models.Company, { foreignKey: 'companyId' });
     }
   }
 
@@ -18,16 +18,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
-    voidanceInviteID: {
-      type:  DataTypes.UUID,
+    voidanceInviteId: {
+      type: DataTypes.UUID,
       allowNull: true,
       references: {
         model: 'VoidanceInvite',
         key: 'id',
       },
     },
-    companyID: {
-      type:  DataTypes.UUID,
+    companyId: {
+      type: DataTypes.UUID,
       allowNull: true,
       references: {
         model: 'Company',

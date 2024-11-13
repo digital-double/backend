@@ -4,9 +4,9 @@ const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class VoidanceInvite extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userID' });
-      this.belongsTo(models.Company, { foreignKey: 'companyID' });
-      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
+      this.belongsTo(models.Users, { foreignKey: 'userId' });
+      this.belongsTo(models.Company, { foreignKey: 'companyId' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementId' });
     }
   }
 
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
-    userID: {
+    userId: {
       type:  DataTypes.UUID,
       allowNull: false,
       references: {
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    companyID: {
+    companyId: {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    advertisementID: {
+    advertisementId: {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
@@ -46,11 +46,20 @@ module.exports = (sequelize, DataTypes) => {
     subject: DataTypes.STRING,
     message: DataTypes.STRING,
     CPC: DataTypes.FLOAT,
-    campaignName: DataTypes.BOOLEAN,
-    acceptance: DataTypes.STRING,
+    campaignName: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
+    status: {
+      type: DataTypes.ENUM(
+        'pending_user',     // Waiting for user acceptance
+        'pending_company',  // Waiting for company acceptance
+        'accepted',
+        'declined'
+      ),
+      defaultValue: 'pending_user',
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'VoidanceInvite',

@@ -22,8 +22,8 @@
     ]
   },
   "imports": {
-    "#root/*.js": "./*.js", 
-    "#src/*.js": "./app/*.js", 
+    "#root/*.js": "./*.js",
+    "#src/*.js": "./app/*.js",
     "#controllers/*.js": "./app/controllers/*.js"
   },
   "author": "Omar Badawy",
@@ -64,7 +64,7 @@
     "lint-staged": "^11.1.2",
     "mocha": "^9.1.3",
     "nodemon": "^2.0.12",
-    "prettier": "^2.3.2",
+    "prettier": "^2.8.8",
     "sequelize-cli": "^6.2.0",
     "sinon": "^11.1.2",
     "solhint": "^3.3.7",
