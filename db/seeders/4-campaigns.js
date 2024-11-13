@@ -11,7 +11,7 @@ module.exports = {
       const companyRows = companyIds[0]; // Extract the data rows
   
       // Insert data for company admins linked to the fetched company IDs
-    await queryInterface.bulkInsert('Campaigns', [
+    await queryInterface.bulkInsert('Campaign', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[0].id,
@@ -76,6 +76,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Campaigns', null, {});
+    await queryInterface.bulkDelete('Campaign', null, {});
   }
 };

@@ -23,7 +23,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Advertisements',
+          model: 'Advertisement',
           key: 'id',
         },
         onUpdate: 'CASCADE',
