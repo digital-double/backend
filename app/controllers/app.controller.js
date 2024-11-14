@@ -1,15 +1,48 @@
 const db = require('../models');
 
-const { Advertisement } = db;
+const { Advertisement, Company, Campaign } = db;
+
+
 
 exports.getMain = async (req, res, next) => {
-    try {
-       const content = await Advertisement.findAll()
-        
-       return res.status(200).json({
-        message: 'Contents retrieved',
-        data: content,
-      });
+  try {
+    const advertisements = await Advertisement.findAll({
+      where: {
+          Status: true 
+      },
+      include: [
+          {
+              model: Campaign,
+              required: true,
+              include: [
+                  {
+                      model: Company,
+                      required: true,
+                  }
+              ]
+          }
+      ],
+      attributes: {
+          exclude: ['CampaignID']  // Optionally exclude foreign key 
+      }
+  });
+
+   // Convert each advertisement to a plain JavaScript object and select required company fields
+   const response = advertisements.map(item => {
+    const ad = item.toJSON();
+    const { Campaign, createdAt, updatedAt, deletedAt, companyID, ...rest } = ad; // Exclude additional fields
+    const company = Campaign?.Company ? { companyName: Campaign.Company.companyName, logo: Campaign.Company.logo } : null;
+
+    return {
+      ...rest,
+      company  // Include only companyName and logo
+    };
+  });
+
+  return res.status(200).json({
+    message: 'Contents retrieved',
+    data: response,
+  });
       
     } catch (err) {
       return next(err);

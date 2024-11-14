@@ -5,5 +5,6 @@ const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
 
 
 router.get('/', isLoggedIn, app.getMain);
+router.get('/filter', isLoggedIn, app.retrieveFiltered)
 
 module.exports = router
