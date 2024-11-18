@@ -4,14 +4,14 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Fetch company IDs from the "Companies" table
     const campaignIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Campaigns";`
+      `SELECT id FROM "Campaign";`
     );
 
     // companyIds[0] contains the actual rows of companies
     const campaignRows = campaignIds[0]; // Extract the data rows
 
     // Insert data for company admins linked to the fetched company IDs
-    await queryInterface.bulkInsert('Advertisements', [
+    await queryInterface.bulkInsert('Advertisement', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         campaignID: campaignRows[0].id,
@@ -79,6 +79,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Advertisements', null, {});
+    await queryInterface.bulkDelete('Advertisement', null, {});
   }
 };

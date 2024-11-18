@@ -9,7 +9,7 @@ module.exports = {
         `SELECT id FROM "Company";`
       );
       const advertisementIds = await queryInterface.sequelize.query(
-        `SELECT id FROM "Advertisements";`
+        `SELECT id FROM "Advertisement";`
       );
       
       const advertisementRows = advertisementIds[0];
