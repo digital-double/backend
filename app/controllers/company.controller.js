@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Company } = db 
+const { Company, Campaign } = db 
 
 // Get all companies
 exports.getAllCompanies = async (req, res, next) => {
@@ -94,4 +94,57 @@ exports.updateCompany = async (req, res, next) =>{
      console.error('Error deleting company:', err);
      return next(err);
    }
+ }
+
+ exports.getProfile = async (req, res, next) => {
+    try {
+        const { companyName } = req.params;
+        console.log(companyName)
+  
+        const company = await Company.findOne({
+          where: { companyName }, // Find by companyName
+          attributes: {
+            exclude: [
+              'industry',
+              'bankName',
+              'bankAccName',
+              'bankAccNo',
+              'bankRoutingNo',
+              'paypalAcc',
+              'bankIban',
+              'bankPaymentStatus',
+              'createdAt',
+              'updatedAt',
+            ],
+          },
+          include: [
+            {
+              model: Campaign,
+              attributes: {
+                exclude: [
+                  'potentialReach',
+                  'potentialEngagement',
+                  'actualEngagement',
+                  'createdAt',
+                  'updatedAt',
+                  'deletedAt',
+                  'numOfConversions',
+                ],
+              },
+            },
+          ],
+        });
+  
+        if (!company) {
+          return res.status(404).json({ message: 'Company not found' });
+        }
+  
+        return res.status(200).json({
+          message: 'Company with campaigns retrieved successfully',
+          data: company,
+        });
+      } catch (err) {
+        console.error('Error retrieving company with campaigns:', err);
+        return next(err);
+      }
  }
