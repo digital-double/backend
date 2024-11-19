@@ -1,37 +1,22 @@
 const express = require('express');
-
 const router = express.Router();
-// const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const company  = require('../controllers/company.controller')
 
 // Get all companies
-router.get('/', (req, res) => {
-  res.send('Get all companies route');
-});
+router.get('/', isLoggedIn, company.getAllCompanies);
 
 // Get a specific company
-router.get('/:id', (req, res) => {
-  res.send(`Get company with id: ${req.params.id}`);
-});
+router.get('/:id', isLoggedIn, company.getCompanyById);
 
 // Create a new company
-router.post('/', (req, res) => {
-  res.send('Create new company route');
-});
+router.post('/', isLoggedIn, company.createCompany);
 
 // Update company profile
-router.put('/:id', (req, res) => {
-  res.send(`Update company with id: ${req.params.id}`);
-});
+router.put('/:id', isLoggedIn, company.updateCompany);
 
-// Update company logo
-router.patch('/:id/logo', (req, res) => {
-  res.send(`Update logo for company with id: ${req.params.id}`);
-});
-
-// Update company banner
-router.patch('/:id/banner', (req, res) => {
-  res.send(`Update banner for company with id: ${req.params.id}`);
-});
+// Delete a company
+router.delete('/:id', isLoggedIn, company.deleteCompany);
 
 // Update company verification status
 router.patch('/:id/verification', (req, res) => {
@@ -56,11 +41,6 @@ router.patch('/:id/paypal', (req, res) => {
 // Update company bank payment status
 router.patch('/:id/payment-status', (req, res) => {
   res.send(`Update bank payment status for company with id: ${req.params.id}`);
-});
-
-// Delete a company
-router.delete('/:id', (req, res) => {
-  res.send(`Delete company with id: ${req.params.id}`);
 });
 
 // Get company settings
