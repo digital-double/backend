@@ -7,7 +7,7 @@ const company  = require('../controllers/company.controller')
 router.get('/', isLoggedIn, company.getAllCompanies);
 
 // Get a specific company
-router.get('/:id', isLoggedIn, company.getCompanyById);
+router.get('/search/:id', isLoggedIn, company.getCompanyById);
 
 // Create a new company
 router.post('/', isLoggedIn, company.createCompany);
@@ -19,9 +19,7 @@ router.put('/:id', isLoggedIn, company.updateCompany);
 router.delete('/:id', isLoggedIn, company.deleteCompany);
 
 // Update company verification status
-router.patch('/:id/verification', (req, res) => {
-  res.send(`Update verification status for company with id: ${req.params.id}`);
-});
+router.get('/:companyName', isLoggedIn, company.getProfile);
 
 // Update number of running ads
 router.patch('/:id/running-ads', (req, res) => {

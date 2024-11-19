@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('Company', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        companyName: 'Tech Innovations Inc.',
+        companyName: 'Techy',
         logo: 'tech_innovations_logo.png',
         description: 'A leading tech company specializing in AI and blockchain solutions.',
         banner: 'tech_innovations_banner.png',
