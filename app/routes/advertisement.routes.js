@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-// const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const advertisement = require('../controllers/advertisement.controller')
 
 // Get all advertisements
-router.get('/', (req, res) => {
-  res.send('Get all advertisements route');
-});
+router.get('/', isLoggedIn, advertisement.getAllCampaigns);
 
 // Get a specific advertisement
 router.get('/:id', (req, res) => {
@@ -13,19 +12,13 @@ router.get('/:id', (req, res) => {
 });
 
 // Create a new advertisement
-router.post('/', (req, res) => {
-  res.send('Create new advertisement route');
-});
+router.post('/', isLoggedIn, advertisement.createCampaign);
 
 // Update an advertisement
-router.put('/:id', (req, res) => {
-  res.send(`Update advertisement with id: ${req.params.id}`);
-});
+router.put('/:id', isLoggedIn, advertisement.updateCampaign);
 
 // Delete an advertisement
-router.delete('/:id', (req, res) => {
-  res.send(`Delete advertisement with id: ${req.params.id}`);
-});
+router.delete('/:id', isLoggedIn, advertisement.deleteCampaign);
 
 // Update advertisement status
 router.patch('/:id/status', (req, res) => {
