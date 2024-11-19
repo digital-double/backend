@@ -27,7 +27,8 @@ exports.getCompanyById = async (req, res, next) =>{
     const { id } = req.params;
     const company = await Company.findByPk(id, {
       attributes: {
-        exclude: ['deletedAt'], // Exclude soft-deleted timestamps if not needed
+        exclude: ['deletedAt','bankName','bankAccName',
+            'bankAccNo','bankRoutingNo','paypalAcc','bankIban','bankPaymentStatus','createdAt','updatedAt'], 
       },
     });
     if (!company) {
