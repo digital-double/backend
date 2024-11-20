@@ -12,7 +12,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', isLoggedIn, campaign.createCampaign);
 
-router.put('/:id', isLoggedIn, campaign.updateCampaign);
+router.patch('/:id', isLoggedIn, campaign.updateCampaign);
 
 router.delete('/:id', isLoggedIn, campaign.deleteCampaign);
 

@@ -35,7 +35,7 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        campaignID: campaignRows[0].id,
+        campaignID: campaignRows[1].id,
         title: 'Back to School',
         Status: false,
         adStart: new Date('2024-08-01'),
@@ -56,7 +56,7 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        campaignID: campaignRows[0].id,
+        campaignID: campaignRows[2].id,
         title: 'Holiday Discounts',
         Status: true,
         adStart: new Date('2024-12-01'),

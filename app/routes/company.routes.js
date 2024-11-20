@@ -13,7 +13,7 @@ router.get('/search/:id', isLoggedIn, company.getCompanyById);
 router.post('/', isLoggedIn, company.createCompany);
 
 // Update company profile
-router.put('/:id', isLoggedIn, company.updateCompany);
+router.patch('/:id', isLoggedIn, company.updateCompany);
 
 // Delete a company
 router.delete('/:id', isLoggedIn, company.deleteCompany);
