@@ -1,4 +1,5 @@
 const db = require('../models');
+const {createCompanyAdmin} = require('./companyAdmin.controller')
 
 const { Users } = db;
 
@@ -88,11 +89,18 @@ exports.retrieveOne = (req, res, next) => {
 };
 
 // set updatePassword attributes
-exports.expressSignup = (req, res, next) => {
+exports.expressSignup = async (req, res, next) => {
   const {
-    body: { userName, email, password },
+    body: { userName, email, password, companySignUp },
   } = req;
+  var results 
 
+  if(companySignUp){
+    results = await createCompanyAdmin(req)
+  }
+  console.log(results)
+
+  if(results === true){
   Users.createNewUser(userName, email, password)
     .then((user) => {
       res.locals.user = user;
@@ -100,4 +108,8 @@ exports.expressSignup = (req, res, next) => {
       return next();
     })
     .catch((err) => next(err));
+  }
+  else{
+  return next(new StatusError('unauthorized: please ask admin for permission to join', 422));
+  }
 };

@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Advertisement, Company, Campaign } = db;
+const { Advertisement } = db;
 
 
 // Get all advertisements for a specific campaign

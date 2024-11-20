@@ -48,6 +48,4 @@ router.post(
   session.validationResponse
 );
 
-
-
 module.exports = router;
