@@ -24,7 +24,7 @@ exports.getCompanyAdmins = async (req, res, next) => {
  
   
 // Create a new admin for a certain company
-exports.createCompanyAdmin = async (req, res, next) => {
+exports.createCompanyMember = async (req, res, next) => {
     try {
       const { companyID, email, accessRights } = req.body;
   
