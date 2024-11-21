@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const { isLoggedIn, isAdminOfCompany } = require('../middlewares/authorization.middleware');
 const company  = require('../controllers/company.controller')
+const admin = require('../controllers/companyAdmin.controller')
 
 // Get all companies
 router.get('/', isLoggedIn, company.getAllCompanies);
@@ -10,21 +11,19 @@ router.get('/', isLoggedIn, company.getAllCompanies);
 router.get('/search/:id', isLoggedIn, company.getCompanyById);
 
 // Create a new company
-router.post('/', isLoggedIn, company.createCompany);
+router.post('/',  company.createCompany);
 
 // Update company profile
-router.patch('/:id', isLoggedIn, company.updateCompany);
+router.patch('/:id', isLoggedIn, isAdminOfCompany, company.updateCompany);
 
 // Delete a company
 router.delete('/:id', isLoggedIn, company.deleteCompany);
 
-// Update company verification status
+// get company Profile
 router.get('/:companyName', isLoggedIn, company.getProfile);
 
-// Update number of running ads
-router.patch('/:id/running-ads', (req, res) => {
-  res.send(`Update number of running ads for company with id: ${req.params.id}`);
-});
+// post company admin
+router.post('/admin', isAdminOfCompany, admin.createCompanyAdmin);
 
 // Update company bank details
 router.patch('/:id/bank-details', (req, res) => {

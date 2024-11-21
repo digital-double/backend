@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Advertisement, Company, Campaign } = db;
+const { Advertisement } = db;
 
 
 // Get all advertisements for a specific campaign
@@ -41,6 +41,7 @@ exports.createAdvertisement = async (req, res, next) => {
         adEnd,
         alocatedBudget,
         description,
+        avgCPC,
       });
   
       return res.status(201).json({
