@@ -29,25 +29,26 @@ exports.createCompanyAdmin = async (req, res, next) => {
       const { companyID, email, accessRights } = req.body;
   
     
-      if (!companyID || !email ) {
-        return res.status(400).json({
-          message: 'Company ID, email, and password are required to create an admin.',
-        });
+      if (!companyID || !email || !accessRights ) {
+        throw new StatusError('Company ID, email, and accessRights are required to create an admin.', 400);
       }
 
-      const validation = await CompanyAdmin.findOne({
+      const adminExists = await CompanyAdmin.findOne({
         where: {
             companyID : companyID,
         }
       })
-      if(validation){
+
+      if(adminExists){
         return false;
       }
-        await CompanyAdmin.create({
-        companyID,
-        email,
-        accessRights,
+
+      await CompanyAdmin.create({
+      companyID,
+      email,
+      accessRights,
       });
+
       return true
     } catch (err) {
       console.error('Error creating company admin:', err);

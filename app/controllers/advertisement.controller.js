@@ -41,6 +41,7 @@ exports.createAdvertisement = async (req, res, next) => {
         adEnd,
         alocatedBudget,
         description,
+        avgCPC,
       });
   
       return res.status(201).json({

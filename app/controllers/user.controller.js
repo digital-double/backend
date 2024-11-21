@@ -90,18 +90,21 @@ exports.retrieveOne = (req, res, next) => {
 
 // set updatePassword attributes
 exports.expressSignup = async (req, res, next) => {
+  try{
   const {
     body: { userName, email, password, companySignUp },
   } = req;
-  var results 
+  var results = true 
 
   if(companySignUp){
-    results = await createCompanyAdmin(req)
+    results = await createCompanyAdmin(req, res, next)
   }
-  console.log(results)
 
-  if(results === true){
-  Users.createNewUser(userName, email, password)
+  if(results === false){
+    throw new StatusError('unauthorized: please ask admin for permission to join', 422);
+  }
+  else{
+    Users.createNewUser(userName, email, password)
     .then((user) => {
       res.locals.user = user;
       req.body.userCredential = userName;
@@ -109,7 +112,8 @@ exports.expressSignup = async (req, res, next) => {
     })
     .catch((err) => next(err));
   }
-  else{
-  return next(new StatusError('unauthorized: please ask admin for permission to join', 422));
+  }
+  catch(err){
+    return next(err)
   }
 };

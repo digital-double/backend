@@ -11,7 +11,7 @@ router.get('/', isLoggedIn, company.getAllCompanies);
 router.get('/search/:id', isLoggedIn, company.getCompanyById);
 
 // Create a new company
-router.post('/', isLoggedIn, company.createCompany);
+router.post('/',  company.createCompany);
 
 // Update company profile
 router.patch('/:id', isLoggedIn, isAdminOfCompany, company.updateCompany);
