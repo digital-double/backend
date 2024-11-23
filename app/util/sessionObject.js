@@ -3,4 +3,5 @@ exports.sessionObject = (userObject) => ({
     userName: userObject.userName,
     email: userObject.email,
     avatar: userObject.avatar,
+    companyEditor: userObject.companyEditor,
   });

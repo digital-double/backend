@@ -16,6 +16,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      userName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       logo: {
         type: Sequelize.STRING,
         allowNull: true,

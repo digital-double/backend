@@ -26,10 +26,10 @@ exports.getCompanyAdmins = async (req, res, next) => {
 // Create a new admin for a certain company
 exports.createCompanyMember = async (req, res, next) => {
     try {
-      const { companyID, email, accessRights } = req.body;
+      const { companyID, email } = req.body;
   
     
-      if (!companyID || !email || !accessRights ) {
+      if (!companyID || !email ) {
         throw new StatusError('Company ID, email, and accessRights are required to create an admin.', 400);
       }
 
@@ -46,7 +46,7 @@ exports.createCompanyMember = async (req, res, next) => {
       await CompanyAdmin.create({
       companyID,
       email,
-      accessRights,
+      accessRights : 'Admin',
       });
 
       return true

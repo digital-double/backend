@@ -6,6 +6,7 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyName: 'Techy',
+        userName: 'Techy',
         logo: 'tech_innovations_logo.png',
         description: 'A leading tech company specializing in AI and blockchain solutions.',
         banner: 'tech_innovations_banner.png',
@@ -26,6 +27,7 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyName: 'Green Energy Solutions',
+        userName: 'green',
         logo: 'green_energy_logo.png',
         description: 'Providing renewable energy solutions globally.',
         banner: 'green_energy_banner.png',
@@ -46,6 +48,7 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyName: 'Blue brue company',
+        userName: 'Blue',
         logo: 'Blue.png',
         description: 'We make blue stuff for no reason.',
         banner: 'Blue_stuff_banner.png',

@@ -1,5 +1,5 @@
 const db = require('../models');
-const {createCompanyAdmin} = require('./companyAdmin.controller')
+const {createCompanyMember} = require('./companyAdmin.controller')
 
 const { Users } = db;
 
@@ -94,24 +94,23 @@ exports.expressSignup = async (req, res, next) => {
   const {
     body: { userName, email, password, companySignUp },
   } = req;
-  var results = true 
+  var companyEditor = false
 
   if(companySignUp){
-    results = await createCompanyAdmin(req, res, next)
+    results = await createCompanyMember(req, res, next)
+    if(results === false){
+      throw new StatusError('unauthorized: please ask admin for permission to join', 422);
+    }
+    companyEditor = results
   }
 
-  if(results === false){
-    throw new StatusError('unauthorized: please ask admin for permission to join', 422);
-  }
-  else{
-    Users.createNewUser(userName, email, password)
+    Users.createNewUser(userName, email, password, companyEditor)
     .then((user) => {
       res.locals.user = user;
       req.body.userCredential = userName;
       return next();
     })
     .catch((err) => next(err));
-  }
   }
   catch(err){
     return next(err)

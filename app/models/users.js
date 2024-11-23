@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.VoidanceInvite, { foreignKey: 'userID' });
     }
 
-    static createNewUser(userName, email, password) {
+    static createNewUser(userName, email, password,companyEditor) {
       return bcrypt
         .hash(password, 12)
         .then((passwordHash) => {
@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
               ...{ userName },
               ...{ email },
               ...{ passwordHash },
+              ...{companyEditor},
             },
           });
         })
@@ -135,6 +136,7 @@ module.exports = (sequelize, DataTypes) => {
     banned: DataTypes.BOOLEAN,
     engagementScore: DataTypes.FLOAT,
     balance: DataTypes.FLOAT,
+    companyEditor: DataTypes.BOOLEAN,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
