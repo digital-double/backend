@@ -26,6 +26,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      companyEditor:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       resetTokenExp: {
         type: DataTypes.DATE,
         allowNull: true,

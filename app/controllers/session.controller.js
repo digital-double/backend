@@ -1,6 +1,5 @@
 exports.login = (req, res, _next) => {
     const { user } = req;
-  
     return res.status(200).json({
       message: 'Successfully logged in',
       user: user.stripSensitive(),

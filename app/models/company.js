@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
     companyName: DataTypes.STRING,
+    userName: DataTypes.STRING,
     logo: DataTypes.STRING,
     description: DataTypes.STRING,
     banner: DataTypes.STRING,

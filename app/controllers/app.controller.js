@@ -1,8 +1,6 @@
 const db = require('../models');
 
-const { Advertisement, Company, Campaign } = db;
-
-
+const { Advertisement, Company, Campaign, Users, Voidances, CompanyAdmin } = db;
 
 exports.getMain = async (req, res, next) => {
   try {
@@ -27,8 +25,8 @@ exports.getMain = async (req, res, next) => {
       }
   });
 
-   // Convert each advertisement to a plain JavaScript object and select required company fields
-   const response = advertisements.map(item => {
+    // Convert each advertisement to a plain JavaScript object and select required company fields
+    const response = advertisements.map(item => {
     const ad = item.toJSON();
     const { Campaign, createdAt, updatedAt, deletedAt, companyID, ...rest } = ad; // Exclude additional fields
     const company = Campaign?.Company ? { companyName: Campaign.Company.companyName, logo: Campaign.Company.logo } : null;
@@ -74,6 +72,92 @@ exports.getMain = async (req, res, next) => {
       data: [],
     });
   };
+
+  exports.getProfile = async (req, res, next) =>{
+    try {
+      const { userName } = req.params;
+
+      // Check if the userName belongs to a Company
+      const company = await Company.findOne({ 
+        where: { userName }, 
+        attributes: {
+          exclude: [
+            'bankName',
+            'bankAccName',
+            'bankAccNo',
+            'bankRoutingNo',
+            'paypalAcc',
+            'bankIban',
+            'bankPaymentStatus',
+            'createdAt',
+            'updatedAt',
+            'deletedAt',
+          ],
+        },
+      });
+    
+      if (company) {
+        // If a Company is found, fetch all associated campaigns excluding specific fields
+        const campaigns = await Campaign.findAll({
+          where: { companyID: company.id },
+          attributes: {
+            exclude: [
+              'potentialReach',
+              'potentialEngagement',
+              'actualEngagement',
+              'createdAt',
+              'updatedAt',
+              'deletedAt',
+              'numOfConversions',
+            ],
+          },
+        });
+    
+        return res.status(200).json({
+          message: 'Company data retrieved successfully',
+          data: {
+            profile: company,
+            campaigns,
+          },
+        });
+      }
+    
+      // Check if the userName belongs to a User
+      const user = await Users.findOne({
+        where: { userName },
+        attributes: { exclude: ['password'] }, 
+      });
+    
+      if (!user) {
+        throw new StatusError(`No record found for userName "${userName}".`, 404);
+      }
+    
+      // If the user is found, fetch all associated voidances
+      const voidances = await Voidances.findAll({
+        where: { userId: user.id },
+        attributes: {
+          exclude: [
+            'createdAt',
+            'updatedAt',
+            'deletedAt',
+            'qualityScore',
+          ],
+        }
+      });
+    
+      return res.status(200).json({
+        message: 'User data retrieved successfully',
+        data: {
+          user,
+          voidances,
+        },
+      });
+    } catch (err) {
+      console.error('Error retrieving data:', err);
+      return next(err);
+    }
+    
+    };
   
 
 

@@ -11,6 +11,7 @@ module.exports = {
         email: 'omar.badawy@digitaldouble.com',
         name: "omar",
         passwordHash: await bcrypt.hash('omar', 12),
+        companyEditor: true,
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
@@ -18,6 +19,7 @@ module.exports = {
         email: 'ignazio@digitaldouble.com',
         name:"ignazio",
         passwordHash: await bcrypt.hash('ignazio', 12),
+        companyEditor: false,
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
@@ -25,6 +27,7 @@ module.exports = {
         email: 'NicoBiko@digitaldouble.com',
         name:"nico",
         passwordHash: await bcrypt.hash('nico', 12),
+        companyEditor: false,
       },
     ]);
   },
