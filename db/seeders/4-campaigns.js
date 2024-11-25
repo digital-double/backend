@@ -2,15 +2,13 @@ const { Sequelize } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-     // Fetch company IDs from the "Companies" table
      const companyIds = await queryInterface.sequelize.query(
         `SELECT id FROM "Company";`
       );
+   
+      const companyRows = companyIds[0]; 
   
-      // companyIds[0] contains the actual rows of companies
-      const companyRows = companyIds[0]; // Extract the data rows
-  
-      // Insert data for company admins linked to the fetched company IDs
+      
     await queryInterface.bulkInsert('Campaign', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),

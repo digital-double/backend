@@ -161,18 +161,17 @@ exports.getProfile = async (req, res, next) =>{
 
 exports.getVoidanceInvites = async (req, res, next) => {
   try {
-    const { userID } = req.params; // Assuming userId is passed as a URL parameter
+    const { userID } = req.params; 
 
     const isCompanyAdmin = await CompanyAdmin.findOne({
       where: { userID },
     });
 
     if (isCompanyAdmin) {
-      // Fetch ContactUs objects for the user
       const contactUsObjects = await ContactUs.findAll({
         where: { userID: userID },
         attributes: {
-          exclude: ['updatedAt', 'deletedAt'], // Exclude specific fields
+          exclude: ['updatedAt', 'deletedAt'],
         },
         include: [
           {
@@ -196,7 +195,6 @@ exports.getVoidanceInvites = async (req, res, next) => {
       });
     }
 
-    // If not a CompanyAdmin, fetch VoidanceInvites
     const voidanceInvites = await VoidanceInvite.findAll({
       where: { userId: userID },
       attributes: {
@@ -224,7 +222,7 @@ exports.getVoidanceInvites = async (req, res, next) => {
     });
   } catch (err) {
     console.error('Error retrieving data:', err);
-    return next(err); // Pass error to error-handling middleware
+    return next(err); 
   }
 };
 
