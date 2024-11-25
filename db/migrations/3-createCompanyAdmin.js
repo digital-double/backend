@@ -29,8 +29,18 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Company', // refers to table name 'Companies'
-          key: 'id',          // refers to column name 'id' in 'Companies'
+          model: 'Company', 
+          key: 'id',          
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      userID: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Users', 
+          key: 'id',          
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

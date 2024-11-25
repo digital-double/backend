@@ -27,8 +27,7 @@ exports.getCompanyAdmins = async (req, res, next) => {
 exports.createCompanyMember = async (req, res, next) => {
     try {
       const { companyID, email } = req.body;
-  
-    
+     
       if (!companyID || !email ) {
         throw new StatusError('Company ID, email, and accessRights are required to create an admin.', 400);
       }
