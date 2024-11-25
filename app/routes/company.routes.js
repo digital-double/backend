@@ -10,7 +10,7 @@ router.get('/search/:id', isLoggedIn, company.getCompanyById);
 router.get('/:companyName', isLoggedIn, company.getProfile);
 
 router.post('/',  company.createCompany);
-router.post('/members', isAdminOfCompany, admin.createCompanyMember);
+// router.post('/members', isAdminOfCompany, admin.createCompanyMember);
 
 router.patch('/:id', isLoggedIn, isAdminOfCompany, company.updateCompany);
 
