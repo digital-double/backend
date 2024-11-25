@@ -1,7 +1,9 @@
-const { Model } = require('sequelize');
-const Sequelize = require("sequelize");
+const { Model, DataTypes } = require('sequelize');
+const Sequelize = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
+'use strict';
+
+module.exports = (sequelize) => {
   class VoidanceInvite extends Model {
     static associate(models) {
       this.belongsTo(models.Users, { foreignKey: 'userId' });
@@ -14,51 +16,78 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
-      validate: {
-        isUUID: 4,
-      },
+      allowNull: false,
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
     userId: {
-      type:  DataTypes.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Users',
+        model: 'Users', 
         key: 'id',
       },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     companyId: {
-      type:  DataTypes.UUID,
+      type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Company',
+        model: 'Company', 
         key: 'id',
       },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     advertisementId: {
-      type:  DataTypes.UUID,
+      type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Advertisement',
+        model: 'Advertisement', 
         key: 'id',
       },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
-    subject: DataTypes.STRING,
-    message: DataTypes.STRING,
-    CPC: DataTypes.FLOAT,
-    campaignName: DataTypes.STRING,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
-    deletedAt: DataTypes.DATE,
+    subject: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    message: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    CPC: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    campaignName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('NOW()'),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('NOW()'),
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     status: {
       type: DataTypes.ENUM(
-        'pending_user',     // Waiting for user acceptance
-        'pending_company',  // Waiting for company acceptance
+        'pending_user',
+        'pending_company',
         'accepted',
         'declined'
       ),
+      allowNull: false,
       defaultValue: 'pending_user',
-      allowNull: false
     },
   }, {
     sequelize,
@@ -69,3 +98,4 @@ module.exports = (sequelize, DataTypes) => {
 
   return VoidanceInvite;
 };
+

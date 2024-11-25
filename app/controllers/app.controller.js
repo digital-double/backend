@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Advertisement, Company, Campaign, Users, Voidances, CompanyAdmin } = db;
+const { Advertisement, Company, Campaign, Users, Voidances, VoidanceInvite, ContactUs, CompanyAdmin} = db;
 
 exports.getMain = async (req, res, next) => {
   try {
@@ -47,7 +47,7 @@ exports.getMain = async (req, res, next) => {
     }
   };
 
-  exports.retrieveFiltered = (req, res, next) => {
+exports.retrieveFiltered = (req, res, next) => {
     const {
       body: { title, offset = 0 },
     } = req;
@@ -71,9 +71,9 @@ exports.getMain = async (req, res, next) => {
       message: 'No content',
       data: [],
     });
-  };
+};
 
-  exports.getProfile = async (req, res, next) =>{
+exports.getProfile = async (req, res, next) =>{
     try {
       const { userName } = req.params;
 
@@ -157,7 +157,74 @@ exports.getMain = async (req, res, next) => {
       return next(err);
     }
     
-    };
-  
+};
+
+exports.getVoidanceInvites = async (req, res, next) => {
+  try {
+    const { userID } = req.params; 
+
+    const isCompanyAdmin = await CompanyAdmin.findOne({
+      where: { userID },
+    });
+
+    if (isCompanyAdmin) {
+      const contactUsObjects = await ContactUs.findAll({
+        where: { userID: userID },
+        attributes: {
+          exclude: ['updatedAt', 'deletedAt'],
+        },
+        include: [
+          {
+            model: Users,
+            attributes: ['id', 'userName', 'email'], 
+          },
+          {
+            model: Advertisement,
+            attributes: ['id', 'title'], 
+          },
+        ],
+      });
+
+      if (!contactUsObjects || contactUsObjects.length === 0) {
+        throw new StatusError(`No ContactUs records found`, 404);
+      }
+
+      return res.status(200).json({
+        message: 'ContactUs data retrieved successfully.',
+        data: contactUsObjects,
+      });
+    }
+
+    const voidanceInvites = await VoidanceInvite.findAll({
+      where: { userId: userID },
+      attributes: {
+        exclude: ['updatedAt', 'deletedAt'], 
+      },
+      include: [
+        {
+          model: Company,
+          attributes: ['id', 'companyName'], 
+        },
+        {
+          model: Advertisement,
+          attributes: ['id', 'title'], 
+        },
+      ],
+    });
+
+    if (!voidanceInvites || voidanceInvites.length === 0) {
+      throw new StatusError(`No VoidanceInvites found for the specified user`, 404);
+    }
+
+    return res.status(200).json({
+      message: 'VoidanceInvites retrieved successfully.',
+      data: voidanceInvites,
+    });
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    return next(err); 
+  }
+};
+
 
 

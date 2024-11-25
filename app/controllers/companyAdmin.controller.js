@@ -24,11 +24,10 @@ exports.getCompanyAdmins = async (req, res, next) => {
  
   
 // Create a new admin for a certain company
-exports.createCompanyMember = async (req, res, next) => {
+exports.checkCompanyAdmin = async (req, res, next) => {
     try {
       const { companyID, email } = req.body;
-  
-    
+     
       if (!companyID || !email ) {
         throw new StatusError('Company ID, email, and accessRights are required to create an admin.', 400);
       }
@@ -43,18 +42,29 @@ exports.createCompanyMember = async (req, res, next) => {
         return false;
       }
 
-      await CompanyAdmin.create({
-      companyID,
-      email,
-      accessRights : 'Admin',
-      });
-
       return true
-    } catch (err) {
+    } 
+    catch (err) {
       console.error('Error creating company admin:', err);
       return next(err);
     }
   };
+
+  exports.postCompanyAdmin = async (req, res, next, user) => {
+    try{
+      const { companyID, email } = req.body;
+      await CompanyAdmin.create({
+        companyID,
+        email,
+        accessRights : 'Admin',
+        userID : user.id
+      });
+    }
+    catch(err){
+      console.error('Error creating company admin:', err);
+      return next(err);
+    }
+  }
  
   
   // Delete an admin of a certain company
