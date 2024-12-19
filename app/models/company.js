@@ -19,6 +19,23 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       });
     }
+    static findCompanyByID = (id) => {
+        return Company.findByPk(id, {
+          attributes: {
+            exclude: ['deletedAt','bankName','bankAccName',
+                'bankAccNo','bankRoutingNo','paypalAcc','bankIban','bankPaymentStatus','createdAt','updatedAt'], 
+          },
+        }).then((company) => {
+          if (!company) {
+            throw new StatusError('Company not found', 404);
+          }
+          return company
+        }).catch(() => {
+          throw new StatusError('error retrieving company', 404);
+        });
+    }
+  
+  
   }
 
   Company.init({

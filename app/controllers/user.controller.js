@@ -6,7 +6,7 @@ const { Users } = db;
 // Update a user
 exports.updateOne = (req, res, next) => {
   const { user } = req;
-
+  try{
   user
     .update(req.body)
     .then((updatedUser) => {
@@ -15,7 +15,13 @@ exports.updateOne = (req, res, next) => {
         user: updatedUser.stripSensitive(),
       });
     })
-    .catch((err) => next(err));
+    .catch(() => {
+      throw new StatusError('missing user credentials', 404);
+    });
+  }
+  catch (err){
+    next(err)
+  }
 };
 
 // set updatePassword attributes
@@ -62,6 +68,11 @@ exports.updatePassword = (req, res, next) => {
     body: { oldPassword, newPassword },
   } = req;
 
+  try{
+    if(!oldPassword || ! newPassword){
+      throw new StatusError("missing userCredentials",400)
+    }
+
   user
     .replacePassword(oldPassword, newPassword)
     .then(() => {
@@ -69,7 +80,13 @@ exports.updatePassword = (req, res, next) => {
         message: 'Password successfully updated',
       });
     })
-    .catch((err) => next(err));
+    .catch(() => {
+      throw new StatusError('Something went wrong while updating', 500);
+    });
+  }
+  catch (err){
+    next(err)
+  }
 };
 
 // Get User object from the username in the request
