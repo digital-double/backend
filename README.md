@@ -61,16 +61,10 @@ You need to install the following things to be able to run this project on your 
 
 5. Setup testing and development database
 
-   1. Run the following to drop & create a new database and automatically migrate and seed:
+   Run the following to drop & create a new database and automatically migrate and seed:
 
       ```zsh
       npm run setup:db
-      ```
-
-   2. Run the following to setup the testing database:
-
-      ```zsh
-      npm run setup:testing
       ```
 
 ### Commands
@@ -92,4 +86,4 @@ You need to install the following things to be able to run this project on your 
 
 authors
 Omar Badawy
-Ignazio Balistreri
+

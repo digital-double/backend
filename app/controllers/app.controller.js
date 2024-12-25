@@ -20,9 +20,6 @@ exports.getMain = async (req, res, next) => {
               ]
           }
       ],
-      attributes: {
-          exclude: ['CampaignID']  // Optionally exclude foreign key 
-      }
   });
 
     // Convert each advertisement to a plain JavaScript object and select required company fields

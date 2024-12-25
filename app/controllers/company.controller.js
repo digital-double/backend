@@ -23,25 +23,14 @@ exports.getAllCompanies = async (req, res, next) => {
 
 // Get a specific company by ID
 exports.getCompanyById = async (req, res, next) =>{
-  try {
-    const { id } = req.params;
-    const company = await Company.findByPk(id, {
-      attributes: {
-        exclude: ['deletedAt','bankName','bankAccName',
-            'bankAccNo','bankRoutingNo','paypalAcc','bankIban','bankPaymentStatus','createdAt','updatedAt'], 
-      },
-    });
-    if (!company) {
-      return res.status(404).json({ message: 'Company not found' });
-    }
-    return res.status(200).json({
-      message: 'Company retrieved successfully',
-      data: company,
-    });
-  } catch (err) {
-    console.error('Error retrieving company:', err);
-    return next(err);
-  }
+  const { id } = req.params;
+    Company.findCompanyByID(id).then((company) => {
+      return res.status(200).json({
+        message: 'Company retrieved successfully',
+        data: company,
+      });
+    })  
+    .catch((err) => next(err));
 },
 
 // Create a new company
@@ -99,7 +88,6 @@ exports.updateCompany = async (req, res, next) =>{
  exports.getProfile = async (req, res, next) => {
     try {
         const { companyName } = req.params;
-        console.log(companyName)
   
         const company = await Company.findOne({
           where: { companyName }, // Find by companyName

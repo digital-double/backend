@@ -4,8 +4,9 @@ const { resetTemplate } = require('../lib/templates');
 require('dotenv').config();
 
 const transportObject = {
-  service: 'hotmail', // using gmail requires added security authentication check nodemailer docs
+  service: 'gmail', // using gmail requires added security authentication check nodemailer docs
   secure: false, // do not use process.env for this otherwise it won't work
+  port: 587,
   auth: {
     user: process.env.EMAIL_USER_ACCOUNT,
     pass: process.env.EMAIL_PASSWORD,

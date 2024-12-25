@@ -4,18 +4,30 @@ const {checkCompanyAdmin, postCompanyAdmin} = require('./companyAdmin.controller
 const { Users } = db;
 
 // Update a user
-exports.updateOne = (req, res, next) => {
-  const { user } = req;
+exports.updateOne = async (req, res, next) => {
+  try {
+    const { userName } = req.params;
+    const type = 'userName'
 
-  user
-    .update(req.body)
-    .then((updatedUser) => {
-      return res.status(200).send({
-        message: 'User was updated successfully',
-        user: updatedUser.stripSensitive(),
-      });
-    })
-    .catch((err) => next(err));
+    const user = await Users.findByLogin(type, userName);
+
+    if ('password' in req.body) {
+      return res.status(403).json({ error: 'Forbiden' });
+    }
+    if (!user) {
+      return res.status(404).json({ message: 'missing user credentials' });
+    }
+    
+    const updatedUser = await user.update(req.body);
+
+    return res.status(200).send({
+      message: 'User was updated successfully',
+      user: updatedUser.stripSensitive(),
+    });
+  } catch (err) {
+    console.error('Error updating user', err);
+    return next(err);
+  }
 };
 
 // set updatePassword attributes
@@ -62,6 +74,11 @@ exports.updatePassword = (req, res, next) => {
     body: { oldPassword, newPassword },
   } = req;
 
+  try{
+    if(!oldPassword || ! newPassword){
+      throw new StatusError("missing userCredentials",400)
+    }
+
   user
     .replacePassword(oldPassword, newPassword)
     .then(() => {
@@ -69,7 +86,13 @@ exports.updatePassword = (req, res, next) => {
         message: 'Password successfully updated',
       });
     })
-    .catch((err) => next(err));
+    .catch(() => {
+      throw new StatusError('Something went wrong while updating', 500);
+    });
+  }
+  catch (err){
+    next(err)
+  }
 };
 
 // Get User object from the username in the request
