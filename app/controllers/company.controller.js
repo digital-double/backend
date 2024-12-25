@@ -88,7 +88,6 @@ exports.updateCompany = async (req, res, next) =>{
  exports.getProfile = async (req, res, next) => {
     try {
         const { companyName } = req.params;
-        console.log(companyName)
   
         const company = await Company.findOne({
           where: { companyName }, // Find by companyName

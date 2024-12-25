@@ -147,5 +147,11 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
   });
 
+  Users.beforeUpdate((user, options) => {
+    if (user.changed('id') || user.changed('userName')) {
+      throw new Error('The id and userName fields are immutable and cannot be changed.');
+    }
+  });
+
   return Users;
 };

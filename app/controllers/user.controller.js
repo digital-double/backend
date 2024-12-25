@@ -4,23 +4,29 @@ const {checkCompanyAdmin, postCompanyAdmin} = require('./companyAdmin.controller
 const { Users } = db;
 
 // Update a user
-exports.updateOne = (req, res, next) => {
-  const { user } = req;
-  try{
-  user
-    .update(req.body)
-    .then((updatedUser) => {
-      return res.status(200).send({
-        message: 'User was updated successfully',
-        user: updatedUser.stripSensitive(),
-      });
-    })
-    .catch(() => {
-      throw new StatusError('missing user credentials', 404);
+exports.updateOne = async (req, res, next) => {
+  try {
+    const { userName } = req.params;
+    const type = 'userName'
+
+    const user = await Users.findByLogin(type, userName);
+
+    if ('password' in req.body) {
+      return res.status(403).json({ error: 'Forbiden' });
+    }
+    if (!user) {
+      return res.status(404).json({ message: 'missing user credentials' });
+    }
+    
+    const updatedUser = await user.update(req.body);
+
+    return res.status(200).send({
+      message: 'User was updated successfully',
+      user: updatedUser.stripSensitive(),
     });
-  }
-  catch (err){
-    next(err)
+  } catch (err) {
+    console.error('Error updating user', err);
+    return next(err);
   }
 };
 
