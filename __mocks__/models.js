@@ -96,9 +96,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   
     findByLogin: jest.fn((field, value) =>
       value === 'testuser'
@@ -172,9 +172,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockCompany = {
@@ -228,9 +228,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)),
   
     findCompanyByID: jest.fn((id) =>
       id === 'test-company-id'
@@ -296,9 +296,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])),
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockContactUs = {
@@ -350,9 +350,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockFaq = {
@@ -398,9 +398,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockInstagramCredentials = {
@@ -452,9 +452,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])),
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockSentInvite = {
@@ -495,9 +495,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])),
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockSession = {
@@ -538,9 +538,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])),
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockVoidanceInvite = {
@@ -601,9 +601,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
 
   const mockVoidances = {
@@ -670,9 +670,9 @@ const mockAdvertisement = {
       })
     ),
   
-    update: jest.fn(() => Promise.resolve([1])), // 1 row updated
+    update: jest.fn(() => Promise.resolve([1])), 
   
-    destroy: jest.fn(() => Promise.resolve(1)), // 1 row deleted
+    destroy: jest.fn(() => Promise.resolve(1)), 
   };
   
   module.exports = {
