@@ -1,59 +1,155 @@
+const request = require('supertest');
+const express = require('express');
+const advertisementController = require('../../app/controllers/advertisement.controller');
 const { Advertisement } = require('../../app/models');
 
-describe('Advertisement Model', () => {
-    it('should find an advertisement by primary key', async () => {
-      const ad = await Advertisement.findByPk('test-ad-id');
-      expect(ad).toBeDefined();
-      expect(ad.id).toBe('test-ad-id');
-      expect(ad.title).toBe('Test Ad');
+// Setup express app for testing
+const app = express();
+app.use(express.json());
+
+app.get('/advertisements/campaign/:campaignID', advertisementController.getAdvertisementsByCampaign);
+app.post('/advertisements', advertisementController.createAdvertisement);
+app.delete('/advertisements/:id', advertisementController.deleteAdvertisement);
+app.get('/advertisements/:id', advertisementController.getAdvertisementById);
+
+describe('Advertisement Controller', () => {
+  describe('getAdvertisementsByCampaign', () => {
+    it('should retrieve advertisements for a specific campaign', async () => {
+      Advertisement.findAll.mockResolvedValue([
+        { id: '1', title: 'Ad 1' },
+        { id: '2', title: 'Ad 2' },
+      ]);
+
+      const response = await request(app).get('/advertisements/campaign/test-campaign-id');
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Advertisements retrieved successfully');
+      expect(response.body.data).toHaveLength(2);
+      expect(Advertisement.findAll).toHaveBeenCalledWith({
+        where: { campaignID: 'test-campaign-id' },
+        attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+      });
     });
-  
-    it('should create a new advertisement', async () => {
-      const adData = {
-        title: 'New Ad',
-        status: true,
-        allocatedBudget: 2000.0,
-        adStart: new Date(),
-        adEnd: new Date(),
-      };
-      const newAd = await Advertisement.create(adData);
-      expect(newAd.id).toBeDefined();
-      expect(newAd.title).toBe('New Ad');
-      expect(newAd.allocatedBudget).toBe(2000.0);
-    });
-  
-    it('should update an advertisement', async () => {
-      const updatedRows = await Advertisement.update(
-        { title: 'Updated Ad' }, // Fields to update
-        { where: { id: 'test-ad-id' } } // Condition for update
-      );
-      expect(updatedRows[0]).toBe(1); // 1 row updated
-    });
-  
-    it('should delete an advertisement', async () => {
-      const deletedRows = await Advertisement.destroy({ where: { id: 'test-ad-id' } });
-      expect(deletedRows).toBe(1); // 1 row deleted
-    });
-  
-    it('should find all advertisements', async () => {
-      const ads = await Advertisement.findAll();
-      expect(ads).toBeDefined();
-      expect(ads).toHaveLength(2);
-      expect(ads[0].title).toBe('Ad 1');
-      expect(ads[1].title).toBe('Ad 2');
-    });
-  
-    it('should throw an error when trying to create an advertisement with invalid data', async () => {
-      Advertisement.create.mockImplementationOnce(() =>
-        Promise.reject(new Error('Invalid advertisement data'))
-      );
-      await expect(
-        Advertisement.create({
-          title: '',
-          status: null,
-          allocatedBudget: -100,
-        })
-      ).rejects.toThrow('Invalid advertisement data');
+
+    it('should handle errors during retrieval', async () => {
+      Advertisement.findAll.mockRejectedValue(new Error('Database error'));
+
+      const response = await request(app).get('/advertisements/campaign/test-campaign-id');
+      expect(response.status).toBe(500);
     });
   });
+
+  describe('createAdvertisement', () => {
+    it('should create a new advertisement', async () => {
+      const newAd = { id: '1', title: 'New Ad' };
+      Advertisement.create.mockResolvedValue(newAd);
+    
+      const response = await request(app).post('/advertisements').send({
+        campaignID: 'test-campaign-id',
+        title: 'New Ad',
+        Status: true,
+        adStart: new Date().toISOString(), 
+        adEnd: new Date().toISOString(),
+        alocatedBudget: 1000.0,
+        description: 'A new advertisement',
+        avgCPC: 10.0,
+      });
+    
+      expect(response.status).toBe(201);
+      expect(response.body.message).toBe('Advertisement created successfully');
+      expect(response.body.data).toEqual(newAd);
+      expect(Advertisement.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          campaignID: 'test-campaign-id',
+          title: 'New Ad',
+          Status: true,
+          adStart: expect.any(String), 
+          adEnd: expect.any(String),
+          alocatedBudget: 1000.0,
+          description: 'A new advertisement',
+          avgCPC: 10.0,
+        })
+      );
+    });
+
+    it('should return a 400 error if campaignID is not provided', async () => {
+      const response = await request(app).post('/advertisements').send({
+        title: 'New Ad',
+        Status: true,
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Campaign ID is required to create an advertisement.');
+    });
+
+    it('should handle errors during creation', async () => {
+      Advertisement.create.mockRejectedValue(new Error('Database error'));
+
+      const response = await request(app).post('/advertisements').send({
+        campaignID: 'test-campaign-id',
+        title: 'New Ad',
+      });
+
+      expect(response.status).toBe(500);
+    });
+  });
+
+  describe('deleteAdvertisement', () => {
+    it('should delete an advertisement by ID', async () => {
+      const mockAd = { id: '1', destroy: jest.fn() };
+      Advertisement.findByPk.mockResolvedValue(mockAd);
+
+      const response = await request(app).delete('/advertisements/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Advertisement deleted successfully');
+      expect(mockAd.destroy).toHaveBeenCalled();
+    });
+
+    it('should return 404 if advertisement is not found', async () => {
+      Advertisement.findByPk.mockResolvedValue(null);
+
+      const response = await request(app).delete('/advertisements/non-existent-id');
+
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('Advertisement not found');
+    });
+
+    it('should handle errors during deletion', async () => {
+      Advertisement.findByPk.mockRejectedValue(new Error('Database error'));
+
+      const response = await request(app).delete('/advertisements/1');
+      expect(response.status).toBe(500);
+    });
+  });
+
+  describe('getAdvertisementById', () => {
+    it('should retrieve an advertisement by ID', async () => {
+      const mockAd = { id: '1', title: 'Test Ad' };
+      Advertisement.findByPk.mockResolvedValue(mockAd);
+
+      const response = await request(app).get('/advertisements/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Advertisement retrieved successfully');
+      expect(response.body.data).toEqual(mockAd);
+    });
+
+    it('should return 404 if advertisement is not found', async () => {
+      Advertisement.findByPk.mockResolvedValue(null);
+
+      const response = await request(app).get('/advertisements/non-existent-id');
+
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('Advertisement not found');
+    });
+
+    it('should handle errors during retrieval', async () => {
+      Advertisement.findByPk.mockRejectedValue(new Error('Database error'));
+
+      const response = await request(app).get('/advertisements/1');
+      expect(response.status).toBe(500);
+    });
+  });
+});
+
   
