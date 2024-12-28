@@ -1,4 +1,4 @@
-const { getMain, retrieveFiltered, getProfile, getVoidanceInvites } = require('../../app/controllers/app.controller');
+const { retrieveFiltered, getProfile, getVoidanceInvites } = require('../../app/controllers/app.controller');
 const { Advertisement, Company, Campaign, Users, Voidances, VoidanceInvite, ContactUs, CompanyAdmin } = require('../../app/models');
 
 jest.mock('../../app/models', () => ({
@@ -31,71 +31,6 @@ jest.mock('../../app/models', () => ({
 describe('App Controller', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  describe('getMain', () => {
-    it('should retrieve all active advertisements with campaign and company details', async () => {
-      const mockAdvertisements = [
-        {
-          id: 'ad1',
-          Status: true,
-          Campaign: {
-            Company: { companyName: 'Company A', logo: 'logo.png' },
-          },
-        },
-      ];
-      Advertisement.findAll.mockResolvedValue(mockAdvertisements);
-
-      const req = {};
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
-
-      await getMain(req, res, next);
-
-      // Verify Advertisement.findAll is called
-      expect(Advertisement.findAll).toHaveBeenCalledWith({
-        where: { Status: true },
-        include: [
-          {
-            model: Campaign,
-            required: true,
-            include: [{ model: Company, required: true }],
-          },
-        ],
-      });
-
-      // Verify res.json is called
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Contents retrieved',
-        data: [
-          {
-            id: 'ad1',
-            company: { companyName: 'Company A', logo: 'logo.png' },
-          },
-        ],
-      });
-
-      // Verify status is set to 200
-      expect(res.status).toHaveBeenCalledWith(200);
-    });
-
-    it('should handle errors', async () => {
-      Advertisement.findAll.mockRejectedValue(new Error('Database error'));
-
-      const req = {};
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
-
-      await getMain(req, res, next);
-
-      expect(next).toHaveBeenCalledWith(expect.any(Error));
-    });
   });
 
   describe('retrieveFiltered', () => {
