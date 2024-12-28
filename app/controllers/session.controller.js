@@ -17,7 +17,6 @@ exports.login = (req, res, _next) => {
     });
   };
   
-  // validate existing session from client
   exports.validateSession = (req, res, next) => {
     const { user } = req;
   
@@ -30,6 +29,7 @@ exports.login = (req, res, _next) => {
   
     return next(new StatusError('Invalid session', 403));
   };
+  
   
   exports.validationResponse = (req, res, _next) => {
     const {
