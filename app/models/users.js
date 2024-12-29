@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.VoidanceInvite, { foreignKey: 'userID' });
     }
 
-    static createNewUser(userName, email, password,companyEditor) {
+    static createNewUser(userName, email, password, stripeID) {
       return bcrypt
         .hash(password, 12)
         .then((passwordHash) => {
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
               ...{ userName },
               ...{ email },
               ...{ passwordHash },
-              ...{companyEditor},
+              ...{ stripeID },
             },
           });
         })
@@ -131,6 +131,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     address: DataTypes.STRING,
+    stripeID: DataTypes.STRING,
     country: DataTypes.STRING,
     city: DataTypes.STRING,
     banned: DataTypes.BOOLEAN,
