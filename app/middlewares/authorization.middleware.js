@@ -35,3 +35,13 @@ exports.isAdminOfCompany = async (req, res, next) => {
   }
 };
 
+exports.isAccountOwner = async (req, res, next) => {
+  const { userName } = req.params
+
+  if(userName !== req.user.userName){
+    return res.status(403).json({ message: 'Access forbidden' });
+  }
+
+  next()
+}
+

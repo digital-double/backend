@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      companyEditor:{
+      isCompany:{
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,

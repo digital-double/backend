@@ -129,7 +129,7 @@ exports.getProfile = async (req, res, next) =>{
     }
   
       if (!user) {
-        throw new StatusError(`${userName}`, 404);
+        throw new StatusError(`Username ${userName}`, 404);
       }
     
       const voidances = await Voidances.findAll({
@@ -159,9 +159,8 @@ exports.getProfile = async (req, res, next) =>{
 
 exports.getnotification = async (req, res, next) => {
   try {
-    const { id, isCompany } = req.user; 
-    console.log("IMINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-    console.log(isCompany)
+    const { id, isCompany } = req.user;
+    const {userName} = req.user 
 
     if (isCompany) {
       const contactUsObjects = await ContactUs.findAll({
