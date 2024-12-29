@@ -7,6 +7,7 @@ const campaignRoutes = require('./campaign.routes');
 const instagramRoutes = require('./instagram.routes');
 const advertisementRoutes = require('./advertisement.routes')
 const appRoutes = require('./app.routes');
+const stripeRoutes = require('./stripe.routes');
 
 // this file acts as the main router for all incoming requests
 router.get('/', (_req, res) => {
@@ -20,6 +21,7 @@ router.use('/ads',advertisementRoutes)
 router.use('/vds', voidanceRoutes);
 router.use('/campaign', campaignRoutes);
 router.use('/instagram', instagramRoutes);
+router.use('/payment', stripeRoutes);
 
 router.post('/csp-reports', (req, res) => {
   console.error(req.body);

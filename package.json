@@ -10,7 +10,7 @@
     "setup:db": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/digital-double/backend"
@@ -29,6 +29,7 @@
   "author": "Omar Badawy",
   "license": "MIT",
   "dependencies": {
+    "@stripe/stripe-js": "^5.4.0",
     "bcrypt": "^5.1.1",
     "connect-session-sequelize": "^7.1.7",
     "dotenv": "^16.4.5",
@@ -46,7 +47,8 @@
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "sanitize": "^2.1.2",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "stripe": "^17.5.0"
   },
   "devDependencies": {
     "chai": "^4.3.6",

@@ -26,6 +26,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      stripeID: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       companyEditor:{
         type: DataTypes.BOOLEAN,
         allowNull: false,

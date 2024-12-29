@@ -1,5 +1,5 @@
 const db = require('../models');
-const {checkCompanyAdmin, postCompanyAdmin} = require('./companyAdmin.controller')
+const {createUser} = require('./stripe.controller')
 
 const { Users } = db;
 
@@ -115,28 +115,18 @@ exports.retrieveOne = (req, res, next) => {
 exports.expressSignup = async (req, res, next) => {
   try{
   const {
-    body: { userName, email, password, companySignUp },
+    body: { userName, email, password },
   } = req;
-  var companyEditor = false
 
-  if(companySignUp){
-    results = await checkCompanyAdmin(req, res, next)
-    if(results === false){
-      throw new StatusError('unauthorized: please ask admin for permission to join', 422);
-    }
-    companyEditor = results
-  }
+    const stripeID = await createUser(req, res, next)
 
-    Users.createNewUser(userName, email, password, companyEditor)
+    Users.createNewUser(userName, email, password, stripeID.id)
     .then((user) => {
-      
-      if(companySignUp){
-      postCompanyAdmin(req, res, next, user)
-      }
       
       res.locals.user = user;
       req.body.userCredential = userName;
       return next();
+      
     })
     .catch((err) => next(err));
   }
