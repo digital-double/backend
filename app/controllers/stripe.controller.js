@@ -49,3 +49,52 @@ exports.createUser = async (req, res, next) => {
     res.status(err.statusCode || 500).json(err.message);
   }
 }
+
+exports.getStripeUser = async (req, res, next) => {
+  try {
+    const customer = await stripe.customers.retrieve(req.body.stripeID);
+
+    return res.status(200).send({
+      message: 'User data sent successfully',
+      customer,
+    });
+  } catch (err) {
+    res.status(err.statusCode || 500).json(err.message);
+  }
+}
+
+exports.updateStripeUser = async (req, res, next) => {
+  try {
+    const { stripeID } = req.body 
+
+    const dynamicMetadata = Object.keys(req.body.metadata || {}).reduce((acc, key) => {
+      acc[key] = req.body.metadata[key];
+      return acc;
+    }, {});
+    
+    const customer = await stripe.customers.update(stripeID, {
+      metadata: dynamicMetadata,
+    });
+    
+
+    return res.status(200).send({
+      message: 'User data updated successfully',
+      customer,
+    });
+  } catch (err) {
+    res.status(err.statusCode || 500).json(err.message);
+  }
+}
+
+exports.delStripeUser = async (req, res, next) => {
+  try {
+    const deleted = await stripe.customers.del(req.body.stripeID);
+
+    return res.status(200).send({
+      message: 'User data deleted successfully',
+      deleted,
+    });
+  } catch (err) {
+    res.status(err.statusCode || 500).json(err.message);
+  }
+}

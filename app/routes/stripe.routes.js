@@ -5,7 +5,13 @@ const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
 
 
 router.post('/checkout', isLoggedIn, stripe.checkout) 
+
 router.get('/checkout', isLoggedIn, stripe.getCheckout) 
-router.post('/user', isLoggedIn, stripe.createUser) 
+router.get('/user', isLoggedIn, stripe.getStripeUser)
+
+router.patch('/user', isLoggedIn, stripe.updateStripeUser)
+
+
+router.delete('/user', isLoggedIn, stripe.delStripeUser)
 
 module.exports = router
