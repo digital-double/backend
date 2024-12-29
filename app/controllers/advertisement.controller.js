@@ -7,17 +7,22 @@ const { Advertisement } = db;
 exports.getAdvertisementsByCampaign = async (req, res, next) => {
     try {
       const { campaignID } = req.params;
+
       const advertisements = await Advertisement.findAll({
         where: { campaignID },
         attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
       });
+
+      if (!advertisements) {
+        throw new StatusError("advertisements",404)
+      }
+
       return res.status(200).json({
         message: 'Advertisements retrieved successfully',
         data: advertisements,
       });
     } catch (err) {
-      console.error('Error retrieving advertisements:', err);
-      return next(err);
+      return next(err); 
     }
   };
   
@@ -26,11 +31,8 @@ exports.createAdvertisement = async (req, res, next) => {
     try {
       const { campaignID, title, Status, adStart, adEnd, alocatedBudget, description, avgCPC } = req.body;
   
-      // Ensure campaignID is provided
       if (!campaignID) {
-        return res.status(400).json({
-          message: 'Campaign ID is required to create an advertisement.',
-        });
+        throw new StatusError("campaign is required",400)
       }
   
       const advertisement = await Advertisement.create({
@@ -49,7 +51,6 @@ exports.createAdvertisement = async (req, res, next) => {
         data: advertisement,
       });
     } catch (err) {
-      console.error('Error creating advertisement:', err);
       return next(err);
     }
   };
@@ -60,10 +61,9 @@ exports.deleteAdvertisement = async (req, res, next) => {
       const { id } = req.params;
   
       const advertisement = await Advertisement.findByPk(id);
+      
       if (!advertisement) {
-        return res.status(404).json({
-          message: 'Advertisement not found',
-        });
+        throw new StatusError("advertisement",404)
       }
   
       await advertisement.destroy();
@@ -71,7 +71,6 @@ exports.deleteAdvertisement = async (req, res, next) => {
         message: 'Advertisement deleted successfully',
       });
     } catch (err) {
-      console.error('Error deleting advertisement:', err);
       return next(err);
     }
   };
@@ -84,11 +83,9 @@ exports.getAdvertisementById = async (req, res, next) => {
       const advertisement = await Advertisement.findByPk(id, {
         attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
       });
-  
+
       if (!advertisement) {
-        return res.status(404).json({
-          message: 'Advertisement not found',
-        });
+        throw new StatusError("advertisement",404)
       }
   
       return res.status(200).json({
@@ -96,7 +93,6 @@ exports.getAdvertisementById = async (req, res, next) => {
         data: advertisement,
       });
     } catch (err) {
-      console.error('Error retrieving advertisement:', err);
       return next(err);
     }
   };
