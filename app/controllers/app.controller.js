@@ -45,6 +45,7 @@ exports.getMain = async (req, res, next) => {
   };
 
 exports.retrieveFiltered = (req, res, next) => {
+  try{
     const {
       body: { title, offset = 0 },
     } = req;
@@ -68,68 +69,69 @@ exports.retrieveFiltered = (req, res, next) => {
       message: 'No content',
       data: [],
     });
+  }
+  catch(err){
+    return next(err)
+  }
 };
 
 exports.getProfile = async (req, res, next) =>{
     try {
-      const { userName } = req.params;
-
-      // Check if the userName belongs to a Company
-      const company = await Company.findOne({ 
-        where: { userName }, 
-        attributes: {
-          exclude: [
-            'bankName',
-            'bankAccName',
-            'bankAccNo',
-            'bankRoutingNo',
-            'paypalAcc',
-            'bankIban',
-            'bankPaymentStatus',
-            'createdAt',
-            'updatedAt',
-            'deletedAt',
-          ],
-        },
-      });
-    
-      if (company) {
-        // If a Company is found, fetch all associated campaigns excluding specific fields
-        const campaigns = await Campaign.findAll({
-          where: { companyID: company.id },
+      const { userName } = req.params
+      
+      const [user, company] = await Promise.all([
+        Users.findOne({
+          where: { userName },
+          attributes: { exclude: ['password'] }, 
+        }),
+        Company.findOne({ 
+          where: { userName }, 
           attributes: {
             exclude: [
-              'potentialReach',
-              'potentialEngagement',
-              'actualEngagement',
+              'bankName',
+              'bankAccName',
+              'bankAccNo',
+              'bankRoutingNo',
+              'paypalAcc',
+              'bankIban',
+              'bankPaymentStatus',
               'createdAt',
               'updatedAt',
               'deletedAt',
-              'numOfConversions',
             ],
           },
-        });
-    
-        return res.status(200).json({
-          message: 'Company data retrieved successfully',
-          data: {
-            profile: company,
-            campaigns,
-          },
-        });
-      }
-    
-      // Check if the userName belongs to a User
-      const user = await Users.findOne({
-        where: { userName },
-        attributes: { exclude: ['password'] }, 
+        }),
+      ]);
+
+      if(company){
+      const campaigns = await Campaign.findAll({
+        where: { companyID: company.id },
+        attributes: {
+          exclude: [
+            'potentialReach',
+            'potentialEngagement',
+            'actualEngagement',
+            'createdAt',
+            'updatedAt',
+            'deletedAt',
+            'numOfConversions',
+          ],
+        },
       });
-    
+  
+      return res.status(200).json({
+        message: 'Company data retrieved successfully',
+        data: {
+          profile: company,
+          campaigns,
+        },
+      });
+    }
+  
       if (!user) {
-        throw new StatusError(`No record found for userName "${userName}".`, 404);
+        throw new StatusError(`${userName}`, 404);
       }
     
-      // If the user is found, fetch all associated voidances
       const voidances = await Voidances.findAll({
         where: { userId: user.id },
         attributes: {
@@ -150,30 +152,27 @@ exports.getProfile = async (req, res, next) =>{
         },
       });
     } catch (err) {
-      console.error('Error retrieving data:', err);
       return next(err);
     }
     
 };
 
-exports.getVoidanceInvites = async (req, res, next) => {
+exports.getnotification = async (req, res, next) => {
   try {
-    const { userID } = req.params; 
+    const { id, isCompany } = req.user; 
+    console.log("IMINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+    console.log(isCompany)
 
-    const isCompanyAdmin = await CompanyAdmin.findOne({
-      where: { userID },
-    });
-
-    if (isCompanyAdmin) {
+    if (isCompany) {
       const contactUsObjects = await ContactUs.findAll({
-        where: { userID: userID },
+        where: { userID: id },
         attributes: {
           exclude: ['updatedAt', 'deletedAt'],
         },
         include: [
           {
             model: Users,
-            attributes: ['id', 'userName', 'email'], 
+            attributes: ['userName', 'email'], 
           },
           {
             model: Advertisement,
@@ -193,14 +192,14 @@ exports.getVoidanceInvites = async (req, res, next) => {
     }
 
     const voidanceInvites = await VoidanceInvite.findAll({
-      where: { userId: userID },
+      where: { userId: id },
       attributes: {
         exclude: ['updatedAt', 'deletedAt'], 
       },
       include: [
         {
           model: Company,
-          attributes: ['id', 'companyName'], 
+          attributes: ['companyName'], 
         },
         {
           model: Advertisement,
@@ -210,7 +209,7 @@ exports.getVoidanceInvites = async (req, res, next) => {
     });
 
     if (!voidanceInvites || voidanceInvites.length === 0) {
-      throw new StatusError(`No VoidanceInvites found for the specified user`, 404);
+      throw new StatusError(`VoidanceInvites`, 404);
     }
 
     return res.status(200).json({
@@ -218,7 +217,6 @@ exports.getVoidanceInvites = async (req, res, next) => {
       data: voidanceInvites,
     });
   } catch (err) {
-    console.error('Error retrieving data:', err);
     return next(err); 
   }
 };
