@@ -9,7 +9,7 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      userId: {
+      userID: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -19,7 +19,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      companyId: {
+      companyID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -29,7 +29,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      advertisementId: {
+      advertisementID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {

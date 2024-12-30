@@ -19,9 +19,9 @@ module.exports = {
     await queryInterface.bulkInsert('voidances', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[0].id,
-        advertisementId: advertisementRows[0].id,
-        companyId: companyRows[0].id,
+        userID: userRows[0].id,
+        advertisementID: advertisementRows[0].id,
+        companyID: companyRows[0].id,
         affiliatedLink: 'https://example.com/link1',
         numbOfClicks: 123,
         fileType: 'image/jpeg',
@@ -34,9 +34,9 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[1].id,
-        advertisementId: advertisementRows[1].id,
-        companyId: companyRows[1].id,
+        userID: userRows[1].id,
+        advertisementID: advertisementRows[1].id,
+        companyID: companyRows[1].id,
         affiliatedLink: 'https://example.com/link2',
         numbOfClicks: 76,
         fileType: 'video/mp4',
@@ -49,9 +49,9 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[2].id,
-        advertisementId: advertisementRows[2].id,
-        companyId: companyRows[2].id,
+        userID: userRows[2].id,
+        advertisementID: advertisementRows[2].id,
+        companyID: companyRows[2].id,
         affiliatedLink: 'https://example.com/link3',
         numbOfClicks: 45,
         fileType: 'application/pdf',

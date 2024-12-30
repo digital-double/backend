@@ -23,9 +23,9 @@ module.exports = {
     await queryInterface.bulkInsert('voidance_invites', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[0].id, 
-        companyId: companyRows[0].id, 
-        advertisementId: advertisementRows[0].id, 
+        userID: userRows[0].id, 
+        companyID: companyRows[0].id, 
+        advertisementID: advertisementRows[0].id, 
         subject: 'Invitation to Participate',
         message: 'We invite you to join our campaign.',
         CPC: 2.5,
@@ -37,9 +37,9 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[1].id, 
-        companyId: companyRows[1].id, 
-        advertisementId: advertisementRows[1].id, 
+        userID: userRows[1].id, 
+        companyID: companyRows[1].id, 
+        advertisementID: advertisementRows[1].id, 
         subject: 'Special Offer Invitation',
         message: 'Join our campaign for exclusive rewards.',
         CPC: 1.8,
@@ -51,9 +51,9 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[2].id, 
-        companyId: companyRows[2].id, 
-        advertisementId: advertisementRows[2].id, 
+        userID: userRows[2].id, 
+        companyID: companyRows[2].id, 
+        advertisementID: advertisementRows[2].id, 
         subject: 'Special Offer Invitation',
         message: 'Join our campaign for exclusive rewards.',
         CPC: 1.8,
