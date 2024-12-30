@@ -5,17 +5,17 @@ module.exports = {
   up: async (queryInterface) => {
     // Fetch company IDs from the "Companies" table
     const companyIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Company";`
+      `SELECT id FROM "companies";`
     );
     const userIds= await queryInterface.sequelize.query(
-      `SELECT id FROM "Users";`
+      `SELECT id FROM "users";`
     )
 
     const companyRows = companyIds[0]; 
     const userRows = userIds[0];
 
 
-    await queryInterface.bulkInsert("CompanyAdmin", [
+    await queryInterface.bulkInsert("company_admins", [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[0].id,
@@ -40,7 +40,7 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.bulkDelete("CompanyAdmin", null, {});
+    await queryInterface.bulkDelete("company_admins", null, {});
   },
 };
 

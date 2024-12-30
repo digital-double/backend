@@ -5,7 +5,7 @@ module.exports = {
     // Ensure the extension for UUID generation is created
     await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
 
-    await queryInterface.createTable('CompanyAdmin', {
+    await queryInterface.createTable('company_admins', {
       id: {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
@@ -29,7 +29,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Company', 
+          model: 'companies', 
           key: 'id',          
         },
         onUpdate: 'CASCADE',
@@ -39,7 +39,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Users', 
+          model: 'users', 
           key: 'id',          
         },
         onUpdate: 'CASCADE',
@@ -63,6 +63,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('CompanyAdmin');
+    await queryInterface.dropTable('company_admins');
   }
 };

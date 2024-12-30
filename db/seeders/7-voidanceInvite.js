@@ -5,13 +5,13 @@ const { Sequelize } = require('sequelize');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const companyIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Company";`
+      `SELECT id FROM "companies";`
     );
     const advertisementIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Advertisement";`
+      `SELECT id FROM "advertisements";`
     );
     const userIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Users";`
+      `SELECT id FROM "users";`
     );
 
     const userRows = userIds[0]; 
@@ -20,7 +20,7 @@ module.exports = {
  
     const companyRows = companyIds[0]; 
 
-    await queryInterface.bulkInsert('VoidanceInvite', [
+    await queryInterface.bulkInsert('voidance_invites', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         userId: userRows[0].id, 
@@ -67,7 +67,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('VoidanceInvite', null, {});
+    await queryInterface.bulkDelete('voidance_invites', null, {});
   },
 };
 

@@ -1,6 +1,5 @@
-const { where } = require('sequelize');
 const db = require('../models');
-const { Voidances, VoidanceInvite, Users } = db;
+const { Voidance, VoidanceInvite, User } = db;
 // Voidance Invite Controllers
 
 // @middleware: isLoggedIn
@@ -10,7 +9,7 @@ exports.getAllVoidanceInvites = async (req, res, next) => {
       where: { userId: req.user.id },
       include: [
         {
-          model: Users,
+          model: User,
           attributes: ['id', 'userName'],
         },
       ],
@@ -34,7 +33,7 @@ exports.getVoidanceInvite = async (req, res, next) => {
       where: { id },
       include: [
         {
-          model: Users,
+          model: User,
           attributes: ['id', 'userName'],
         },
       ],
@@ -188,7 +187,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 
     // If accepted, create the actual voidance
     if (status === 'accepted') {
-      await Voidances.create(
+      await Voidance.create(
         {
           userId: voidanceInvite.userId,
           companyId: voidanceInvite.companyId,
@@ -220,7 +219,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.getAllGeneratedVoidances = async (req, res, next) => {
   try {
-    const generatedVoidances = await Voidances.findAll({
+    const generatedVoidances = await Voidance.findAll({
       where: { userId: req.user.id },
     });
 
@@ -238,7 +237,7 @@ exports.getGeneratedVoidance = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const generatedVoidance = await Voidances.findOne({
+    const generatedVoidance = await Voidance.findOne({
       where: {
         id,
         userId: req.user.id,
@@ -261,7 +260,7 @@ exports.getGeneratedVoidance = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.createVoidance = async (req, res, next) => {
   try {
-    const newGeneratedVoidance = await Voidances.create({
+    const newGeneratedVoidance = await Voidance.create({
       ...req.body,
       userId: req.user.id,
     });
@@ -280,7 +279,7 @@ exports.deleteGeneratedVoidance = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const deleted = await Voidances.destroy({
+    const deleted = await Voidance.destroy({
       where: {
         id,
         userId: req.user.id,
@@ -305,7 +304,7 @@ exports.updateGeneratedVoidanceUploadStatus = async (req, res, next) => {
     const { id } = req.params;
     const { UploadStatus } = req.body;
 
-    const [updated] = await Voidances.update(
+    const [updated] = await Voidance.update(
       { UploadStatus },
       {
         where: {
@@ -333,7 +332,7 @@ exports.updateGeneratedVoidanceQualityScore = async (req, res, next) => {
     const { id } = req.params;
     const { qualityScore } = req.body;
 
-    const [updated] = await Voidances.update(
+    const [updated] = await Voidance.update(
       { qualityScore },
       {
         where: {

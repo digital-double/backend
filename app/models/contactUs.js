@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ContactUs extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userID' });
+      this.belongsTo(models.User, { foreignKey: 'userID' });
       this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
     }
   }
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id',
       },
     },
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Company',
+        model: 'companies',
         key: 'id',
       },
     },
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Advertisement',
+        model: 'advertisements',
         key: 'id',
       },
     },
@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'ContactUs',
+    tableName: 'contact_us',
     paranoid: true,
     timestamps: true,
   });

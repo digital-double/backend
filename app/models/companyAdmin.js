@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class CompanyAdmin extends Model {
     static associate(models) {
       this.belongsTo(models.Company, { foreignKey: 'companyID' });
-      this.hasOne(models.Users, { foreignKey: 'userID' });
+      this.hasOne(models.User, { foreignKey: 'userID' });
     }
   }
 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Company',
+        model: 'companies',
         key: 'id',
       },
     },
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id',
       },
     },
@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'CompanyAdmin',
+    tableName: 'company_admins',
     paranoid: true,
     timestamps: true,
   });

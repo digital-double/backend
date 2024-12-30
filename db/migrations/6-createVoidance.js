@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Voidances', {
+    await queryInterface.createTable('voidances', {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -13,7 +13,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -23,7 +23,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Advertisement',
+          model: 'advertisements',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -33,7 +33,7 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Company',
+          model: 'companies',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -107,6 +107,6 @@ module.exports = {
   },
   
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Voidances');
+    await queryInterface.dropTable('voidances');
   }
 };

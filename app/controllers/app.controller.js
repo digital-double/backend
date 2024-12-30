@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Advertisement, Company, Campaign, Users, Voidances, VoidanceInvite, ContactUs, CompanyAdmin} = db;
+const { Advertisement, Company, Campaign, User, Voidance, VoidanceInvite, ContactUs, CompanyAdmin} = db;
 
 exports.getMain = async (req, res, next) => {
   try {
@@ -80,7 +80,7 @@ exports.getProfile = async (req, res, next) =>{
       const { userName } = req.params
       
       const [user, company] = await Promise.all([
-        Users.findOne({
+        User.findOne({
           where: { userName },
           attributes: { exclude: ['password'] }, 
         }),
@@ -132,7 +132,7 @@ exports.getProfile = async (req, res, next) =>{
         throw new StatusError(`Username ${userName}`, 404);
       }
     
-      const voidances = await Voidances.findAll({
+      const voidances = await Voidance.findAll({
         where: { userId: user.id },
         attributes: {
           exclude: [
@@ -170,7 +170,7 @@ exports.getnotification = async (req, res, next) => {
         },
         include: [
           {
-            model: Users,
+            model: User,
             attributes: ['userName', 'email'], 
           },
           {

@@ -4,10 +4,9 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Voidances extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userId' });
+      this.belongsTo(models.User, { foreignKey: 'userId' });
       this.belongsTo(models.Advertisement, { foreignKey: 'advertisementId' });
       this.belongsTo(models.Company, { foreignKey: 'companyId' });
-      this.hasOne(models.InstagramVoidance, { foreignKey: 'voidanceId' });
     }
   }
 
@@ -25,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
         },
       },
@@ -33,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Advertisement',
+          model: 'advertisements',
           key: 'id',
         },
       },
@@ -41,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Company',
+          model: 'companies',
           key: 'id',
         },
       },
@@ -81,6 +80,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Voidances',
+      tableName: 'voidances',
       paranoid: true,
       timestamps: true,
     }

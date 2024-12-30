@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'VoidanceInvite',
+        model: 'voidance_invites',
         key: 'id',
       },
     },
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Company',
+        model: 'companies',
         key: 'id',
       },
     },
@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'SentInvite',
+    tableName: 'sent_invites',
     paranoid: true,
     timestamps: true,
   });

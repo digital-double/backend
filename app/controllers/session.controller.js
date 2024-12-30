@@ -4,7 +4,7 @@ exports.login = (req, res, _next) => {
       message: 'Successfully logged in',
       user: user.stripSensitive(),
     });
-  };
+};
   
 exports.logout = (req, res, next) => {
     req.logout((err) => {
