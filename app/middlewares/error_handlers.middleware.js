@@ -1,3 +1,5 @@
+require('dotenv').config
+
 global.StatusError = class extends Error {
     constructor(message, status) {
       super(message);

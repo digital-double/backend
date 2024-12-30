@@ -3,35 +3,36 @@ const db = require('../models');
 const { Campaign, Company } = db
 
 exports.getAllCampaigns = async (req, res, next)=>{
-  // Get all campaign
   const { companyID } = req.body
     try {
       const campaigns = await Campaign.findAll({
-        where: { companyID: companyID }, // Example filter: Only active campaigns
+        where: { companyID: companyID }, 
         include: [
           {
             model: Company,
             required: true,
-            attributes: ['companyName', 'logo'], // Include only necessary fields from Company
+            attributes: ['companyName', 'logo'], 
           },
         ],
         attributes: {
-          exclude: ['deletedAt', 'createdAt', 'updatedAt', 'companyID'], // Exclude unwanted fields
+          exclude: ['deletedAt', 'createdAt', 'updatedAt', 'companyID'], 
         },
       });
+      
+      if (campaigns.length == 0) {
+        throw new StatusError("campaign",404)
+      }
 
       return res.status(200).json({
         message: 'Campaigns retrieved successfully',
         data: campaigns,
       });
     } catch (err) {
-      console.error('Error retrieving campaigns:', err);
       return next(err);
     }
-  },
+},
 
-  exports.createCampaign = async (req, res, next) => {
-
+exports.createCampaign = async (req, res, next) => {
     try {
       const newCampaign = await Campaign.create(req.body);
 
@@ -41,11 +42,11 @@ exports.getAllCampaigns = async (req, res, next)=>{
           {
             model: Company,
             required: true,
-            attributes: ['companyName', 'logo'], // Include only necessary fields from Company
+            attributes: ['companyName', 'logo'], 
           },
         ],
         attributes: {
-          exclude: ['deletedAt', 'createdAt'], // Exclude unwanted fields
+          exclude: ['deletedAt', 'createdAt'], 
         },
       });
 
@@ -54,19 +55,17 @@ exports.getAllCampaigns = async (req, res, next)=>{
         data: createdCampaign,
       });
     } catch (err) {
-      console.error('Error creating campaign:', err);
       return next(err);
     }
 }
 
-  // Update an existing campaign
- exports.updateCampaign = async (req, res, next) => {
+exports.updateCampaign = async (req, res, next) => {
     try {
       const { id } = req.params;
 
       const campaign = await Campaign.findByPk(id);
       if (!campaign) {
-        return res.status(404).json({ message: 'Campaign not found' });
+        throw new StatusError("campaign",404)
       }
 
       await campaign.update(req.body);
@@ -77,11 +76,11 @@ exports.getAllCampaigns = async (req, res, next)=>{
           {
             model: Company,
             required: true,
-            attributes: ['companyName', 'logo'], // Include only necessary fields from Company
+            attributes: ['companyName', 'logo'], 
           },
         ],
         attributes: {
-          exclude: ['deletedAt', 'createdAt', 'updatedAt'], // Exclude unwanted fields
+          exclude: ['deletedAt', 'createdAt', 'updatedAt'], 
         },
       });
 
@@ -90,28 +89,26 @@ exports.getAllCampaigns = async (req, res, next)=>{
         data: updatedCampaign,
       });
     } catch (err) {
-      console.error('Error updating campaign:', err);
       return next(err);
     }
-  },
+},
 
-  // Delete a campaign
-  exports.deleteCampaign = async (req, res, next) => {
+exports.deleteCampaign = async (req, res, next) => {
     try {
       const { id } = req.params;
 
       const campaign = await Campaign.findByPk(id);
+
       if (!campaign) {
-        return res.status(404).json({ message: 'Campaign not found' });
+        throw new StatusError("campaign",404)
       }
 
-      await campaign.destroy(); // Soft delete due to `paranoid: true`
+      await campaign.destroy(); 
 
       return res.status(200).json({
         message: 'Campaign deleted successfully',
       });
     } catch (err) {
-      console.error('Error deleting campaign:', err);
       return next(err);
     }
-  }
+}

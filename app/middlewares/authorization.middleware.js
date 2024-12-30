@@ -13,25 +13,27 @@ exports.isLoggedIn = (req, _res, next) => {
 // checks if the user is an admin of a company
 exports.isAdminOfCompany = async (req, res, next) => {
   try {
-    const { id } = req.params; 
-
-    if (!id) {
-      return res.status(400).json({ message: 'Unauthorized' });
-    }
-
     const admin = await CompanyAdmin.findOne({
-      where: { companyID: id, email: req.user.email },
+      where: { email: req.user.email },
     });
 
-
-    if (!admin) {
+    if (admin.accessRights !== "admin") {
       return res.status(403).json({ message: 'Access forbidden. You are not an admin of this company.' });
     }
 
     return next();
   } catch (err) {
-    console.error('Authorization error:', err);
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
+
+exports.isAccountOwner = async (req, res, next) => {
+  const { userName } = req.params
+
+  if(userName !== req.user.userName){
+    return res.status(403).json({ message: 'Access forbidden' });
+  }
+
+  next()
+}
 

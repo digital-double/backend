@@ -41,7 +41,7 @@ exports.getVoidanceInvite = async (req, res, next) => {
     });
 
     if (!voidanceInvite) {
-      return res.status(404).send({ message: 'Voidance invite not found' });
+      throw new StatusError('voidance', 404);
     }
 
     return res.status(200).send({
@@ -71,17 +71,13 @@ exports.createVoidanceInvite = async (req, res, next) => {
     // Validation based on invite source
     if (isCompanyInvite) {
       if (!companyId || !advertisementId) {
-        return res.status(400).send({
-          message: 'Company voidances require companyId and advertisementId',
-        });
+        throw new StatusError('id', 404);
       }
     }
 
     // Base required fields
     if (!subject || !message || !campaignName) {
-      return res.status(400).send({
-        message: 'Subject, message, and campaignName are required',
-      });
+      throw new StatusError('information missing', 400);
     }
 
     // Check for existing invite
@@ -142,7 +138,7 @@ exports.deleteVoidanceInvite = async (req, res, next) => {
     });
 
     if (!deleted) {
-      return res.status(404).send({ message: 'Voidance invite not found' });
+      throw new StatusError('invite', 404);
     }
 
     return res.status(200).send({
@@ -163,9 +159,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 
     const validStatuses = ['accepted', 'declined'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).send({
-        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
-      });
+      throw new StatusError('invalid status', 400);
     }
 
     const voidanceInvite = await VoidanceInvite.findOne({
@@ -175,9 +169,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 
     if (!voidanceInvite) {
       await t.rollback();
-      return res.status(404).send({
-        message: 'Voidance invite not found',
-      });
+      throw new StatusError('invite', 404);
     }
 
     // Check if user has permission to update
@@ -189,9 +181,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
       (voidanceInvite.status === 'pending_company' && !isCompany)
     ) {
       await t.rollback();
-      return res.status(403).send({
-        message: 'Not authorized to update this invite status',
-      });
+      throw new StatusError('User', 404);
     }
 
     await voidanceInvite.update({ status }, { transaction: t });
@@ -227,8 +217,6 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
   }
 };
 
-// Generated Voidance Controllers
-
 // @middleware: isLoggedIn
 exports.getAllGeneratedVoidances = async (req, res, next) => {
   try {
@@ -258,7 +246,7 @@ exports.getGeneratedVoidance = async (req, res, next) => {
     });
 
     if (!generatedVoidance) {
-      return res.status(404).send({ message: 'Generated voidance not found' });
+      throw new StatusError('voidance', 404);
     }
 
     return res.status(200).send({
@@ -300,7 +288,7 @@ exports.deleteGeneratedVoidance = async (req, res, next) => {
     });
 
     if (!deleted) {
-      return res.status(404).send({ message: 'Generated voidance not found' });
+      throw new StatusError('voidance', 404);
     }
 
     return res.status(200).send({
@@ -328,7 +316,7 @@ exports.updateGeneratedVoidanceUploadStatus = async (req, res, next) => {
     );
 
     if (!updated) {
-      return res.status(404).send({ message: 'Generated voidance not found' });
+      throw new StatusError('voidance', 404);
     }
 
     return res.status(200).send({
@@ -356,7 +344,7 @@ exports.updateGeneratedVoidanceQualityScore = async (req, res, next) => {
     );
 
     if (!updated) {
-      return res.status(404).send({ message: 'Generated voidance not found' });
+      throw new StatusError('voidance', 404);
     }
 
     return res.status(200).send({

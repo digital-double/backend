@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       });
     }
+    
     static findCompanyByID = (id) => {
         return Company.findByPk(id, {
           attributes: {

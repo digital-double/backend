@@ -11,7 +11,7 @@ module.exports = {
         email: 'omar.badawy@covelant.com',
         name: "omar",
         passwordHash: await bcrypt.hash('omar', 12),
-        companyEditor: true,
+        isCompany: true,
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
@@ -19,7 +19,7 @@ module.exports = {
         email: 'ignazio@covelant.com',
         name:"ignazio",
         passwordHash: await bcrypt.hash('ignazio', 12),
-        companyEditor: false,
+        isCompany: false,
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
@@ -27,7 +27,7 @@ module.exports = {
         email: 'NicoBiko@covelant.com',
         name:"nico",
         passwordHash: await bcrypt.hash('nico', 12),
-        companyEditor: false,
+        isCompany: false,
       },
     ]);
   },

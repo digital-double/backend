@@ -137,7 +137,7 @@ module.exports = (sequelize, DataTypes) => {
     banned: DataTypes.BOOLEAN,
     engagementScore: DataTypes.FLOAT,
     balance: DataTypes.FLOAT,
-    companyEditor: DataTypes.BOOLEAN,
+    isCompany: DataTypes.BOOLEAN,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
