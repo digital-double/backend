@@ -6,7 +6,7 @@ exports.login = (req, res, _next) => {
     });
   };
   
-  exports.logout = (req, res, next) => {
+exports.logout = (req, res, next) => {
     req.logout((err) => {
       if (err) {
         return next(err);
@@ -15,9 +15,9 @@ exports.login = (req, res, _next) => {
         message: 'Successfully logged out',
       });
     });
-  };
+};
   
-  exports.validateSession = (req, res, next) => {
+exports.validateSession = (req, res, next) => {
     const { user } = req;
   
     if (user) {
@@ -28,17 +28,15 @@ exports.login = (req, res, _next) => {
     }
   
     return next(new StatusError('Invalid session', 403));
-  };
-  
-  
-  exports.validationResponse = (req, res, _next) => {
+};
+   
+exports.validationResponse = (req, res, _next) => {
     const {
       user: { id: userId},
     } = req;
-  
   
     return res.status(200).send({
       message: 'signup complete',
       userId
     });
-  };
+};

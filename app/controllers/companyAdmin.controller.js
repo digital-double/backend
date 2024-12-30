@@ -86,6 +86,7 @@ exports.updateCompanyAdmin = async (req, res, next) => {
       const { email, password, accessRights } = req.body;
   
       const admin = await CompanyAdmin.findByPk(id);
+      
       if (!admin) {
         throw new StatusError('admin', 404);
       }

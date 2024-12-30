@@ -7,15 +7,14 @@ const { Users } = db;
 exports.updateOne = async (req, res, next) => {
   try {
     const { userName } = req.params;
-    const type = 'userName'
 
-    const user = await Users.findByLogin(type, userName);
+    const user = await Users.findByLogin('userName', userName);
 
     if ('password' in req.body) {
-      return res.status(403).json({ error: 'Forbiden' });
+      throw new StatusError('user', 403);
     }
     if (!user) {
-      return res.status(404).json({ message: 'missing user credentials' });
+      throw new StatusError('User credentials', 404);
     }
     
     const updatedUser = await user.update(req.body);
@@ -25,7 +24,6 @@ exports.updateOne = async (req, res, next) => {
       user: updatedUser.stripSensitive(),
     });
   } catch (err) {
-    console.error('Error updating user', err);
     return next(err);
   }
 };
