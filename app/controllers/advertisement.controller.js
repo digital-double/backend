@@ -3,7 +3,7 @@ const db = require('../models');
 const { Advertisement } = db;
 
 
-// Get all advertisements for a specific campaign
+
 exports.getAdvertisementsByCampaign = async (req, res, next) => {
     try {
       const { campaignID } = req.params;
@@ -24,9 +24,9 @@ exports.getAdvertisementsByCampaign = async (req, res, next) => {
     } catch (err) {
       return next(err); 
     }
-  };
+};
   
-// Create a new advertisement for an existing campaign
+
 exports.createAdvertisement = async (req, res, next) => {
     try {
       const { campaignID, title, Status, adStart, adEnd, alocatedBudget, description, avgCPC } = req.body;
@@ -53,9 +53,9 @@ exports.createAdvertisement = async (req, res, next) => {
     } catch (err) {
       return next(err);
     }
-  };
+};
  
-  // Delete an advertisement
+
 exports.deleteAdvertisement = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -73,9 +73,9 @@ exports.deleteAdvertisement = async (req, res, next) => {
     } catch (err) {
       return next(err);
     }
-  };
+};
   
-  // Get a specific advertisement by ID
+
 exports.getAdvertisementById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -95,5 +95,5 @@ exports.getAdvertisementById = async (req, res, next) => {
     } catch (err) {
       return next(err);
     }
-  };
+};
   

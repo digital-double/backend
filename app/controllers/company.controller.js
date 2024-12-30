@@ -2,7 +2,7 @@ const db = require('../models');
 
 const { Company, Campaign } = db 
 
-// Get all companies
+
 exports.getAllCompanies = async (req, res, next) => {
   try {
     const companies = await Company.findAll({
@@ -16,24 +16,10 @@ exports.getAllCompanies = async (req, res, next) => {
       data: companies,
     });
   } catch (err) {
-    console.error('Error retrieving companies:', err);
     return next(err);
   }
 },
 
-// Get a specific company by ID
-exports.getCompanyById = async (req, res, next) =>{
-  const { id } = req.params;
-    Company.findCompanyByID(id).then((company) => {
-      return res.status(200).json({
-        message: 'Company retrieved successfully',
-        data: company,
-      });
-    })  
-    .catch((err) => next(err));
-},
-
-// Create a new company
 exports.createCompany= async (req, res, next) => {
   try {
     const newCompany = await Company.create(req.body);
@@ -42,97 +28,49 @@ exports.createCompany= async (req, res, next) => {
       data: newCompany,
     });
   } catch (err) {
-    console.error('Error creating company:', err);
     return next(err);
   }
 },
 
-
-// Update an existing company
 exports.updateCompany = async (req, res, next) =>{
   try {
     const { id } = req.params;
+
     const company = await Company.findByPk(id);
+
     if (!company) {
-      return res.status(404).json({ message: 'Company not found' });
+      throw new StatusError("company",404)
     }
+
     const updatedCompany = await company.update(req.body);
+
     return res.status(200).json({
       message: 'Company updated successfully',
       data: updatedCompany,
     });
+
   } catch (err) {
-    console.error('Error updating company:', err);
     return next(err);
   }
 },
 
-// Delete a company (soft delete due to `paranoid: true`)
- exports.deleteCompany = async (req, res, next) =>{
+exports.deleteCompany = async (req, res, next) =>{
    try {
      const { id } = req.params;
+
      const company = await Company.findByPk(id);
+
      if (!company) {
-       return res.status(404).json({ message: 'Company not found' });
+       throw new StatusError("campaign",404)
      }
-     await company.destroy(); // Soft delete
+
+     await company.destroy();
+
      return res.status(200).json({
        message: 'Company deleted successfully',
      });
    } catch (err) {
-     console.error('Error deleting company:', err);
      return next(err);
    }
- }
+}
 
- exports.getProfile = async (req, res, next) => {
-    try {
-        const { companyName } = req.params;
-  
-        const company = await Company.findOne({
-          where: { companyName }, // Find by companyName
-          attributes: {
-            exclude: [
-              'industry',
-              'bankName',
-              'bankAccName',
-              'bankAccNo',
-              'bankRoutingNo',
-              'paypalAcc',
-              'bankIban',
-              'bankPaymentStatus',
-              'createdAt',
-              'updatedAt',
-            ],
-          },
-          include: [
-            {
-              model: Campaign,
-              attributes: {
-                exclude: [
-                  'potentialReach',
-                  'potentialEngagement',
-                  'actualEngagement',
-                  'createdAt',
-                  'updatedAt',
-                  'deletedAt',
-                  'numOfConversions',
-                ],
-              },
-            },
-          ],
-        });
-  
-        if (!company) {
-          return res.status(404).json({ message: 'Company not found' });
-        }
-  
-        return res.status(200).json({
-          message: 'Company with campaigns retrieved successfully',
-          data: company,
-        });
-      } catch (err) {
-        console.error('Error retrieving company with campaigns:', err);
-        return next(err);
-      }
- }

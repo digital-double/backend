@@ -65,7 +65,7 @@ exports.updateCampaign = async (req, res, next) => {
 
       const campaign = await Campaign.findByPk(id);
       if (!campaign) {
-        return res.status(404).json({ message: 'Campaign not found' });
+        throw new StatusError("campaign",404)
       }
 
       await campaign.update(req.body);
