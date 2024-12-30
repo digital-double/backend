@@ -2,7 +2,7 @@ const db = require('../models');
 
 const { CompanyAdmin, Company, Campaign } = db;
 
-// Get all admin members of a certain company
+
 exports.getCompanyAdmins = async (req, res, next) => {
     try {
       const { companyID } = req.body;
@@ -17,13 +17,10 @@ exports.getCompanyAdmins = async (req, res, next) => {
         data: admins,
       });
     } catch (err) {
-      console.error('Error retrieving company admins:', err);
       return next(err);
     }
-  };
- 
-  
-// Create a new admin for a certain company
+};
+   
 exports.checkCompanyAdmin = async (req, res, next) => {
     try {
       const { companyID, email } = req.body;
@@ -45,12 +42,11 @@ exports.checkCompanyAdmin = async (req, res, next) => {
       return true
     } 
     catch (err) {
-      console.error('Error creating company admin:', err);
       return next(err);
     }
-  };
+};
 
-  exports.postCompanyAdmin = async (req, res, next, user) => {
+exports.postCompanyAdmin = async (req, res, next, user) => {
     try{
       const { companyID, email } = req.body;
       await CompanyAdmin.create({
@@ -61,22 +57,18 @@ exports.checkCompanyAdmin = async (req, res, next) => {
       });
     }
     catch(err){
-      console.error('Error creating company admin:', err);
       return next(err);
     }
-  }
+}
  
-  
-  // Delete an admin of a certain company
 exports.deleteCompanyAdmin = async (req, res, next) => {
     try {
       const { id } = req.params;
   
       const admin = await CompanyAdmin.findByPk(id);
+
       if (!admin) {
-        return res.status(404).json({
-          message: 'Admin not found',
-        });
+        throw new StatusError('admin', 404);
       }
   
       await admin.destroy();
@@ -84,13 +76,10 @@ exports.deleteCompanyAdmin = async (req, res, next) => {
         message: 'Admin deleted successfully',
       });
     } catch (err) {
-      console.error('Error deleting company admin:', err);
       return next(err);
     }
-  };
+};
   
-
-  // Update an admin of a certain company
 exports.updateCompanyAdmin = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -98,12 +87,9 @@ exports.updateCompanyAdmin = async (req, res, next) => {
   
       const admin = await CompanyAdmin.findByPk(id);
       if (!admin) {
-        return res.status(404).json({
-          message: 'Admin not found',
-        });
+        throw new StatusError('admin', 404);
       }
-  
-      // Update fields
+
       admin.email = email || admin.email;
       if (password) {
         admin.password = password; // Note: Hash the password before updating it
@@ -117,8 +103,7 @@ exports.updateCompanyAdmin = async (req, res, next) => {
         data: admin,
       });
     } catch (err) {
-      console.error('Error updating company admin:', err);
       return next(err);
     }
-  };
+};
   
