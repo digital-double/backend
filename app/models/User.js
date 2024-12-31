@@ -118,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     companyAdminID: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'company_admins',
         key: 'id',
