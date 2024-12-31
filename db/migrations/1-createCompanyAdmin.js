@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Ensure the extension for UUID generation is created
@@ -34,6 +35,10 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      passwordHash: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       accessRights: {
         type: Sequelize.STRING,

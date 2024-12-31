@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     email: DataTypes.STRING,
+    passwordHash: DataTypes.STRING,
     accessRights: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
