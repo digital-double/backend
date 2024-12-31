@@ -35,16 +35,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      userID: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: 'users', 
-          key: 'id',          
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
       accessRights: {
         type: Sequelize.STRING,
         allowNull: true,
