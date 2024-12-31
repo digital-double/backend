@@ -15,8 +15,8 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[0].id,
-        adminName: "omar",
-        email: "omar.badawy@covelant.com",
+        adminName: "admin1",
+        email: "admin1@covelant.com",
         accessRights: "admin",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -24,8 +24,8 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[1].id,
-        adminName: "ignazio",
-        email: "ignazio@covelant.com",
+        adminName: "admin2",
+        email: "admin2@covelant.com",
         accessRights: "member",
         createdAt: new Date(),
         updatedAt: new Date(),

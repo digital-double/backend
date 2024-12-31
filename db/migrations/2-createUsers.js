@@ -10,16 +10,6 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      companyAdminID: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-          model: 'company_admins',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      },
       userName: {
         type: Sequelize.STRING,
         allowNull: true,
