@@ -4,9 +4,16 @@ const { Sequelize } = require('sequelize');
 module.exports = {
   up: async (queryInterface) => {
 
+    const companyAdminIds = await queryInterface.sequelize.query(
+      `SELECT id FROM "company_admins";`
+    );
+
+    const companyAdminRows = companyAdminIds[0]; 
+
     await queryInterface.bulkInsert('users', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
+        companyAdminID: companyAdminRows[0].id,
         userName: 'Omar_Badawy',
         email: 'omar.badawy@covelant.com',
         name: "omar",
@@ -15,6 +22,7 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
+        companyAdminID: companyAdminRows[1].id,
         userName: 'masterignazio69',
         email: 'ignazio@covelant.com',
         name:"ignazio",
@@ -23,6 +31,7 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
+        companyAdminID: null,
         userName: 'NicoBiko',
         email: 'NicoBiko@covelant.com',
         name:"nico",

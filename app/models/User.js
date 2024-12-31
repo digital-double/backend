@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.ContactUs, { foreignKey: 'userID' });
       this.hasMany(models.VoidanceInvite, { foreignKey: 'userID' });
+      this.hasOne(models.CompanyAdmin, { foreignKey: 'companyAdminID' });
     }
 
     static createNewUser(userName, email, password, stripeID) {
@@ -114,6 +115,14 @@ module.exports = (sequelize, DataTypes) => {
         isUUID: 4,
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
+    },
+    companyAdminID: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'company_admins',
+        key: 'id',
+      },
     },
     userName: DataTypes.STRING,
     email: DataTypes.STRING,
