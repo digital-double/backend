@@ -2,7 +2,7 @@ const { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Voidances extends Model {
+  class Voidance extends Model {
     static associate(models) {
       this.belongsTo(models.User, { foreignKey: 'userID' });
       this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Voidances.init(
+  Voidance.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -79,12 +79,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Voidances',
+      modelName: 'Voidance',
       tableName: 'voidances',
       paranoid: true,
       timestamps: true,
     }
   );
 
-  return Voidances;
+  return Voidance;
 };

@@ -10,8 +10,6 @@ const { checkUsername, checkEmail,} = require('../middlewares/validation.middlew
 router.get('/session', session.validateSession); //good
 router.get('/:userName', isLoggedIn, user.retrieveOne); // good but requires lower case sanitisation for data input
 
-router.post('/login', passport.authenticate('local'), session.login); // good
-router.post('/logout', isLoggedIn, session.logout); // good
 router.post('/updatePassword/:token', user.replacePassword); // good
 router.post('/forgotPassword', user.setResetToken, mailer.sendResetPasswordInstructions); //broken
 router.post('/signup', checkUsername, checkEmail, user.expressSignup, passport.authenticate('local'), session.validationResponse); //good

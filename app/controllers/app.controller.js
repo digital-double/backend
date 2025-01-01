@@ -103,9 +103,11 @@ exports.getProfile = async (req, res, next) =>{
         }),
       ]);
 
+      
+
       if(company){
       const campaigns = await Campaign.findAll({
-        where: { companyID: company.id },
+        where: { companyID: company.dataValues.id },
         attributes: {
           exclude: [
             'potentialReach',
@@ -126,14 +128,15 @@ exports.getProfile = async (req, res, next) =>{
           campaigns,
         },
       });
-    }
+     }
   
       if (!user) {
         throw new StatusError(`Username ${userName}`, 404);
       }
-    
+      
+      console.log(user.id )
       const voidances = await Voidance.findAll({
-        where: { userId: user.id },
+        where: { userID: user.id },
         attributes: {
           exclude: [
             'createdAt',
@@ -143,7 +146,8 @@ exports.getProfile = async (req, res, next) =>{
           ],
         }
       });
-    
+      
+
       return res.status(200).json({
         message: 'User data retrieved successfully',
         data: {
@@ -152,6 +156,7 @@ exports.getProfile = async (req, res, next) =>{
         },
       });
     } catch (err) {
+      console.error(err)
       return next(err);
     }
     

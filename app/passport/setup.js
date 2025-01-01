@@ -1,16 +1,18 @@
 const db = require('../models');
 
-const { Users } = db;
+const { User, CompanyAdmin } = db;
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
-    return done(null, user.id);
+    return done(null, { id: user.id, type: user instanceof User ? 'User' : 'CompanyAdmin' });
   });
 
-  passport.deserializeUser((id, done) => {
-    Users.findByPk(id).then((user) => {
-      if (!user) return done('User not found');
-      return done(null, user);
-    });
+  passport.deserializeUser(async ({ id, type }, done) => {
+    try {
+      const user = type === 'User' ? await User.findByPk(id) : await CompanyAdmin.findByPk(id);
+      done(null, user);
+    } catch (err) {
+      done(err);
+    }
   });
 };

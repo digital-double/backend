@@ -65,7 +65,6 @@ exports.createCompanyAdmin = async (req, res, next) => {
       })
     }
     catch(err){
-      console.error("error",err)
       return next(err);
     }
 }

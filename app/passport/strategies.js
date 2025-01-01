@@ -2,9 +2,26 @@ const LocalStrategy = require('passport-local').Strategy;
 const db = require('../models');
 
 const {
-  Users,
+  User,
+  CompanyAdmin,
   Sequelize: { Op },
 } = db;
+
+async function checkTypeOfuser(userCredential){
+  console.log('we in check')
+  const user =
+            (await User.findOne({
+              where: {
+                [Op.or]: [{ email: userCredential }, { userName: userCredential }],
+              },
+            })) ||
+            (await CompanyAdmin.findOne({
+              where: {
+                [Op.or]: [{ email: userCredential }, { userName: userCredential }],
+              },
+            }));
+            return user
+}
 
 exports.register = async (passport) => {
   passport.use(
@@ -14,12 +31,9 @@ exports.register = async (passport) => {
         passwordField: 'password', // This ensures 'password' as the field for passwords
       },
       async (userCredential, password, done) => {
+
         try {
-          const user = await Users.findOne({
-            where: {
-              [Op.or]: [{ email: userCredential }, { userName: userCredential }],
-            },
-          });
+          const user = await checkTypeOfuser(userCredential)
 
           if (!user) {
             return done(null, false, { message: 'Incorrect credentials.' });
