@@ -1,6 +1,7 @@
 const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 const bcrypt = require('bcrypt');
+const { Op } = Sequelize;
 
 module.exports = (sequelize, DataTypes) => {
   class CompanyAdmin extends Model {
@@ -8,29 +9,26 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Company, { foreignKey: 'companyID' });
     }
     
-    static createNewAdmin(userName, email, password, stripeID) {
-      return bcrypt
-        .hash(password, 12)
-        .then((passwordHash) => {
-          return CompanyAdmin.findOrCreate({
-            where: {
-              [Op.or]: [{ userName }, { email }],
-            },
-            defaults: {
-              ...{ userName },
-              ...{ email },
-              ...{ passwordHash },
-              ...{ stripeID },
-            },
-          });
-        })
-        .then(([companyAdmin, created]) => {
-          if (!created) {
-            throw new StatusError('Admin already exists', 409);
-          }
-          return companyAdmin;
-        });
-    } 
+    static async createNewAdmin(companyID, userName, email, password, accessRights) {
+      const passwordHash = await bcrypt.hash(password, 12);
+      const [companyAdmin, created] = await CompanyAdmin.findOrCreate({
+        where: {
+          [Op.or]: [{ userName }, { email }],
+        },
+        defaults: {
+          ...{ userName },
+          ...{ email },
+          ...{ passwordHash },
+          ...{ accessRights },
+          ...{ companyID },
+        },
+      });
+      if (!created) {
+        throw new StatusError('Admin already exists', 409);
+      }
+      return companyAdmin;
+
+  }
   }
 
   
@@ -46,13 +44,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     companyID: {
       type:  DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'companies',
         key: 'id',
       },
     },
     email: DataTypes.STRING,
+    userName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     passwordHash: DataTypes.STRING,
     accessRights: DataTypes.STRING,
     createdAt: DataTypes.DATE,

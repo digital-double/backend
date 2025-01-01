@@ -15,7 +15,7 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[0].id,
-        adminName: "admin1",
+        userName: 'Techy',
         email: "admin1@covelant.com",
         passwordHash: await bcrypt.hash('admin1', 12),
         accessRights: "admin",
@@ -25,7 +25,7 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[1].id,
-        adminName: "admin2",
+        userName: 'green',
         email: "admin2@covelant.com",
         passwordHash: await bcrypt.hash('admin2', 12),
         accessRights: "admin",
@@ -34,8 +34,8 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        companyID: companyRows[2].id,
-        adminName: "admin3",
+        companyID: companyRows[1].id,
+        userName: 'green',
         email: "admin3@covelant.com",
         passwordHash: await bcrypt.hash('admin3', 12),
         accessRights: "member",

@@ -13,19 +13,6 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      adminName: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      role: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
       companyID: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -35,6 +22,15 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      userName: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       passwordHash: {
         type: Sequelize.STRING,

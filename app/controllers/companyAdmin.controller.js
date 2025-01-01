@@ -46,17 +46,26 @@ exports.checkCompanyAdmin = async (req, res, next) => {
     }
 };
 
-exports.postCompanyAdmin = async (req, res, next, user) => {
+exports.createCompanyAdmin = async (req, res, next) => {
     try{
-      const { companyID, email } = req.body;
-      await CompanyAdmin.create({
-        companyID,
-        email,
-        accessRights : 'Admin',
-        userID : user.id
-      });
+      const { id, userName } = req.companyData;
+      const {email, password} = req.body
+
+      const adminData = await CompanyAdmin.createNewAdmin(id, userName, email, password, "admin")
+
+
+      return res.status(200).json({
+        message:"company registered successfully",
+        adminData: {
+          id: adminData.id,
+          userName: adminData.userName,
+          accessRights: adminData.accessRights,
+          company: req.companyData,
+        }
+      })
     }
     catch(err){
+      console.error("error",err)
       return next(err);
     }
 }
