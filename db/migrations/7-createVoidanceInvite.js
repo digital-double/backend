@@ -2,38 +2,38 @@ const { DataTypes } = require('sequelize'); // Import DataTypes
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('VoidanceInvite', {
+    await queryInterface.createTable('voidance_invites', {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         allowNull: false,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      userId: {
+      userID: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Users', // Name of the Users table
+          model: 'users', // Name of the Users table
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      companyId: {
+      companyID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Company', // Name of the Company table
+          model: 'companies', // Name of the Company table
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      advertisementId: {
+      advertisementID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Advertisement', // Name of the Advertisement table
+          model: 'advertisements', // Name of the Advertisement table
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -83,7 +83,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('VoidanceInvite');
+    await queryInterface.dropTable('voidance_invites');
   },
 };
 

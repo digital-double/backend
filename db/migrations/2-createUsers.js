@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('users', {
       id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -86,17 +86,17 @@ module.exports = {
         defaultValue: Sequelize.fn('now'),
       },
     });
-    await queryInterface.addConstraint('Users', {
+    await queryInterface.addConstraint('users', {
       fields: ['email'],
       type: 'unique',
     });
-    await queryInterface.addConstraint('Users', {
+    await queryInterface.addConstraint('users', {
       fields: ['userName'],
       type: 'unique',
     });
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('users');
   },
 };

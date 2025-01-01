@@ -1,49 +1,40 @@
 const { DataTypes } = require("sequelize");
 
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Ensure the extension for UUID generation is created
     await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
 
-    await queryInterface.createTable('CompanyAdmin', {
+    await queryInterface.createTable('company_admins', {
       id: {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
       },
-      adminName: {
-        type: Sequelize.STRING,
+      companyID: {
+        type: DataTypes.UUID,
         allowNull: false,
+        references: {
+          model: 'companies', 
+          key: 'id',          
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-      role: {
+      userName: {
         type: Sequelize.STRING,
-        allowNull: true,
-      },
-      companyID: {
-        type: DataTypes.UUID,
         allowNull: false,
-        references: {
-          model: 'Company', 
-          key: 'id',          
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
-      userID: {
-        type: DataTypes.UUID,
+      passwordHash: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: {
-          model: 'Users', 
-          key: 'id',          
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       accessRights: {
         type: Sequelize.STRING,
@@ -63,6 +54,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('CompanyAdmin');
+    await queryInterface.dropTable('company_admins');
   }
 };

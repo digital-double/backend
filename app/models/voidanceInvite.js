@@ -6,9 +6,9 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
   class VoidanceInvite extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userId' });
-      this.belongsTo(models.Company, { foreignKey: 'companyId' });
-      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementId' });
+      this.belongsTo(models.User, { foreignKey: 'userID' });
+      this.belongsTo(models.Company, { foreignKey: 'companyID' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
     }
   }
 
@@ -19,31 +19,31 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
-    userId: {
+    userID: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Users', 
+        model: 'users', 
         key: 'id',
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
     },
-    companyId: {
+    companyID: {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Company', 
+        model: 'companies', 
         key: 'id',
       },
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
     },
-    advertisementId: {
+    advertisementID: {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Advertisement', 
+        model: 'advertisements', 
         key: 'id',
       },
       onUpdate: 'CASCADE',
@@ -92,6 +92,7 @@ module.exports = (sequelize) => {
   }, {
     sequelize,
     modelName: 'VoidanceInvite',
+    tableName: 'voidance_invites',
     paranoid: true,
     timestamps: true,
   });

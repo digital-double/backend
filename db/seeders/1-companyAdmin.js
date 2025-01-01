@@ -5,23 +5,19 @@ module.exports = {
   up: async (queryInterface) => {
     // Fetch company IDs from the "Companies" table
     const companyIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Company";`
+      `SELECT id FROM "companies";`
     );
-    const userIds= await queryInterface.sequelize.query(
-      `SELECT id FROM "Users";`
-    )
 
     const companyRows = companyIds[0]; 
-    const userRows = userIds[0];
 
 
-    await queryInterface.bulkInsert("CompanyAdmin", [
+    await queryInterface.bulkInsert("company_admins", [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[0].id,
-        userID: userRows[0].id,
-        adminName: "omar",
-        email: "omar.badawy@covelant.com",
+        userName: 'Techy',
+        email: "admin1@covelant.com",
+        passwordHash: await bcrypt.hash('admin1', 12),
         accessRights: "admin",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -29,9 +25,19 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         companyID: companyRows[1].id,
-        userID: userRows[1].id,
-        adminName: "ignazio",
-        email: "ignazio@covelant.com",
+        userName: 'green',
+        email: "admin2@covelant.com",
+        passwordHash: await bcrypt.hash('admin2', 12),
+        accessRights: "admin",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: Sequelize.literal('uuid_generate_v4()'),
+        companyID: companyRows[1].id,
+        userName: 'green',
+        email: "admin3@covelant.com",
+        passwordHash: await bcrypt.hash('admin3', 12),
         accessRights: "member",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -40,7 +46,7 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.bulkDelete("CompanyAdmin", null, {});
+    await queryInterface.bulkDelete("company_admins", null, {});
   },
 };
 

@@ -70,6 +70,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Company',
+    tableName: 'companies',
     paranoid: true,
     timestamps: true,
   });

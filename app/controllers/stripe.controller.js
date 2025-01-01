@@ -36,7 +36,6 @@ exports.getCheckout = async (req, res, next) => {
   }
 }
 
-
 exports.createUser = async (req, res, next) => {
   try {
     const customer = await stripe.customers.create({

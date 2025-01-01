@@ -2,13 +2,13 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class FacialData extends Model {
+  class InstagramData extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userID' });
+      this.belongsTo(models.User, { foreignKey: 'userID' });
     }
   }
 
-  FacialData.init({
+  InstagramData.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -21,20 +21,24 @@ module.exports = (sequelize, DataTypes) => {
       type:  DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id',
       },
     },
-    FacialImage: DataTypes.STRING,
+    Username: DataTypes.STRING,
+    igEmail: DataTypes.STRING,
+    accessToken: DataTypes.STRING,
+    AccountLinked: DataTypes.BOOLEAN,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'FacialData',
+    modelName: 'InstagramData',
+    tableName: 'instagram_datas',
     paranoid: true,
     timestamps: true,
   });
 
-  return FacialData;
+  return InstagramData;
 };

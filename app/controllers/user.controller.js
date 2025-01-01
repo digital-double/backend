@@ -1,14 +1,14 @@
 const db = require('../models');
 const {createUser} = require('./stripe.controller')
 
-const { Users } = db;
+const { User } = db;
 
 // Update a user
 exports.updateOne = async (req, res, next) => {
   try {
     const { userName } = req.params;
 
-    const user = await Users.findByLogin('userName', userName);
+    const user = await User.findByLogin('userName', userName);
 
     if ('password' in req.body) {
       throw new StatusError('user', 403);
@@ -34,7 +34,7 @@ exports.setResetToken = (req, res, next) => {
     body: { email },
   } = req;
 
-  Users.findByLogin('email', email)
+  User.findByLogin('email', email)
     .then((user) => user.setResetToken())
     .then((token) => {
       res.locals.resetToken = token;
@@ -50,7 +50,7 @@ exports.replacePassword = (req, res, next) => {
     params: { token },
   } = req;
 
-  Users.findByToken(token)
+  User.findByToken(token)
     .then((user) => {
       if (user.resetTokenExp < Date.now()) {
         throw new StatusError('Token expired', 401);
@@ -99,7 +99,7 @@ exports.retrieveOne = (req, res, next) => {
     params: { userName },
   } = req;
 
-  Users.findByLogin('userName', userName)
+  User.findByLogin('userName', userName)
     .then((user) => {
       return res.status(200).send({
         message: 'User data sent successfully',
@@ -118,7 +118,7 @@ exports.expressSignup = async (req, res, next) => {
 
     const stripeID = await createUser(req, res, next)
 
-    Users.createNewUser(userName, email, password, stripeID.id)
+    User.createNewUser(userName, email, password, stripeID.id)
     .then((user) => {
       
       res.locals.user = user;

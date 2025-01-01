@@ -7,10 +7,8 @@ const { generateToken } = require('../util/tokenGenerator');
 const { Op } = Sequelize;
 
 module.exports = (sequelize, DataTypes) => {
-  class Users extends Model {
+  class User extends Model {
     static associate(models) {
-      this.hasOne(models.FacialData, { foreignKey: 'userID' });
-      this.hasMany(models.InstagramVoidance, { foreignKey: 'userID' }); // add Many association to voidance later
       this.hasMany(models.ContactUs, { foreignKey: 'userID' });
       this.hasMany(models.VoidanceInvite, { foreignKey: 'userID' });
     }
@@ -19,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       return bcrypt
         .hash(password, 12)
         .then((passwordHash) => {
-          return Users.findOrCreate({
+          return User.findOrCreate({
             where: {
               [Op.or]: [{ userName }, { email }],
             },
@@ -41,14 +39,14 @@ module.exports = (sequelize, DataTypes) => {
   
     static findById = (id) => {
       if (!id) throw new StatusError('User', 404);
-      return Users.findByPk(id, { rejectOnEmpty: true }).catch(() => {
+      return User.findByPk(id, { rejectOnEmpty: true }).catch(() => {
         throw new StatusError('User', 404);
       });
     };
   
     static findByLogin = (type, userCredential) => {
       if (!type || !userCredential) throw new StatusError('User', 404);
-      return Users.findOne({
+      return User.findOne({
         where: { [type]: userCredential },
         rejectOnEmpty: true,
       }).catch(() => {
@@ -58,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
   
     static findByToken = (resetToken) => {
       if (!resetToken) throw new StatusError('User', 404);
-      return Users.findOne({
+      return User.findOne({
         where: { resetToken },
         rejectOnEmpty: true,
       }).catch(() => {
@@ -108,7 +106,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
 
-  Users.init({
+  User.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -143,16 +141,17 @@ module.exports = (sequelize, DataTypes) => {
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'Users',
+    modelName: 'User',
+    tableName: 'users',
     paranoid: true,
     timestamps: true,
   });
 
-  Users.beforeUpdate((user, options) => {
+  User.beforeUpdate((user, options) => {
     if (user.changed('id') || user.changed('userName')) {
       throw new Error('The id and userName fields are immutable and cannot be changed.');
     }
   });
 
-  return Users;
+  return User;
 };

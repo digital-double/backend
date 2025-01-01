@@ -16,6 +16,7 @@ module.exports = (sequelize) => {
       sequelize,
       timestamps: true,
       modelName: 'Session',
+      tableName: 'sessions',
     }
   );
   return Session;

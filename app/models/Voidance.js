@@ -2,16 +2,15 @@ const { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Voidances extends Model {
+  class Voidance extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: 'userId' });
-      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementId' });
-      this.belongsTo(models.Company, { foreignKey: 'companyId' });
-      this.hasOne(models.InstagramVoidance, { foreignKey: 'voidanceId' });
+      this.belongsTo(models.User, { foreignKey: 'userID' });
+      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
+      this.belongsTo(models.Company, { foreignKey: 'companyID' });
     }
   }
 
-  Voidances.init(
+  Voidance.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -21,27 +20,27 @@ module.exports = (sequelize, DataTypes) => {
         },
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      userId: {
+      userID: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
         },
       },
-      advertisementId: {
+      advertisementID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Advertisement',
+          model: 'advertisements',
           key: 'id',
         },
       },
-      companyId: {
+      companyID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Company',
+          model: 'companies',
           key: 'id',
         },
       },
@@ -80,11 +79,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Voidances',
+      modelName: 'Voidance',
+      tableName: 'voidances',
       paranoid: true,
       timestamps: true,
     }
   );
 
-  return Voidances;
+  return Voidance;
 };

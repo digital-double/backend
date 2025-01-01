@@ -5,13 +5,13 @@ const { Sequelize } = require('sequelize');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const companyIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Company";`
+      `SELECT id FROM "companies";`
     );
     const advertisementIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Advertisement";`
+      `SELECT id FROM "advertisements";`
     );
     const userIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "Users";`
+      `SELECT id FROM "users";`
     );
 
     const userRows = userIds[0]; 
@@ -20,12 +20,12 @@ module.exports = {
  
     const companyRows = companyIds[0]; 
 
-    await queryInterface.bulkInsert('VoidanceInvite', [
+    await queryInterface.bulkInsert('voidance_invites', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[0].id, 
-        companyId: companyRows[0].id, 
-        advertisementId: advertisementRows[0].id, 
+        userID: userRows[0].id, 
+        companyID: companyRows[0].id, 
+        advertisementID: advertisementRows[0].id, 
         subject: 'Invitation to Participate',
         message: 'We invite you to join our campaign.',
         CPC: 2.5,
@@ -37,9 +37,9 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[1].id, 
-        companyId: companyRows[1].id, 
-        advertisementId: advertisementRows[1].id, 
+        userID: userRows[1].id, 
+        companyID: companyRows[1].id, 
+        advertisementID: advertisementRows[1].id, 
         subject: 'Special Offer Invitation',
         message: 'Join our campaign for exclusive rewards.',
         CPC: 1.8,
@@ -51,9 +51,9 @@ module.exports = {
       },
       {
         id: Sequelize.literal('uuid_generate_v4()'),
-        userId: userRows[2].id, 
-        companyId: companyRows[2].id, 
-        advertisementId: advertisementRows[2].id, 
+        userID: userRows[2].id, 
+        companyID: companyRows[2].id, 
+        advertisementID: advertisementRows[2].id, 
         subject: 'Special Offer Invitation',
         message: 'Join our campaign for exclusive rewards.',
         CPC: 1.8,
@@ -67,7 +67,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('VoidanceInvite', null, {});
+    await queryInterface.bulkDelete('voidance_invites', null, {});
   },
 };
 

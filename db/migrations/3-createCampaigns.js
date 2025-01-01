@@ -2,18 +2,18 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Advertisement', {
+    await queryInterface.createTable('campaigns', {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
-      campaignID: {
+      companyID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Campaign',
+          model: 'companies',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -23,48 +23,40 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      Status: {
+      likes: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      totalBudget: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      campaignStatus: {
         type: Sequelize.BOOLEAN,
         allowNull: true,
       },
-      adStart: {
+      campaignStart: {
         type: Sequelize.DATE,
         allowNull: true,
       },
-      adEnd: {
+      campaignEnd: {
         type: Sequelize.DATE,
-        allowNull: true,
-      },
-      alocatedBudget: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
-      },
-      spentBudget: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
-      },
-      conversions: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      leads: {
-        type: Sequelize.INTEGER,
         allowNull: true,
       },
       avgCPC: {
         type: Sequelize.FLOAT,
         allowNull: true,
       },
-      totalLikes: {
+      numOfAds: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      totalComments: {
+      numOfConversions: {
         type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      description: {
-        type: Sequelize.STRING,
         allowNull: true,
       },
       numOfModels: {
@@ -75,8 +67,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      fileName: {
-        type: Sequelize.STRING,
+      potentialEngagement: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      actualEngagement: {
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       createdAt: {
@@ -97,6 +93,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Advertisement');
+    await queryInterface.dropTable('campaigns');
   }
 };

@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Advertisement, Company, Campaign, Users, Voidances, VoidanceInvite, ContactUs, CompanyAdmin} = db;
+const { Advertisement, Company, Campaign, User, Voidance, VoidanceInvite, ContactUs, CompanyAdmin} = db;
 
 exports.getMain = async (req, res, next) => {
   try {
@@ -80,7 +80,7 @@ exports.getProfile = async (req, res, next) =>{
       const { userName } = req.params
       
       const [user, company] = await Promise.all([
-        Users.findOne({
+        User.findOne({
           where: { userName },
           attributes: { exclude: ['password'] }, 
         }),
@@ -103,9 +103,11 @@ exports.getProfile = async (req, res, next) =>{
         }),
       ]);
 
+      
+
       if(company){
       const campaigns = await Campaign.findAll({
-        where: { companyID: company.id },
+        where: { companyID: company.dataValues.id },
         attributes: {
           exclude: [
             'potentialReach',
@@ -126,14 +128,15 @@ exports.getProfile = async (req, res, next) =>{
           campaigns,
         },
       });
-    }
+     }
   
       if (!user) {
         throw new StatusError(`Username ${userName}`, 404);
       }
-    
-      const voidances = await Voidances.findAll({
-        where: { userId: user.id },
+      
+      console.log(user.id )
+      const voidances = await Voidance.findAll({
+        where: { userID: user.id },
         attributes: {
           exclude: [
             'createdAt',
@@ -143,7 +146,8 @@ exports.getProfile = async (req, res, next) =>{
           ],
         }
       });
-    
+      
+
       return res.status(200).json({
         message: 'User data retrieved successfully',
         data: {
@@ -152,6 +156,7 @@ exports.getProfile = async (req, res, next) =>{
         },
       });
     } catch (err) {
+      console.error(err)
       return next(err);
     }
     
@@ -170,7 +175,7 @@ exports.getnotification = async (req, res, next) => {
         },
         include: [
           {
-            model: Users,
+            model: User,
             attributes: ['userName', 'email'], 
           },
           {

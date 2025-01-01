@@ -2,41 +2,29 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('InstagramVoidances', {
+    await queryInterface.createTable('faqs', {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
-      userID: {
+      companyID: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: 'Users',
+          model: 'companies',
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
       },
-      fileType: {
+      question: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      fileLength: {
+      answer: {
         type: Sequelize.STRING,
-        allowNull: true,
-      },
-      fileName: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      uploadDate: {
-        type: Sequelize.DATE,
         allowNull: true,
       },
       createdAt: {
@@ -57,6 +45,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('InstagramVoidances');
+    await queryInterface.dropTable('faqs');
   }
 };

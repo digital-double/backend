@@ -2,38 +2,38 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Voidances', {
+    await queryInterface.createTable('voidances', {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false,
       },
-      userId: {
+      userID: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      advertisementId: {
+      advertisementID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Advertisement',
+          model: 'advertisements',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      companyId: {
+      companyID: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'Company',
+          model: 'companies',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -107,6 +107,6 @@ module.exports = {
   },
   
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Voidances');
+    await queryInterface.dropTable('voidances');
   }
 };

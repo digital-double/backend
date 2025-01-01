@@ -22,11 +22,15 @@ exports.getAllCompanies = async (req, res, next) => {
 
 exports.createCompany= async (req, res, next) => {
   try {
+    const {userName, companyName, password} = req.body
+
+    if(!userName || !companyName || !password){
+      throw new StatusError("missing data", 409)
+    }
+
     const newCompany = await Company.create(req.body);
-    return res.status(201).json({
-      message: 'Company created successfully',
-      data: newCompany,
-    });
+    req.companyData = newCompany;
+    next();
   } catch (err) {
     return next(err);
   }
