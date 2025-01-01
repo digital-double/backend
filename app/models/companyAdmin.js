@@ -1,12 +1,39 @@
 const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
+const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   class CompanyAdmin extends Model {
     static associate(models) {
       this.belongsTo(models.Company, { foreignKey: 'companyID' });
     }
+    
+    static createNewAdmin(userName, email, password, stripeID) {
+      return bcrypt
+        .hash(password, 12)
+        .then((passwordHash) => {
+          return CompanyAdmin.findOrCreate({
+            where: {
+              [Op.or]: [{ userName }, { email }],
+            },
+            defaults: {
+              ...{ userName },
+              ...{ email },
+              ...{ passwordHash },
+              ...{ stripeID },
+            },
+          });
+        })
+        .then(([companyAdmin, created]) => {
+          if (!created) {
+            throw new StatusError('Admin already exists', 409);
+          }
+          return companyAdmin;
+        });
+    } 
   }
+
+  
 
   CompanyAdmin.init({
     id: {
