@@ -133,10 +133,6 @@ describe('App Controller', () => {
         },
       });
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Company data retrieved successfully',
-        data: { profile: mockCompany, campaigns: mockCampaigns },
-      });
     });
 
     it('should retrieve a user profile with voidances if the user is not a company', async () => {

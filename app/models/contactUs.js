@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
   class ContactUs extends Model {
     static associate(models) {
       this.belongsTo(models.User, { foreignKey: 'userID' });
-      this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
     }
   }
 
@@ -31,14 +30,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       references: {
         model: 'companies',
-        key: 'id',
-      },
-    },
-    advertisementID: {
-      type:  DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'advertisements',
         key: 'id',
       },
     },

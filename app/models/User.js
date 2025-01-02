@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.ContactUs, { foreignKey: 'userID' });
       this.hasMany(models.VoidanceInvite, { foreignKey: 'userID' });
+      this.belongsToMany(models.Category, {
+        through: models.UserCategory,
+        foreignKey: 'userID',
+        otherKey: 'categoryID',
+      })
     }
 
     static createNewUser(userName, email, password, stripeID) {

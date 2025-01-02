@@ -5,6 +5,7 @@ const companyRoutes = require('./company.routes');
 const voidanceRoutes = require('./voidance.routes');
 const campaignRoutes = require('./campaign.routes');
 const instagramRoutes = require('./instagram.routes');
+const categoryRoutes = require('./category.routes');
 const advertisementRoutes = require('./advertisement.routes')
 const appRoutes = require('./app.routes');
 const stripeRoutes = require('./stripe.routes');
@@ -16,6 +17,7 @@ router.get('/', (_req, res) => {
 
 router.use('/app', appRoutes)
 router.use('/users', userRoutes);
+router.use('/cat', categoryRoutes);
 router.use('/companies', companyRoutes);
 router.use('/ads',advertisementRoutes)
 router.use('/vds', voidanceRoutes);

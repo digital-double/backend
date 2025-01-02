@@ -7,7 +7,6 @@ module.exports = (sequelize) => {
   class VoidanceInvite extends Model {
     static associate(models) {
       this.belongsTo(models.User, { foreignKey: 'userID' });
-      this.belongsTo(models.Company, { foreignKey: 'companyID' });
       this.belongsTo(models.Advertisement, { foreignKey: 'advertisementID' });
     }
   }
@@ -28,16 +27,6 @@ module.exports = (sequelize) => {
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
-    },
-    companyID: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'companies', 
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL',
     },
     advertisementID: {
       type: DataTypes.UUID,
