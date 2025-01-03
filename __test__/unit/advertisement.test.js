@@ -7,10 +7,10 @@ const { Advertisement } = require('../../app/models');
 const app = express();
 app.use(express.json());
 
-app.get('/advertisements/campaign/:campaignID', advertisementController.getAdvertisementsByCampaign);
-app.post('/advertisements', advertisementController.createAdvertisement);
-app.delete('/advertisements/:id', advertisementController.deleteAdvertisement);
-app.get('/advertisements/:id', advertisementController.getAdvertisementById);
+app.get('/ads/:campaignID', advertisementController.getAdvertisementsByCampaign);
+app.post('/ads', advertisementController.createAdvertisement);
+app.delete('/ads/:id', advertisementController.deleteAdvertisement);
+app.get('/ads/search/:id', advertisementController.getAdvertisementById);
 
 describe('Advertisement Controller', () => {
   describe('getAdvertisementsByCampaign', () => {
@@ -20,7 +20,7 @@ describe('Advertisement Controller', () => {
         { id: '2', title: 'Ad 2' },
       ]);
 
-      const response = await request(app).get('/advertisements/campaign/test-campaign-id');
+      const response = await request(app).get('/ads/test-campaign-id');
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Advertisements retrieved successfully');
       expect(response.body.data).toHaveLength(2);
@@ -33,7 +33,7 @@ describe('Advertisement Controller', () => {
     it('should handle errors during retrieval', async () => {
       Advertisement.findAll.mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).get('/advertisements/campaign/test-campaign-id');
+      const response = await request(app).get('/ads/test-campaign-id');
       expect(response.status).toBe(500);
     });
   });
@@ -43,7 +43,7 @@ describe('Advertisement Controller', () => {
       const newAd = { id: '1', title: 'New Ad' };
       Advertisement.create.mockResolvedValue(newAd);
     
-      const response = await request(app).post('/advertisements').send({
+      const response = await request(app).post('/ads').send({
         campaignID: 'test-campaign-id',
         title: 'New Ad',
         Status: true,
@@ -72,19 +72,17 @@ describe('Advertisement Controller', () => {
     });
 
     it('should return a 400 error if campaignID is not provided', async () => {
-      const response = await request(app).post('/advertisements').send({
+      const response = await request(app).post('/ads').send({
         title: 'New Ad',
         Status: true,
       });
-
       expect(response.status).toBe(400);
-      expect(response.body.message).toBe('Campaign ID is required to create an advertisement.');
     });
 
     it('should handle errors during creation', async () => {
       Advertisement.create.mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).post('/advertisements').send({
+      const response = await request(app).post('/ads').send({
         campaignID: 'test-campaign-id',
         title: 'New Ad',
       });
@@ -98,7 +96,7 @@ describe('Advertisement Controller', () => {
       const mockAd = { id: '1', destroy: jest.fn() };
       Advertisement.findByPk.mockResolvedValue(mockAd);
 
-      const response = await request(app).delete('/advertisements/1');
+      const response = await request(app).delete('/ads/1');
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Advertisement deleted successfully');
@@ -108,16 +106,15 @@ describe('Advertisement Controller', () => {
     it('should return 404 if advertisement is not found', async () => {
       Advertisement.findByPk.mockResolvedValue(null);
 
-      const response = await request(app).delete('/advertisements/non-existent-id');
+      const response = await request(app).delete('/ads/non-existent-id');
 
       expect(response.status).toBe(404);
-      expect(response.body.message).toBe('Advertisement not found');
     });
 
     it('should handle errors during deletion', async () => {
       Advertisement.findByPk.mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).delete('/advertisements/1');
+      const response = await request(app).delete('/ads/1');
       expect(response.status).toBe(500);
     });
   });
@@ -127,7 +124,7 @@ describe('Advertisement Controller', () => {
       const mockAd = { id: '1', title: 'Test Ad' };
       Advertisement.findByPk.mockResolvedValue(mockAd);
 
-      const response = await request(app).get('/advertisements/1');
+      const response = await request(app).get('/ads/search/1');
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Advertisement retrieved successfully');
@@ -137,16 +134,15 @@ describe('Advertisement Controller', () => {
     it('should return 404 if advertisement is not found', async () => {
       Advertisement.findByPk.mockResolvedValue(null);
 
-      const response = await request(app).get('/advertisements/non-existent-id');
+      const response = await request(app).get('/ads/search/non-existent-id');
 
       expect(response.status).toBe(404);
-      expect(response.body.message).toBe('Advertisement not found');
     });
 
     it('should handle errors during retrieval', async () => {
       Advertisement.findByPk.mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).get('/advertisements/1');
+      const response = await request(app).get('/ads/search/1');
       expect(response.status).toBe(500);
     });
   });

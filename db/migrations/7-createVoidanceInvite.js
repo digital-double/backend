@@ -19,16 +19,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      companyID: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-          model: 'companies', // Name of the Company table
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      },
       advertisementID: {
         type: DataTypes.UUID,
         allowNull: true,

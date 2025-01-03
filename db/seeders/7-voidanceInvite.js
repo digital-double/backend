@@ -4,9 +4,6 @@ const { Sequelize } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const companyIds = await queryInterface.sequelize.query(
-      `SELECT id FROM "companies";`
-    );
     const advertisementIds = await queryInterface.sequelize.query(
       `SELECT id FROM "advertisements";`
     );
@@ -15,16 +12,12 @@ module.exports = {
     );
 
     const userRows = userIds[0]; 
-
-    const advertisementRows = advertisementIds[0]; 
- 
-    const companyRows = companyIds[0]; 
+    const advertisementRows = advertisementIds[0];  
 
     await queryInterface.bulkInsert('voidance_invites', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         userID: userRows[0].id, 
-        companyID: companyRows[0].id, 
         advertisementID: advertisementRows[0].id, 
         subject: 'Invitation to Participate',
         message: 'We invite you to join our campaign.',
@@ -38,7 +31,6 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         userID: userRows[1].id, 
-        companyID: companyRows[1].id, 
         advertisementID: advertisementRows[1].id, 
         subject: 'Special Offer Invitation',
         message: 'Join our campaign for exclusive rewards.',
@@ -52,7 +44,6 @@ module.exports = {
       {
         id: Sequelize.literal('uuid_generate_v4()'),
         userID: userRows[2].id, 
-        companyID: companyRows[2].id, 
         advertisementID: advertisementRows[2].id, 
         subject: 'Special Offer Invitation',
         message: 'Join our campaign for exclusive rewards.',
