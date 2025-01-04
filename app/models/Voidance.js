@@ -44,14 +44,6 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      affiliatedLink: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      numbOfClicks: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
       fileType: {
         type: DataTypes.STRING,
         allowNull: true,

@@ -39,15 +39,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      affiliatedLink: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      numbOfClicks: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-      },
       fileType: {
         type: DataTypes.STRING,
         allowNull: true,
