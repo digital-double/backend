@@ -39,7 +39,6 @@
     "express-session": "^1.18.0",
     "express-validator": "^7.2.0",
     "fs": "^0.0.1-security",
-    "ioredis": "^5.4.2",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.4",
@@ -48,7 +47,6 @@
     "path": "^0.12.7",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
-    "redis": "^4.7.0",
     "sanitize": "^2.1.2",
     "sequelize": "^6.37.3",
     "stripe": "^17.5.0"

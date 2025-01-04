@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
 const affiliate  = require('../controllers/affiliate.controller')
-const rateLimiter = require("../middlewares/rateLimiter.middleware.js");
 
 
 router.get('/:uniqueIdentifier', affiliate.registerClick); //good
