@@ -12,8 +12,8 @@ exports.getAdvertisementsByCampaign = async (req, res, next) => {
         where: { campaignID },
         attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
       });
-
-      if (!advertisements) {
+      console.log(campaignID)
+      if (!advertisements || advertisements.length == 0) {
         throw new StatusError("advertisements",404)
       }
 

@@ -10,7 +10,7 @@ router.get('/invites/:id', isLoggedIn, voidanceController.getVoidanceInvite); //
 router.get('/generated/:id', isLoggedIn, voidanceController.getGeneratedVoidance); //good
 
 router.post('/invites', isLoggedIn, voidanceController.createVoidanceInvite); //good
-router.post('/generated', isLoggedIn, voidanceController.createVoidance); //good
+router.post('/', isLoggedIn, voidanceController.createVoidance); //good
 
 router.patch('/invites/:id', isLoggedIn, voidanceController.voidanceUpdateStatus); //good
 router.patch('/generated/:id/upload-status', isLoggedIn, voidanceController.updateGeneratedVoidanceUploadStatus); //good

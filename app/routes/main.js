@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userRoutes = require('./user.routes');
+const affiliateRoutes = require('./affiliate.routes');
 const companyRoutes = require('./company.routes');
 const voidanceRoutes = require('./voidance.routes');
 const campaignRoutes = require('./campaign.routes');
@@ -16,6 +17,7 @@ router.get('/', (_req, res) => {
 });
 
 router.use('/app', appRoutes)
+router.use('/affiliate', affiliateRoutes)
 router.use('/users', userRoutes);
 router.use('/cat', categoryRoutes);
 router.use('/companies', companyRoutes);

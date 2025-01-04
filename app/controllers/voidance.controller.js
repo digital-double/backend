@@ -1,12 +1,34 @@
 const db = require('../models');
-const { Voidance, VoidanceInvite, User } = db;
-// Voidance Invite Controllers
+const { Voidance, VoidanceInvite, User,AffiliateLink } = db;
+const crypto = require('crypto');
+
+require('dotenv').config();
+
+const generateAffiliateLink = async (voidanceID, redirectTo) => {
+  try {
+    const uniqueIdentifier = crypto.randomBytes(8).toString('hex'); // Generate a unique token
+    const link = `${process.env.BASE_URL}/affiliate/${uniqueIdentifier}`;
+    console.log(link)
+
+    if(!voidanceID || !redirectTo) throw new StatusError("missing data", 400)
+
+    const affiliateLink = await AffiliateLink.create({
+      voidanceID,
+      link,
+      redirectTo,
+    });
+
+    return affiliateLink;
+  } catch (error) {
+    throw error;
+  }
+};
 
 // @middleware: isLoggedIn
 exports.getAllVoidanceInvites = async (req, res, next) => {
   try {
     const voidanceInvites = await VoidanceInvite.findAll({
-      where: { userId: req.user.id },
+      where: { userID: req.user.id },
       include: [
         {
           model: User,
@@ -82,7 +104,7 @@ exports.createVoidanceInvite = async (req, res, next) => {
     // Check for existing invite
     const existingInvite = await VoidanceInvite.findOne({
       where: {
-        userId: req.user.id,
+        userID: req.user.id,
         ...(companyId && { companyId }),
         ...(advertisementId && { advertisementId }),
         campaignName,
@@ -100,7 +122,7 @@ exports.createVoidanceInvite = async (req, res, next) => {
     // Create new invite
     const invite = await VoidanceInvite.create(
       {
-        userId: req.user.id,
+        userID: req.user.id,
         subject,
         message,
         CPC,
@@ -132,7 +154,7 @@ exports.deleteVoidanceInvite = async (req, res, next) => {
     const deleted = await VoidanceInvite.destroy({
       where: {
         id,
-        userId: req.user.id,
+        userID: req.user.id,
       },
     });
 
@@ -173,7 +195,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 
     // Check if user has permission to update
     const isCompany = req.user.role === 'company';
-    const isTargetUser = voidanceInvite.userId === req.user.id;
+    const isTargetUser = voidanceInvite.userID === req.user.id;
 
     if (
       (voidanceInvite.status === 'pending_user' && !isTargetUser) ||
@@ -189,7 +211,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
     if (status === 'accepted') {
       await Voidance.create(
         {
-          userId: voidanceInvite.userId,
+          userID: voidanceInvite.userID,
           companyId: voidanceInvite.companyId,
           advertisementId: voidanceInvite.advertisementId,
           campaignName: voidanceInvite.campaignName,
@@ -220,7 +242,7 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
 exports.getAllGeneratedVoidances = async (req, res, next) => {
   try {
     const generatedVoidances = await Voidance.findAll({
-      where: { userId: req.user.id },
+      where: { userID: req.user.id },
     });
 
     return res.status(200).send({
@@ -240,7 +262,7 @@ exports.getGeneratedVoidance = async (req, res, next) => {
     const generatedVoidance = await Voidance.findOne({
       where: {
         id,
-        userId: req.user.id,
+        userID: req.user.id,
       },
     });
 
@@ -253,6 +275,7 @@ exports.getGeneratedVoidance = async (req, res, next) => {
       generatedVoidance,
     });
   } catch (err) {
+    console.error(err)
     return next(err);
   }
 };
@@ -260,16 +283,26 @@ exports.getGeneratedVoidance = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.createVoidance = async (req, res, next) => {
   try {
-    const newGeneratedVoidance = await Voidance.create({
-      ...req.body,
-      userId: req.user.id,
+    const { redirectTo, ...voidanceData } = req.body;
+
+    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID){
+      throw new StatusError("missing data", 400)
+    }
+
+    const voidance = await Voidance.create({
+      ...voidanceData,
+      userID: req.user.id,
     });
+
+    const affiliateLink = await generateAffiliateLink(voidance.id, redirectTo);
 
     return res.status(201).send({
       message: 'Generated voidance created successfully',
-      voidance: newGeneratedVoidance,
+      voidance: voidance,
+      affiliateLink
     });
   } catch (err) {
+    console.error(err)
     return next(err);
   }
 };
@@ -282,7 +315,7 @@ exports.deleteGeneratedVoidance = async (req, res, next) => {
     const deleted = await Voidance.destroy({
       where: {
         id,
-        userId: req.user.id,
+        userID: req.user.id,
       },
     });
 
@@ -309,7 +342,7 @@ exports.updateGeneratedVoidanceUploadStatus = async (req, res, next) => {
       {
         where: {
           id,
-          userId: req.user.id,
+          userID: req.user.id,
         },
       }
     );
@@ -337,7 +370,7 @@ exports.updateGeneratedVoidanceQualityScore = async (req, res, next) => {
       {
         where: {
           id,
-          userId: req.user.id,
+          userID: req.user.id,
         },
       }
     );
