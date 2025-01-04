@@ -10,6 +10,4 @@ router.get('/affiliate-analytics/:voidanceId', affiliate.getAffiliateAnalytics);
 
 
 
-
-
 module.exports = router;
