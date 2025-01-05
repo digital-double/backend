@@ -3,17 +3,10 @@ const db = require('../models');
 const { Campaign, Company } = db
 
 exports.getAllCampaigns = async (req, res, next)=>{
-  const { companyID } = req.body
+  const { companyID } = req.user
     try {
       const campaigns = await Campaign.findAll({
         where: { companyID: companyID }, 
-        include: [
-          {
-            model: Company,
-            required: true,
-            attributes: ['companyName', 'logo'], 
-          },
-        ],
         attributes: {
           exclude: ['deletedAt', 'createdAt', 'updatedAt', 'companyID'], 
         },
@@ -34,6 +27,12 @@ exports.getAllCampaigns = async (req, res, next)=>{
 
 exports.createCampaign = async (req, res, next) => {
     try {
+      const {title, description, totalBudget, campaignStatus, campaignStart, campaignEnd} = req.body
+
+      if(!title || !description || !totalBudget || !campaignStatus || !campaignStart || !campaignEnd){
+        throw new StatusError("missing input", 400)
+      }
+      
       const newCampaign = await Campaign.create(req.body);
 
       const createdCampaign = await Campaign.findOne({
