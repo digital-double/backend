@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const { isLoggedIn, isCompany, isAccountOwner } = require('../middlewares/authorization.middleware');
 const campaign = require('../controllers/campaign.controller')
 
 
-router.get('/', isLoggedIn, campaign.getAllCampaigns); //good
+router.get('/:userName/:campaignID', isLoggedIn, campaign.getAdvertisementsInCampaign);  
+router.get('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.getAllCampaigns);
 
-router.post('/', isLoggedIn, campaign.createCampaign); //good security middleware
+router.post('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.createCampaign); 
 
-router.patch('/:id', isLoggedIn, campaign.updateCampaign); //security middleware
+router.patch('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.updateCampaign); 
 
-router.delete('/:id', isLoggedIn, campaign.deleteCampaign); // security middleware
+router.delete('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.deleteCampaign); 
 
 
 

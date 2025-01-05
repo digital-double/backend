@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Campaign, Company } = db
+const { Campaign, Company,Advertisement } = db
 
 exports.getAllCampaigns = async (req, res, next)=>{
   const { companyID } = req.user
@@ -60,7 +60,7 @@ exports.createCampaign = async (req, res, next) => {
 
 exports.updateCampaign = async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
 
       const campaign = await Campaign.findByPk(id);
       if (!campaign) {
@@ -92,9 +92,32 @@ exports.updateCampaign = async (req, res, next) => {
     }
 },
 
+exports.getAdvertisementsInCampaign = async (req, res, next) => {
+  try {
+    const { campaignID } = req.params;
+
+    const advertisements = await Advertisement.findAll({
+      where: { campaignID },
+      attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+    });
+
+    if (!advertisements || advertisements.length == 0) {
+      throw new StatusError("advertisements",404)
+    }
+
+    return res.status(200).json({
+      message: 'Advertisements retrieved successfully',
+      data: advertisements,
+    });
+  } catch (err) {
+    return next(err); 
+  }
+};
+
+
 exports.deleteCampaign = async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
 
       const campaign = await Campaign.findByPk(id);
 

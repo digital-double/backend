@@ -20,25 +20,10 @@ exports.getAllCompanies = async (req, res, next) => {
   }
 },
 
-exports.createCompany= async (req, res, next) => {
-  try {
-    const {userName, companyName, password} = req.body
-
-    if(!userName || !companyName || !password){
-      throw new StatusError("missing data", 409)
-    }
-
-    const newCompany = await Company.create(req.body);
-    req.companyData = newCompany;
-    next();
-  } catch (err) {
-    return next(err);
-  }
-},
 
 exports.updateCompany = async (req, res, next) =>{
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const company = await Company.findByPk(id);
 
@@ -60,7 +45,7 @@ exports.updateCompany = async (req, res, next) =>{
 
 exports.deleteCompany = async (req, res, next) =>{
    try {
-     const { id } = req.params;
+     const { id } = req.body;
 
      const company = await Company.findByPk(id);
 

@@ -32,8 +32,24 @@ module.exports = (sequelize, DataTypes) => {
           }
           return company
         }).catch(() => {
-          throw new StatusError('error retrieving company', 404);
+          throw new StatusError('error while retrieving company', 500);
         });
+    }
+
+    static createCompany = async (req) => {
+      try {
+        const {userName, companyName,} = req.body
+    
+        if(!userName || !companyName){
+          throw new StatusError("missing data", 409)
+        }
+    
+        const newCompany = await Company.create(req.body);
+
+        return newCompany
+      } catch (err) {
+        throw new StatusError('error while creating company', 500);
+      }
     }
   
   
