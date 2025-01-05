@@ -35,6 +35,31 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      minFollower: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: true,
+      },
+      maxFollower:{
+        type: Sequelize.INTEGER,
+        defaultValue: 1000000,
+        allowNull: true,
+      },
+      gender: {
+        type: Sequelize.STRING,
+        defaultValue: "any",
+        allowNull: true,
+      },
+      minAge: {
+        type: Sequelize.INTEGER,
+        defaultValue: 18,
+        allowNull: true,
+      },
+      maxAge: {
+        type: Sequelize.INTEGER,
+        defaultValue: 100,
+        allowNull: true,
+      },
       alocatedBudget: {
         type: Sequelize.FLOAT,
         allowNull: true,
@@ -75,9 +100,13 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      fileName: {
+      name: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+      },
+      imagePath: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,

@@ -2,7 +2,31 @@ const db = require('../models');
 
 const { Advertisement } = db;
 
+exports.createAdvertisement = async (req, res, next) => {
+  try {
+    const { campaignID, title, Status, adStart, adEnd, 
+      alocatedBudget, description, avgCPC, name } = req.body;
 
+    if (!campaignID || !title || !Status || !adStart || !adEnd || 
+      !alocatedBudget || !description || !avgCPC || !name)
+      {
+        throw new StatusError("Missing data", 400);
+      }
+
+    const advertisement = await Advertisement.create({
+      ...req.body,
+      imagePath: req.file.path, // File path saved by multer
+    });
+
+    return res.status(201).json({
+      message: 'Advertisement created successfully',
+      data: advertisement,
+    });
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+};
 
 exports.getAdvertisementsByCampaign = async (req, res, next) => {
     try {
@@ -23,35 +47,6 @@ exports.getAdvertisementsByCampaign = async (req, res, next) => {
       });
     } catch (err) {
       return next(err); 
-    }
-};
-  
-
-exports.createAdvertisement = async (req, res, next) => {
-    try {
-      const { campaignID, title, Status, adStart, adEnd, alocatedBudget, description, avgCPC } = req.body;
-  
-      if (!campaignID) {
-        throw new StatusError("campaign is required",400)
-      }
-  
-      const advertisement = await Advertisement.create({
-        campaignID,
-        title,
-        Status,
-        adStart,
-        adEnd,
-        alocatedBudget,
-        description,
-        avgCPC,
-      });
-  
-      return res.status(201).json({
-        message: 'Advertisement created successfully',
-        data: advertisement,
-      });
-    } catch (err) {
-      return next(err);
     }
 };
  
