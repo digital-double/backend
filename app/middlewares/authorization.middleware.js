@@ -28,3 +28,12 @@ exports.isCompany = async (req, res, next) => {
   next()
 }
 
+exports.isAdmin = async (req, res, next) => {
+  const {accessRights} = req.user
+  console.log(accessRights)
+  if(accessRights !== 'admin') {
+    return res.status(403).json({ message: 'Access forbidden' });
+  }
+  next()
+}
+
