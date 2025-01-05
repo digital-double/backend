@@ -11,6 +11,4 @@ router.post('/', isLoggedIn, upload.single('image'), advertisement.createAdverti
 
 router.delete('/:id', isLoggedIn, advertisement.deleteAdvertisement); //good
 
-
-
 module.exports = router

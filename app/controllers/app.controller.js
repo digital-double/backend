@@ -134,10 +134,9 @@ exports.getProfile = async (req, res, next) =>{
 
 exports.getnotification = async (req, res, next) => {
   try {
-    const { id, isCompany } = req.user;
-    const {userName} = req.user 
+    const { id, companyID } = req.user;
 
-    if (isCompany) {
+    if (companyID) {
       const contactUsObjects = await ContactUs.findAll({
         where: { userID: id },
         attributes: {
@@ -147,10 +146,6 @@ exports.getnotification = async (req, res, next) => {
           {
             model: User,
             attributes: ['userName', 'email'], 
-          },
-          {
-            model: Advertisement,
-            attributes: ['id', 'title'], 
           },
         ],
       });
@@ -166,15 +161,11 @@ exports.getnotification = async (req, res, next) => {
     }
 
     const voidanceInvites = await VoidanceInvite.findAll({
-      where: { userId: id },
+      where: { userID: id },
       attributes: {
         exclude: ['updatedAt', 'deletedAt'], 
       },
       include: [
-        {
-          model: Company,
-          attributes: ['companyName'], 
-        },
         {
           model: Advertisement,
           attributes: ['id', 'title'], 
@@ -191,6 +182,7 @@ exports.getnotification = async (req, res, next) => {
       data: voidanceInvites,
     });
   } catch (err) {
+    console.error(err)
     return next(err); 
   }
 };
