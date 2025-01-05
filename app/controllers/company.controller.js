@@ -38,7 +38,7 @@ exports.createCompany= async (req, res, next) => {
 
 exports.updateCompany = async (req, res, next) =>{
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const company = await Company.findByPk(id);
 
@@ -60,7 +60,7 @@ exports.updateCompany = async (req, res, next) =>{
 
 exports.deleteCompany = async (req, res, next) =>{
    try {
-     const { id } = req.params;
+     const { id } = req.body;
 
      const company = await Company.findByPk(id);
 

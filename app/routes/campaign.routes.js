@@ -4,13 +4,14 @@ const { isLoggedIn, isCompany, isAccountOwner } = require('../middlewares/author
 const campaign = require('../controllers/campaign.controller')
 
 
-router.get('/', isLoggedIn, isCompany, isAccountOwner, campaign.getAllCampaigns); 
+router.get('/:userName/:campaignID', isLoggedIn, campaign.getAdvertisementsInCampaign);  
+router.get('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.getAllCampaigns);
 
-router.post('/', isLoggedIn, isCompany, isAccountOwner, campaign.createCampaign); 
+router.post('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.createCampaign); 
 
-router.patch('/:id', isLoggedIn, isCompany, isAccountOwner, campaign.updateCampaign); 
+router.patch('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.updateCampaign); 
 
-router.delete('/:id', isLoggedIn, isCompany, isAccountOwner, campaign.deleteCampaign); 
+router.delete('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.deleteCampaign); 
 
 
 

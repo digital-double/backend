@@ -28,32 +28,10 @@ exports.createAdvertisement = async (req, res, next) => {
   }
 };
 
-exports.getAdvertisementsByCampaign = async (req, res, next) => {
-    try {
-      const { campaignID } = req.params;
-
-      const advertisements = await Advertisement.findAll({
-        where: { campaignID },
-        attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
-      });
-      console.log(campaignID)
-      if (!advertisements || advertisements.length == 0) {
-        throw new StatusError("advertisements",404)
-      }
-
-      return res.status(200).json({
-        message: 'Advertisements retrieved successfully',
-        data: advertisements,
-      });
-    } catch (err) {
-      return next(err); 
-    }
-};
- 
 
 exports.deleteAdvertisement = async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
   
       const advertisement = await Advertisement.findByPk(id);
       
@@ -73,7 +51,7 @@ exports.deleteAdvertisement = async (req, res, next) => {
 
 exports.getAdvertisementById = async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
   
       const advertisement = await Advertisement.findByPk(id, {
         attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
