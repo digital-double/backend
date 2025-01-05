@@ -8,8 +8,8 @@ const { checkUsername, checkEmail,} = require('../middlewares/validation.middlew
 
 router.get('/', isLoggedIn, company.getAllCompanies); 
 
-router.post('/signup', checkUsername, checkEmail, company.createCompany, companyAdmin.createCompanyAdmin); 
-// router.post('/members', isAdminOfCompany, admin.createCompanyMember);
+router.post('/signup', checkUsername, checkEmail, companyAdmin.createCompanyAndAdmin); 
+//router.post('/members', isAdmin, isAccountOwner, companyAdmin.createCompanyMember);
 
 router.patch('/:userName', isLoggedIn, isAccountOwner, company.updateCompany); 
 

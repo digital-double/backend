@@ -20,36 +20,14 @@ exports.getCompanyAdmins = async (req, res, next) => {
       return next(err);
     }
 };
-   
-exports.checkCompanyAdmin = async (req, res, next) => {
-    try {
-      const { companyID, email } = req.body;
-     
-      if (!companyID || !email ) {
-        throw new StatusError('Company ID, email, and accessRights are required to create an admin.', 400);
-      }
 
-      const adminExists = await CompanyAdmin.findOne({
-        where: {
-            companyID : companyID,
-        }
-      })
 
-      if(adminExists){
-        return false;
-      }
-
-      return true
-    } 
-    catch (err) {
-      return next(err);
-    }
-};
-
-exports.createCompanyAdmin = async (req, res, next) => {
+exports.createCompanyAndAdmin = async (req, res, next) => {
     try{
-      const { id, userName } = req.companyData;
+      const data = await Company.createCompany(req)
+
       const {email, password} = req.body
+      const { id, userName } = data;
 
       const adminData = await CompanyAdmin.createNewAdmin(id, userName, email, password, "admin")
 
@@ -65,6 +43,7 @@ exports.createCompanyAdmin = async (req, res, next) => {
       })
     }
     catch(err){
+      console.error(err)
       return next(err);
     }
 }
