@@ -1,4 +1,5 @@
 const db = require('../models');
+const { Op } = require('sequelize');
 
 const { Advertisement, Company, Campaign, User, Voidance, VoidanceInvite, ContactUs, CompanyAdmin} = db;
 
@@ -42,37 +43,6 @@ exports.getMain = async (req, res, next) => {
     } catch (err) {
       return next(err);
     }
-  };
-
-exports.retrieveFiltered = (req, res, next) => {
-  try{
-    const {
-      body: { title, offset = 0 },
-    } = req;
-  
-    if (title) {
-      return Advertisement.findAll({
-        where: { title },
-        offset,
-        limit: 20,
-      })
-        .then((content) => {
-          res.status(200).json({
-            message: 'Contents retrieved',
-            data: content,
-          });
-        })
-        .catch((err) => next(err));
-    }
-  
-    return res.status(200).json({
-      message: 'No content',
-      data: [],
-    });
-  }
-  catch(err){
-    return next(err)
-  }
 };
 
 exports.getProfile = async (req, res, next) =>{
@@ -225,5 +195,76 @@ exports.getnotification = async (req, res, next) => {
   }
 };
 
+exports.retrieveFiltered = async (req, res, next) => {
+  try {
+    // Extract filters from the request
+    const { advertisementFilters = {}, companyFilters = {}, campaignFilters = {} } = req.body;
 
+    // Build advertisement conditions dynamically
+    const advertisementConditions = {};
+    if ('cpc' in advertisementFilters) {
+      advertisementConditions.avgCPC = { [Op.lte]: advertisementFilters.cpc };
+    }
+    if ('budget' in advertisementFilters) {
+      advertisementConditions.alocatedBudget = { [Op.lte]: advertisementFilters.budget };
+    }
+    if ('startDate' in advertisementFilters) {
+      advertisementConditions.adStart = { [Op.gte]: advertisementFilters.startDate };
+    }
+    if ('endDate' in advertisementFilters) {
+      advertisementConditions.adEnd = { [Op.lte]: advertisementFilters.endDate };
+    }
+    if ('Status' in advertisementFilters) {
+      advertisementConditions.Status = advertisementFilters.Status;
+    }
+
+    // Build company conditions dynamically
+    const companyConditions = {};
+    if ('industry' in companyFilters) {
+      companyConditions.industry = companyFilters.industry;
+    }
+
+    // Build campaign conditions dynamically
+    const campaignConditions = {};
+    if ('totalBudget' in campaignFilters) {
+      campaignConditions.totalBudget = { [Op.gte]: campaignFilters.totalBudget };
+    }
+    if ('campaignStatus' in campaignFilters) {
+      campaignConditions.campaignStatus = campaignFilters.campaignStatus;
+    }
+    if ('campaignStart' in campaignFilters) {
+      campaignConditions.campaignStart = { [Op.gte]: campaignFilters.campaignStart };
+    }
+    if ('campaignEnd' in campaignFilters) {
+      campaignConditions.campaignEnd = { [Op.lte]: campaignFilters.campaignEnd };
+    }
+    if ('avgCPC' in campaignFilters) {
+      campaignConditions.avgCPC = { [Op.lte]: campaignFilters.avgCPC };
+    }
+
+    // Perform the database queries with dynamic conditions
+    const advertisements = Object.keys(advertisementConditions).length
+      ? await Advertisement.findAll({ where: advertisementConditions })
+      : [];
+    const companies = Object.keys(companyConditions).length
+      ? await Company.findAll({ where: companyConditions })
+      : [];
+    const campaigns = Object.keys(campaignConditions).length
+      ? await Campaign.findAll({ where: campaignConditions })
+      : [];
+
+    // Construct the response
+    return res.status(200).json({
+      message: 'Filtered entities retrieved successfully',
+      data: {
+        advertisements,
+        companies,
+        campaigns,
+      },
+    });
+  } catch (err) {
+    console.error('Error filtering entities:', err);
+    return next(err);
+  }
+};
 
