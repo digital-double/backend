@@ -1,22 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const voidanceController = require('../controllers/voidance.controller');
-const { isLoggedIn } = require('../middlewares/authorization.middleware');
+const voidance = require('../controllers/voidance.controller');
+const { isLoggedIn, isCompany, isAccountOwner } = require('../middlewares/authorization.middleware');
+const upload = require('../middlewares/upload.middleware.js')
 
 
-router.get('/invites', isLoggedIn, voidanceController.getAllVoidanceInvites); //good
-router.get('/generated', isLoggedIn, voidanceController.getAllGeneratedVoidances); //good
-router.get('/invites/:id', isLoggedIn, voidanceController.getVoidanceInvite); //good
-router.get('/generated/:id', isLoggedIn, voidanceController.getGeneratedVoidance); //good
+router.get('/:userName/invites', isLoggedIn, isAccountOwner, voidance.getAllVoidanceInvites); //good
+router.get('/:userName', isLoggedIn, isAccountOwner, voidance.getAllVoidances); //good
+router.get('/search/:id', isLoggedIn, voidance.getVoidanceById); //good
 
-router.post('/invites', isLoggedIn, voidanceController.createVoidanceInvite); //good
-router.post('/', isLoggedIn, voidanceController.createVoidance); //good
+router.post('/invites', isLoggedIn, isCompany, voidance.postVoidanceInvite); //good prob fucked as well
+router.post('/:userName', isLoggedIn, isAccountOwner, upload.single('image'), voidance.createVoidance); //will come back to it
 
-router.patch('/invites/:id', isLoggedIn, voidanceController.voidanceUpdateStatus); //good
-router.patch('/generated/:id/upload-status', isLoggedIn, voidanceController.updateGeneratedVoidanceUploadStatus); //good
-router.patch('/generated/:id/quality-score', isLoggedIn, voidanceController.updateGeneratedVoidanceQualityScore); //good
+router.patch('/:userName/:id', isLoggedIn, isAccountOwner, voidance.voidanceUpdateStatus); // fucked
 
-router.delete('/generated/:id', isLoggedIn, voidanceController.deleteGeneratedVoidance); //good
-router.delete('/invites/:id', isLoggedIn, voidanceController.deleteVoidanceInvite); //good
+router.delete('/:userName/:id', isLoggedIn, isAccountOwner, voidance.deleteVoidance); // good
+router.delete('/:userName/invites/:id', isLoggedIn, isCompany, voidance.deleteVoidanceInvite); //good
 
 module.exports = router;

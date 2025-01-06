@@ -22,11 +22,11 @@ exports.registerClick = async (req, res, next) => {
       const affiliateLink = await AffiliateLink.findOne({
         where: { link: `${process.env.BASE_URL}/affiliate/${uniqueIdentifier}` },
       });
-  
+     
       if (!affiliateLink || affiliateLink.lenght == 0) {
         return res.status(404).json({ message: 'Affiliate link not found.' });
       }
-      
+
       const existingClick = await ReferralIP.findOne({
         where: {
           affiliateLinkID: affiliateLink.id,
@@ -41,7 +41,7 @@ exports.registerClick = async (req, res, next) => {
           hashedIPAddress: hashedIP,
         });
       }
-  
+      console.log(affiliateLink.redirectTo)
       return res.redirect(affiliateLink.redirectTo);
       } catch (err) {
         console.error(err)

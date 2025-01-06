@@ -39,17 +39,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      fileType: {
+      imagePath: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
-      fileLength: {
+      name: {
         type: DataTypes.STRING,
-        allowNull: true,
-      },
-      fileName: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       qualityScore: {
         type: DataTypes.FLOAT,

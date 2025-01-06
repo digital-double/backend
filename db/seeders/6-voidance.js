@@ -1,7 +1,26 @@
 const { Sequelize } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   up: async (queryInterface) => {
+    const uploadsDir = path.resolve(__dirname, '../uploads');
+    
+        if (!fs.existsSync(uploadsDir)) {
+          fs.mkdirSync(uploadsDir);
+        }
+    
+        const placeholderImages = [
+          { name: 'vd One', imageName: 'vd1.jpg' },
+          { name: 'vd Two', imageName: 'vd2.jpg' },
+          { name: 'vd Three', imageName: 'vd3.jpg' },
+        ];
+    
+        for (const placeholder of placeholderImages) {
+          const filePath = path.join(uploadsDir, placeholder.imageName);
+          fs.writeFileSync(filePath, 'This is a placeholder image content'); 
+        }
+
      const userIds = await queryInterface.sequelize.query(
         `SELECT id FROM "users";`
       );
@@ -22,9 +41,8 @@ module.exports = {
         userID: userRows[0].id,
         advertisementID: advertisementRows[0].id,
         companyID: companyRows[0].id,
-        fileType: 'image/jpeg',
-        fileLength: '3MB',
-        fileName: 'sample_image1.jpg',
+        name: "vd One",
+        imagePath: 'uploads/vd1.jpg',
         qualityScore: 85.5,
         uploadStatus: 'pending',
         createdAt: new Date(),
@@ -35,9 +53,8 @@ module.exports = {
         userID: userRows[1].id,
         advertisementID: advertisementRows[1].id,
         companyID: companyRows[1].id,
-        fileType: 'video/mp4',
-        fileLength: '15MB',
-        fileName: 'sample_video.mp4',
+        name: "vd Two",
+        imagePath: 'uploads/vd2.jpg',
         qualityScore: 90.0,
         uploadStatus: 'pending',
         createdAt: new Date(),
@@ -48,9 +65,8 @@ module.exports = {
         userID: userRows[2].id,
         advertisementID: advertisementRows[2].id,
         companyID: companyRows[2].id,
-        fileType: 'application/pdf',
-        fileLength: '1MB',
-        fileName: 'sample_document.pdf',
+        name: "vd three",
+        imagePath: 'uploads/vd3.jpg',
         qualityScore: 78.3,
         uploadStatus: 'pending',
         createdAt: new Date(),
