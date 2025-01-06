@@ -195,15 +195,16 @@ exports.getVoidanceById = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.createVoidance = async (req, res, next) => {
   try {
-    const { redirectTo, ...voidanceData } = req.body;
+    const { redirectTo, name, ...voidanceData } = req.body;
 
-    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID || !redirectTo){
+    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID || !redirectTo || !name){
       throw new StatusError("missing data", 400)
     }
 
     const voidance = await Voidance.create({
       ...voidanceData,
       userID: req.user.id,
+      imagePath: req.file.path, // File path saved by multer
     });
 
     const affiliateLink = await generateAffiliateLink(voidance.id, redirectTo);

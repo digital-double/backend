@@ -23,7 +23,6 @@ exports.createAdvertisement = async (req, res, next) => {
       data: advertisement,
     });
   } catch (err) {
-    console.error(err);
     return next(err);
   }
 };
