@@ -19,6 +19,7 @@ module.exports = {
         companyID: companyRows[0].id,
         createdAt: new Date(),
         deletedAt: null,
+        updatedAt: new Date(),
       },
       {
         id: queryInterface.sequelize.literal('uuid_generate_v4()'),
@@ -26,6 +27,7 @@ module.exports = {
         companyID: companyRows[1].id,
         createdAt: new Date(),
         deletedAt: null,
+        updatedAt: new Date(),
       },
     ]);
   },
