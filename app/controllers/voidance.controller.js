@@ -1,28 +1,8 @@
 const db = require('../models');
-const { Voidance, VoidanceInvite, User,AffiliateLink } = db;
-const crypto = require('crypto');
+const { Voidance, VoidanceInvite} = db;
+const {generateAffiliateLink} = require('../util/linkGenerator')
 
 require('dotenv').config();
-
-const generateAffiliateLink = async (voidanceID, redirectTo) => {
-  try {
-    const uniqueIdentifier = crypto.randomBytes(8).toString('hex'); // Generate a unique token
-    const link = `${process.env.BASE_URL}/affiliate/${uniqueIdentifier}`;
-    console.log(link)
-
-    if(!voidanceID || !redirectTo) throw new StatusError("missing data", 400)
-
-    const affiliateLink = await AffiliateLink.create({
-      voidanceID,
-      link,
-      redirectTo,
-    });
-
-    return affiliateLink;
-  } catch (error) {
-    throw error;
-  }
-};
 
 // @middleware: isLoggedIn
 exports.getAllVoidanceInvites = async (req, res, next) => {
@@ -42,7 +22,6 @@ exports.getAllVoidanceInvites = async (req, res, next) => {
     return next(err);
   }
 };
-
 
 // @middleware: isLoggedIn
 exports.postVoidanceInvite = async (req, res, next) => {
@@ -218,7 +197,7 @@ exports.createVoidance = async (req, res, next) => {
   try {
     const { redirectTo, ...voidanceData } = req.body;
 
-    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID){
+    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID || !redirectTo){
       throw new StatusError("missing data", 400)
     }
 
@@ -235,7 +214,6 @@ exports.createVoidance = async (req, res, next) => {
       affiliateLink
     });
   } catch (err) {
-    console.error(err)
     return next(err);
   }
 };
