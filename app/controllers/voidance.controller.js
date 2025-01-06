@@ -195,9 +195,9 @@ exports.getVoidanceById = async (req, res, next) => {
 // @middleware: isLoggedIn
 exports.createVoidance = async (req, res, next) => {
   try {
-    const { redirectTo, name, ...voidanceData } = req.body;
+    const { redirectTo, ...voidanceData } = req.body;
 
-    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID || !redirectTo || !name){
+    if(!req.body.companyID || !req.body.userID || !req.body.advertisementID || !redirectTo || !req.body.name){
       throw new StatusError("missing data", 400)
     }
 
