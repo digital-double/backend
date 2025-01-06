@@ -44,15 +44,11 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      fileType: {
+      imagePath: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      fileLength: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      fileName: {
+      name: {
         type: DataTypes.STRING,
         allowNull: true,
       },
