@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const vdInviteIds = await queryInterface.sequelize.query(

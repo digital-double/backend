@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const userIds = await queryInterface.sequelize.query(
