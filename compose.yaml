@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   server:
     build:
@@ -22,26 +20,27 @@ services:
           sleep 2;
         done;
         npm start
-
   db:
-    image: postgres:latest
-    restart: always
-    volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    environment:
-      POSTGRES_USER: dd
-      POSTGRES_PASSWORD: abcd1234
-      POSTGRES_DB: devd
-    expose:
-      - "5432"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "dd"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+   image: postgres:latest
+   restart: always
+   volumes:
+     - db-data:/var/lib/postgresql/data
+     - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+   environment:
+     POSTGRES_USER: dd
+     POSTGRES_PASSWORD: abcd1234
+     POSTGRES_DB: devd
+   expose:
+     - "5432"
+   healthcheck:
+     test: ["CMD", "pg_isready", "-U", "dd", "-d", "devd"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
 
 volumes:
   db-data:
+
 
 
