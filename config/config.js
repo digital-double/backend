@@ -1,16 +1,6 @@
-const { updateEnvVariables } = require('../app/util/env.handler');
 const { readFileToString } = require('../app/util/readFile');
 
-const databaseEnvVariables = [
-  'DB_DATABASE',
-  'DB_USERNAME',
-  'DB_PASSWORD',
-  'DB_HOST',
-  'DB_PORT',
-];
-updateEnvVariables(databaseEnvVariables);
-
-require('dotenv').config(); // this is important!
+require('dotenv').config(); 
 
 const commonConfig = {
   database: process.env.DB_DATABASE,

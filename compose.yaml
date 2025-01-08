@@ -1,0 +1,48 @@
+services:
+  server:
+    build:
+      context: .
+      target: dev
+    environment:
+      NODE_ENV: development
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+      - 9229:9229
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        until nc -z db 5432; do
+          echo "Waiting for database...";
+          sleep 2;
+        done;
+        npm start
+  db:
+   image: postgres:latest
+   restart: always
+   volumes:
+     - db-data:/var/lib/postgresql/data
+     - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+   environment:
+     POSTGRES_USER: dd
+     POSTGRES_PASSWORD: abcd1234
+     POSTGRES_DB: devd
+   expose:
+     - "5432"
+   healthcheck:
+     test: ["CMD", "pg_isready", "-U", "dd", "-d", "devd"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+
+volumes:
+  db-data:
+
+
+

@@ -22,6 +22,10 @@ const sequelize =
         define: {
           freezeTableName: true,
         },
+        retry: {
+          match: [/ConnectionError/, /Connection refused/],
+          max: 5, // Retry up to 5 times
+        },
       });
 
 fs.readdirSync(__dirname)
