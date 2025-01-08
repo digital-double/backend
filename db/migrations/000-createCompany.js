@@ -8,7 +8,7 @@ module.exports = {
     await queryInterface.createTable('companies', {
       id: {
         type: DataTypes.UUID, // Change from INTEGER to UUID
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
         primaryKey: true,
         allowNull: false,
       },
