@@ -12,7 +12,7 @@ const config = require('../../config/config')[env];
 
 const db = {};
 const sequelize =
-  env === 'productions'
+  env === 'production'
     ? new Sequelize(`${config.url}?sslmode=require`, config)
     : new Sequelize(config.database, config.username, config.password, {
         host: config.host,

@@ -21,10 +21,10 @@ const testConfig = () => {
 };
 
 module.exports = {
-  production: {
+  development: {
     ...commonConfig,
   },
-  development: {
+  production: {
     url: process.env.DB_URL,
     dialect: 'postgres',
     define: {
