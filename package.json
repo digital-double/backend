@@ -48,6 +48,7 @@
     "path": "^0.12.7",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
+    "postgres": "^3.4.5",
     "sanitize": "^2.1.2",
     "sequelize": "^6.37.3",
     "stripe": "^17.5.0"
