@@ -53,10 +53,10 @@ exports.registerClick = async (req, res, next) => {
 
 exports.getAffiliateAnalytics = async (req, res, next) => {
     try {
-        const { voidanceId } = req.params;
+        const { voidanceID } = req.params;
     
         const links = await AffiliateLink.findAll({
-          where: { voidanceId },
+          where: { voidanceID },
           attributes: ['id', 'link', 'clicks', 'redirectTo'],
         });
     
