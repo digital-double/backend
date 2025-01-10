@@ -2,6 +2,16 @@ const { Model } = require("sequelize");
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
+  (async () => {
+    try {
+      await sequelize.query(`
+        CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+      `);
+      console.log('Extension uuid-ossp created (if not already exists).');
+    } catch (error) {
+      console.error('Error creating uuid-ossp extension:', error);
+    }
+  })();
   class Company extends Model {
     static associate(models) {
       this.hasMany(models.Campaign, {

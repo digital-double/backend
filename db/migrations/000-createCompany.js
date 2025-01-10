@@ -2,8 +2,9 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Ensure the extension for UUID generation is created
-    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+    await queryInterface.sequelize.query(`
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    `);
 
     await queryInterface.createTable('companies', {
       id: {
@@ -94,6 +95,9 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.sequelize.query(`
+      DROP EXTENSION IF EXISTS "uuid-ossp";
+    `);
     await queryInterface.dropTable('companies');
   }
 };
