@@ -10,14 +10,17 @@ const {
 } = require('./app/middlewares/error_handlers.middleware');
 const { setHeaders } = require('./app/middlewares/headers.middleware');
 const db = require('./app/models');
+const path = require('path');
 
 require('dotenv').config();
 require('./app/passport/setup')(passport);
 require('./app/passport/strategies').register(passport);
 
+
 const app = express();
 
 app.disable('x-powered-by');
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 

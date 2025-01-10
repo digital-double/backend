@@ -1,0 +1,28 @@
+/* Full-page styling */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+    background-color: #101129; /* Darker background color */
+    font-family: 'Arial', sans-serif; /* Sans-serif font */
+    text-align: center;
+}
+
+/* Centered logo styling with blur effect */
+img {
+    min-width: 800px; /* Increase logo size */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Subtext styling */
+h1 {
+    margin-top: 20px; /* Add spacing above subtext */
+    font-size: 1.5rem; /* Adjust subtext size */
+    font-weight: 400; /* Light font weight */
+    color: rgb(255, 255, 255); /* White font */
+    opacity: 0.8; /* Slight transparency for a subtle look */
+}

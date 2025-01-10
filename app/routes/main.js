@@ -11,9 +11,12 @@ const advertisementRoutes = require('./advertisement.routes')
 const appRoutes = require('./app.routes');
 const stripeRoutes = require('./stripe.routes');
 
+const path = require('path');
+const viewsPath = path.join(__dirname, '../../public');
+router.use(express.static(viewsPath));
 // this file acts as the main router for all incoming requests
 router.get('/', (_req, res) => {
-  res.send('digital double');
+  res.sendFile(path.join(viewsPath, 'index.html'));
 });
 
 router.use('/app', appRoutes)
