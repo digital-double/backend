@@ -2,6 +2,9 @@ const { Sequelize } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.sequelize.query(`
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    `);
     await queryInterface.bulkInsert('companies', [
       {
         id: Sequelize.literal('uuid_generate_v4()'),
@@ -70,6 +73,11 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+    down: async (queryInterface) => {
+      await queryInterface.sequelize.query(`
+        DROP EXTENSION IF EXISTS "uuid-ossp";
+      `);
+    },
     await queryInterface.bulkDelete('companies', null, {});
   }
 };
