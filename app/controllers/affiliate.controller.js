@@ -44,7 +44,6 @@ exports.registerClick = async (req, res, next) => {
 
       return res.redirect(affiliateLink.redirectTo);
       } catch (err) {
-        console.error(err)
         return next(err)
       }
 
