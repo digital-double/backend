@@ -126,7 +126,6 @@ exports.getProfile = async (req, res, next) =>{
         },
       });
     } catch (err) {
-      console.error(err)
       return next(err);
     }
     
@@ -138,7 +137,7 @@ exports.getnotification = async (req, res, next) => {
 
     if (companyID) {
       const contactUsObjects = await ContactUs.findAll({
-        where: { userID: id },
+        where: {companyID },
         attributes: {
           exclude: ['updatedAt', 'deletedAt'],
         },
@@ -182,7 +181,6 @@ exports.getnotification = async (req, res, next) => {
       data: voidanceInvites,
     });
   } catch (err) {
-    console.error(err)
     return next(err); 
   }
 };
@@ -191,10 +189,11 @@ exports.retrieveFiltered = async (req, res, next) => {
   try {
     // Extract filters from the request
     const { advertisementFilters = {}, companyFilters = {}, campaignFilters = {} } = req.body;
-
+    
     // Build advertisement conditions dynamically
     const advertisementConditions = {};
     if ('cpc' in advertisementFilters) {
+      console.log(advertisementFilters)
       advertisementConditions.avgCPC = { [Op.lte]: advertisementFilters.cpc };
     }
     if ('budget' in advertisementFilters) {
@@ -255,7 +254,6 @@ exports.retrieveFiltered = async (req, res, next) => {
       },
     });
   } catch (err) {
-    console.error('Error filtering entities:', err);
     return next(err);
   }
 };
