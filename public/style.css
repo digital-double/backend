@@ -5,24 +5,69 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Vertically center */
-    justify-content: center; /* Horizontally center */
-    background-color: #101129; /* Darker background color */
-    font-family: 'Arial', sans-serif; /* Sans-serif font */
+    align-items: center;
+    justify-content: center;
+    background-color: #101129;
+    font-family: 'Arial', sans-serif;
     text-align: center;
 }
 
 /* Centered logo styling with blur effect */
 img {
-    min-width: 800px; /* Increase logo size */
-    height: auto; /* Maintain aspect ratio */
+    min-width: 800px; 
+    height: auto; 
 }
 
 /* Subtext styling */
 h1 {
-    margin-top: 20px; /* Add spacing above subtext */
-    font-size: 1.5rem; /* Adjust subtext size */
-    font-weight: 400; /* Light font weight */
-    color: rgb(255, 255, 255); /* White font */
-    opacity: 0.8; /* Slight transparency for a subtle look */
+    margin-top: 20px; 
+    font-size: 1.5rem; 
+    font-weight: 400; 
+    color: rgb(255, 255, 255); 
+    opacity: 0.8; 
+}
+
+/* For screens smaller than 1200px */
+@media (max-width: 1200px) {
+    img {
+        min-width: 600px; 
+    }
+    h1 {
+        font-size: 1.4rem; 
+    }
+}
+
+/* For screens smaller than 768px (tablets and small devices) */
+@media (max-width: 768px) {
+    img {
+        margin-right: 90px; 
+        max-width: 150px; 
+    }
+    h1 {
+        font-size: 1.2rem; 
+    }
+}
+
+/* For screens smaller than 480px (mobile devices) */
+@media (max-width: 480px) {
+    img {
+        margin-left: 250px; 
+        max-width: 150px; 
+    }
+    h1 {
+        margin-left: 150px; 
+        font-size: 1rem; 
+    }
+}
+
+
+@media (max-width: 320px) {
+    img {
+        margin-left: 350px; 
+        max-width: 150px; 
+    }
+    h1 {
+        margin-left: 250px; 
+        font-size: 1rem; 
+    }
 }
