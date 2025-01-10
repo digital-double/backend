@@ -102,7 +102,8 @@ If you cannot seed the data simply go to following link and sign up using the fo
 2. Enter the following keys `companyName`, `userName`, `email`, `password` and fill it with suitable values
 3. Go to the login and follow the steps there with the data you just entered
 
-## Application Deployment Diagram
+## Continuous Integration/Delivery
+This repository includes a CI/CD pipeline (Github actions) to check pull requests and merge to the main branch. These GitHub actions automatically deploy the latest main branch using docker on render. render utilises its docker daemon process manager to keep our application online. The overview is as follows:
 ![Screenshot 2025-01-10 164839](https://github.com/user-attachments/assets/c09c1464-ca10-4c73-9b77-ddc0ed2b3fae)
 
 authors
