@@ -22,8 +22,8 @@ router.get('/', (_req, res) => {
 router.use('/app', appRoutes)
 router.use('/affiliates', affiliateRoutes)
 router.use('/users', userRoutes);
-router.use('/cats', categoryRoutes);
-router.use('/comps', companyRoutes);
+router.use('/categories', categoryRoutes);
+router.use('/companies', companyRoutes);
 router.use('/ads',advertisementRoutes)
 router.use('/vds', voidanceRoutes);
 router.use('/campaigns', campaignRoutes);
