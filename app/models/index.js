@@ -1,8 +1,7 @@
 const fs = require('fs');
-
 const path = require('path');
-
 const Sequelize = require('sequelize');
+
 
 require('dotenv').config();
 
@@ -13,7 +12,7 @@ const config = require('../../config/config')[env];
 const db = {};
 const sequelize =
   env === 'production'
-    ? new Sequelize(`${config.url}?sslmode=require`, config)
+    ? new Sequelize(`${config.url}`, config)
     : new Sequelize(config.database, config.username, config.password, {
         host: config.host,
         port: Number(config.DB_PORT),
