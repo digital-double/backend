@@ -4,9 +4,9 @@ const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
 const affiliate  = require('../controllers/affiliate.controller')
 
 
-router.get('/:uniqueIdentifier', affiliate.registerClick); //good
+router.get('/:uniqueIdentifier', affiliate.registerClick); 
 
-router.get('/analytics/:voidanceID', isLoggedIn,  affiliate.getAffiliateAnalytics); //good
+router.get('/analytics/:voidanceID', isLoggedIn,  affiliate.getAffiliateAnalytics);
 
 
 

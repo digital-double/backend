@@ -4,18 +4,18 @@ const router = express.Router();
 const user = require( '../controllers/user.controller.js');
 const session = require('../controllers/session.controller.js');
 const mailer = require('../controllers/mailer.controller.js');
-const { isLoggedIn } = require('../middlewares/authorization.middleware.js');
+const { isLoggedIn,isAccountOwner } = require('../middlewares/authorization.middleware.js');
 const { checkUsername, checkEmail,} = require('../middlewares/validation.middleware.js');
 
-router.get('/session', session.validateSession); //good
-router.get('/:userName', isLoggedIn, user.retrieveOne); // good but requires lower case sanitisation for data inputs
+router.get('/session', session.validateSession); 
+router.get('/:userName', isLoggedIn, user.retrieveOne); 
 
-router.post('/updatePassword/:token', user.replacePassword); // good
-router.post('/forgotPassword', user.setResetToken, mailer.sendResetPasswordInstructions); //broken
-router.post('/signup', checkUsername, checkEmail, user.expressSignup, passport.authenticate('local'), session.validationResponse); //good
+router.post('/updatePassword/:token', user.replacePassword); 
+router.post('/forgotPassword', user.setResetToken, mailer.sendResetPasswordInstructions); 
+router.post('/signup', checkUsername, checkEmail, user.expressSignup, passport.authenticate('local'), session.validationResponse); 
 
-router.patch('/updatePassword', isLoggedIn, user.updatePassword); //good
-router.patch('/:userName', isLoggedIn, user.updateOne); // good
+router.patch('/updatePassword/:userName', isLoggedIn, isAccountOwner, user.updatePassword); 
+router.patch('/:userName', isLoggedIn, isAccountOwner, user.updateOne); 
 
 
 

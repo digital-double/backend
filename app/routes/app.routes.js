@@ -6,12 +6,12 @@ const session = require('../controllers/session.controller.js');
 const passport = require('passport');
 
 
-router.get('/', isLoggedIn, app.getMain); //good
-router.get('/filter', isLoggedIn, app.retrieveFiltered) // good
-router.get('/:userName', isLoggedIn, app.getProfile) //good
-router.get('/:userName/notification', isLoggedIn, isAccountOwner, app.getnotification) // broken due isadmindatabase
+router.get('/', isLoggedIn, app.getMain); 
+router.get('/filter', isLoggedIn, app.retrieveFiltered) 
+router.get('/:userName', isLoggedIn, app.getProfile) 
+router.get('/:userName/notification', isLoggedIn, isAccountOwner, app.getnotification) 
 
-router.post('/login', passport.authenticate('local'), session.login); // good
-router.post('/logout', isLoggedIn, session.logout); // good
+router.post('/login', passport.authenticate('local'), session.login); 
+router.post('/logout', isLoggedIn, session.logout); 
 
 module.exports = router
