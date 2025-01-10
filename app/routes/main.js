@@ -23,7 +23,7 @@ router.use('/app', appRoutes)
 router.use('/affiliates', affiliateRoutes)
 router.use('/users', userRoutes);
 router.use('/cats', categoryRoutes);
-router.use('/orgs', companyRoutes);
+router.use('/comps', companyRoutes);
 router.use('/ads',advertisementRoutes)
 router.use('/vds', voidanceRoutes);
 router.use('/campaigns', campaignRoutes);
