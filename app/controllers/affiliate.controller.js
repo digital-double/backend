@@ -41,7 +41,7 @@ exports.registerClick = async (req, res, next) => {
           hashedIPAddress: hashedIP,
         });
       }
-      console.log(affiliateLink.redirectTo)
+
       return res.redirect(affiliateLink.redirectTo);
       } catch (err) {
         console.error(err)

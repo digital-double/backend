@@ -1,5 +1,3 @@
-// checks if user is logged in
-const { CompanyAdmin } = require('../models');
 
 exports.isLoggedIn = (req, _res, next) => {
     const { user } = req;
@@ -30,7 +28,7 @@ exports.isCompany = async (req, res, next) => {
 
 exports.isAdmin = async (req, res, next) => {
   const {accessRights} = req.user
-  console.log(accessRights)
+
   if(accessRights !== 'admin') {
     return res.status(403).json({ message: 'Access forbidden' });
   }

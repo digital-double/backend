@@ -5,7 +5,6 @@ const { isLoggedIn, isAccountOwner } = require('../middlewares/authorization.mid
 const session = require('../controllers/session.controller.js');
 const passport = require('passport');
 
-
 router.get('/', isLoggedIn, app.getMain); //good
 router.get('/filter', isLoggedIn, app.retrieveFiltered) // good
 router.get('/:userName', isLoggedIn, app.getProfile) //good

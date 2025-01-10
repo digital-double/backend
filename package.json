@@ -52,7 +52,9 @@
     "postgres": "^3.4.5",
     "sanitize": "^2.1.2",
     "sequelize": "^6.37.3",
-    "stripe": "^17.5.0"
+    "stripe": "^17.5.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.6",

@@ -104,7 +104,7 @@ exports.getProfile = async (req, res, next) =>{
         throw new StatusError(`Username ${userName}`, 404);
       }
       
-      console.log(user.id )
+
       const voidances = await Voidance.findAll({
         where: { userID: user.id },
         attributes: {

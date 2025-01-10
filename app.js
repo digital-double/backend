@@ -4,10 +4,7 @@ const morgan = require('morgan');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const mainRoute = require('./app/routes/main');
-const {
-  noPathHandler,
-  errorHandler,
-} = require('./app/middlewares/error_handlers.middleware');
+const {noPathHandler,errorHandler,} = require('./app/middlewares/error_handlers.middleware');
 const { setHeaders } = require('./app/middlewares/headers.middleware');
 const db = require('./app/models');
 const path = require('path');
@@ -49,7 +46,7 @@ app.use(
       httpOnly: true,
       sameSite: ['production'].includes(process.env.NODE_ENV) ? 'none' : 'lax',
       secure: ['production'].includes(process.env.NODE_ENV),
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
+      maxAge: 1000 * 60 * 60 * 24 * 7, 
     },
   })
 );
