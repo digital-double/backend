@@ -5,16 +5,16 @@ const { isLoggedIn, isCompany, isAccountOwner } = require('../middlewares/author
 const upload = require('../middlewares/upload.middleware.js')
 
 
-router.get('/:userName/invites', isLoggedIn, isAccountOwner, voidance.getAllVoidanceInvites); //good
-router.get('/:userName', isLoggedIn, isAccountOwner, voidance.getAllVoidances); //good
-router.get('/search/:id', isLoggedIn, voidance.getVoidanceById); //good
+router.get('/:userName/invites', isLoggedIn, isAccountOwner, voidance.getAllVoidanceInvites); 
+router.get('/:userName', isLoggedIn, isAccountOwner, voidance.getAllVoidances); 
+router.get('/search/:id', isLoggedIn, voidance.getVoidanceById); 
 
-router.post('/invites', isLoggedIn, isCompany, voidance.postVoidanceInvite); //good prob fucked as well
-router.post('/:userName', isLoggedIn, isAccountOwner, upload.single('image'), voidance.createVoidance); //will come back to it
+router.post('/invites', isLoggedIn, isCompany, voidance.postVoidanceInvite); 
+router.post('/:userName', isLoggedIn, isAccountOwner, upload.single('image'), voidance.createVoidance); 
 
-router.patch('/:userName/:id', isLoggedIn, isAccountOwner, voidance.voidanceUpdateStatus); // fucked
+router.patch('/:userName/invite/:id', isLoggedIn, isAccountOwner, voidance.voidanceUpdateStatus);
 
-router.delete('/:userName/:id', isLoggedIn, isAccountOwner, voidance.deleteVoidance); // good
-router.delete('/:userName/invites/:id', isLoggedIn, isCompany, voidance.deleteVoidanceInvite); //good
+router.delete('/:userName/:id', isLoggedIn, isAccountOwner, voidance.deleteVoidance); 
+router.delete('/:userName/invites/:id', isLoggedIn, isCompany, voidance.deleteVoidanceInvite); 
 
 module.exports = router;

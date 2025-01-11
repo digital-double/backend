@@ -35,23 +35,9 @@ exports.createCampaign = async (req, res, next) => {
       
       const newCampaign = await Campaign.create(req.body);
 
-      const createdCampaign = await Campaign.findOne({
-        where: { id: newCampaign.id },
-        include: [
-          {
-            model: Company,
-            required: true,
-            attributes: ['companyName', 'logo'], 
-          },
-        ],
-        attributes: {
-          exclude: ['deletedAt', 'createdAt'], 
-        },
-      });
-
       return res.status(201).json({
         message: 'Campaign created successfully',
-        data: createdCampaign,
+        data: newCampaign,
       });
     } catch (err) {
       return next(err);
@@ -67,21 +53,8 @@ exports.updateCampaign = async (req, res, next) => {
         throw new StatusError("campaign",404)
       }
 
-      await campaign.update(req.body);
+      const updatedCampaign = await campaign.update(req.body);
 
-      const updatedCampaign = await Campaign.findOne({
-        where: { id: campaign.id },
-        include: [
-          {
-            model: Company,
-            required: true,
-            attributes: ['companyName', 'logo'], 
-          },
-        ],
-        attributes: {
-          exclude: ['deletedAt', 'createdAt', 'updatedAt'], 
-        },
-      });
 
       return res.status(200).json({
         message: 'Campaign updated successfully',
@@ -113,7 +86,6 @@ exports.getAdvertisementsInCampaign = async (req, res, next) => {
     return next(err); 
   }
 };
-
 
 exports.deleteCampaign = async (req, res, next) => {
     try {

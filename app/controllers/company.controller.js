@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Company, Campaign } = db 
+const { Company } = db 
 
 
 exports.getAllCompanies = async (req, res, next) => {
@@ -20,12 +20,11 @@ exports.getAllCompanies = async (req, res, next) => {
   }
 },
 
-
 exports.updateCompany = async (req, res, next) =>{
   try {
-    const { id } = req.body;
+    const { companyID } = req.user;
 
-    const company = await Company.findByPk(id);
+    const company = await Company.findByPk(companyID);
 
     if (!company) {
       throw new StatusError("company",404)
@@ -45,12 +44,12 @@ exports.updateCompany = async (req, res, next) =>{
 
 exports.deleteCompany = async (req, res, next) =>{
    try {
-     const { id } = req.body;
+     const { companyID } = req.user;
 
-     const company = await Company.findByPk(id);
+     const company = await Company.findByPk(companyID);
 
      if (!company) {
-       throw new StatusError("campaign",404)
+       throw new StatusError("company",404)
      }
 
      await company.destroy();

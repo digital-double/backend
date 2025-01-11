@@ -7,12 +7,12 @@ const { User } = db;
 exports.updateOne = async (req, res, next) => {
   try {
     const { userName } = req.params;
-
-    const user = await User.findByLogin('userName', userName);
-
     if ('password' in req.body) {
       throw new StatusError('user', 403);
     }
+
+    const user = await User.findByLogin('userName', userName);
+
     if (!user) {
       throw new StatusError('User credentials', 404);
     }

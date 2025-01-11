@@ -6,6 +6,7 @@ const category = require('../controllers/category.controller')
 
 
 router.post('/', isLoggedIn, category.postUserCategory); 
+
 router.get('/', isLoggedIn, category.getUserCategory); 
 router.get('/models', isLoggedIn, category.getCategoryUsers);
 

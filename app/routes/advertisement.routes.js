@@ -5,12 +5,12 @@ const { isLoggedIn, isCompany, isAccountOwner } = require('../middlewares/author
 const upload = require('../middlewares/upload.middleware.js')
 
 
-router.get('/:userName', isLoggedIn, advertisement.getAdvertisementById); //good
+router.get('/', isLoggedIn, advertisement.getAdvertisementById); 
 
-router.post('/:userName', isLoggedIn, upload.single('image'), advertisement.createAdvertisement); //good
+router.post('/:userName', isLoggedIn, isAccountOwner, upload.single('image'), advertisement.createAdvertisement); 
 
 //missing a patch route
 
-router.delete('/:userName', isLoggedIn, isCompany, isAccountOwner, advertisement.deleteAdvertisement); //good
+router.delete('/:userName', isLoggedIn, isCompany, isAccountOwner, advertisement.deleteAdvertisement); 
 
 module.exports = router

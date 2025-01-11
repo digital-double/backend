@@ -20,15 +20,15 @@ router.get('/', (_req, res) => {
 });
 
 router.use('/app', appRoutes)
-router.use('/affiliate', affiliateRoutes)
+router.use('/affiliates', affiliateRoutes)
 router.use('/users', userRoutes);
-router.use('/cat', categoryRoutes);
+router.use('/categories', categoryRoutes);
 router.use('/companies', companyRoutes);
 router.use('/ads',advertisementRoutes)
 router.use('/vds', voidanceRoutes);
-router.use('/campaign', campaignRoutes);
+router.use('/campaigns', campaignRoutes);
 router.use('/instagram', instagramRoutes);
-router.use('/payment', stripeRoutes);
+router.use('/payments', stripeRoutes);
 
 router.post('/csp-reports', (req, res) => {
   console.error(req.body);
