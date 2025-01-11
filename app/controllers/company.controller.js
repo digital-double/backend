@@ -20,7 +20,6 @@ exports.getAllCompanies = async (req, res, next) => {
   }
 },
 
-
 exports.updateCompany = async (req, res, next) =>{
   try {
     const { companyID } = req.user;

@@ -33,7 +33,7 @@ exports.postVoidanceInvite = async (req, res, next) => {
       message,
       CPC,
       campaignName,
-      companyID,
+      userID,
       advertisementID,
     } = req.body;
 
@@ -45,8 +45,7 @@ exports.postVoidanceInvite = async (req, res, next) => {
     // Check for existing invite
     const existingInvite = await VoidanceInvite.findOne({
       where: {
-        userID: req.user.id,
-        ...(companyID && { companyID }),
+        userID: userID,
         ...(advertisementID && { advertisementID }),
         campaignName,
       },
@@ -63,12 +62,11 @@ exports.postVoidanceInvite = async (req, res, next) => {
     // Create new invite
     const invite = await VoidanceInvite.create(
       {
-        userID: req.user.id,
+        userID: userID,
         subject,
         message,
         CPC,
         campaignName,
-        companyID: companyID || null,
         advertisementID: advertisementID || null,
         status: 'pending_user',
       },
@@ -91,11 +89,12 @@ exports.postVoidanceInvite = async (req, res, next) => {
 exports.deleteVoidanceInvite = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const {userID} = req.body
 
     const deleted = await VoidanceInvite.destroy({
       where: {
         id,
-        userID: req.user.id,
+        userID
       },
     });
 
@@ -118,29 +117,31 @@ exports.voidanceUpdateStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-
+  
     const validStatuses = ['accepted', 'declined'];
     if (!validStatuses.includes(status)) {
       throw new StatusError('invalid status', 400);
     }
-
+  
     const voidanceInvite = await VoidanceInvite.findOne({
       where: { id },
       transaction: t,
     });
-
+  
     if (!voidanceInvite) {
-      await t.rollback();
       throw new StatusError('invite', 404);
     }
-
-    if (status === 'accepted') {
-      await t.commit();
-
-    return res.status(200).send({
-      message: 'Voidance invite status updated successfully',
-      voidanceInvite,
-    });
+  
+    if (status === 'accepted' || status === 'declined') {
+      voidanceInvite.status = status; 
+      await voidanceInvite.save({ transaction: t }); 
+  
+      await t.commit(); 
+  
+      return res.status(200).send({
+        message: 'Voidance invite status updated successfully',
+        voidanceInvite,
+      });
     }
   } catch (err) {
     await t.rollback();
@@ -184,7 +185,7 @@ exports.getVoidanceById = async (req, res, next) => {
     }
 
     return res.status(200).send({
-      message: 'Generated voidance retrieved successfully',
+      message: 'voidance retrieved successfully',
       voidance,
     });
   } catch (err) {
