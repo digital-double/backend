@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const { Campaign, Company,Advertisement } = db
+const { Campaign,Advertisement } = db
 
 exports.getAllCampaigns = async (req, res, next)=>{
   const { companyID } = req.user
