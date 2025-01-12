@@ -26,8 +26,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      stripeID: {
-        type: Sequelize.STRING,
+      stripeId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      accountId: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       isCompany:{

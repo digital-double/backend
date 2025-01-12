@@ -1,4 +1,5 @@
 const db = require('../models');
+const {createStripeCustomer, createStripeAccount} = require('./stripe.controller')
 
 const { CompanyAdmin, Company, Campaign } = db;
 
@@ -24,6 +25,11 @@ exports.getCompanyAdmins = async (req, res, next) => {
 
 exports.createCompanyAndAdmin = async (req, res, next) => {
     try{
+      const stripeId = await createStripeCustomer(req, res, next)
+      const accountId = await createStripeAccount(req, "company")
+      req.body.stripeId = stripeId.id
+      req.body.accountId = accountId.id
+
       const data = await Company.createCompany(req)
 
       const {email, password} = req.body

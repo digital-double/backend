@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
-    static createNewUser(userName, email, password, stripeID) {
+    static createNewUser(userName, email, password, stripeId, accountId) {
       return bcrypt
         .hash(password, 12)
         .then((passwordHash) => {
@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
               ...{ userName },
               ...{ email },
               ...{ passwordHash },
-              ...{ stripeID },
+              ...{ stripeId },
+              ...{ accountId },
             },
           });
         })
@@ -134,7 +135,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     address: DataTypes.STRING,
-    stripeID: DataTypes.STRING,
+    stripeId: DataTypes.STRING,
+    accountId: DataTypes.STRING,
     country: DataTypes.STRING,
     city: DataTypes.STRING,
     banned: DataTypes.BOOLEAN,

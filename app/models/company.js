@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static createCompany = async (req) => {
       try {
-        const {userName, companyName,} = req.body
+        const {userName, companyName} = req.body
     
         if(!userName || !companyName){
           throw new StatusError("missing data", 409)
@@ -74,6 +74,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: Sequelize.literal('uuid_generate_v4()'),
     },
+    stripeId: DataTypes.STRING,
+    accountId: DataTypes.STRING,
     companyName: DataTypes.STRING,
     userName: DataTypes.STRING,
     logo: DataTypes.STRING,

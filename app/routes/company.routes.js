@@ -6,6 +6,7 @@ const companyAdmin  = require('../controllers/companyAdmin.controller')
 const { checkUsername, checkEmail,} = require('../middlewares/validation.middleware.js');
 
 
+
 router.get('/', isLoggedIn, company.getAllCompanies); 
 
 router.post('/signup', checkUsername, checkEmail, companyAdmin.createCompanyAndAdmin); 
