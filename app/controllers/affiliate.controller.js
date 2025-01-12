@@ -7,7 +7,7 @@ require('dotenv').config();
 
 
 function hashIPAddress(ipAddress) {
-  const hash = crypto.createHash("sha256"); // Use a secure hashing algorithm
+  const hash = crypto.createHash("sha256"); 
   hash.update(ipAddress);
   return hash.digest("hex");
 }
