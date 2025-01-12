@@ -10,7 +10,7 @@ router.post('/', isLoggedIn, category.postUserCategory);
 router.get('/', isLoggedIn, category.getUserCategory); 
 router.get('/models', isLoggedIn, category.getCategoryUsers);
 
-router.delete('/', isLoggedIn, category.deleteCategoriesByTypes); 
+router.delete('/:userName', isLoggedIn, category.deleteCategoriesByTypes); 
 
 
 module.exports = router;

@@ -36,7 +36,7 @@ exports.getCheckout = async (req, res, next) => {
   }
 }
 
-exports.createUser = async (req, res, next) => {
+exports.createStripeCustomer = async (req) => {
   try {
     const customer = await stripe.customers.create({
       name: req.body.name,
@@ -45,7 +45,31 @@ exports.createUser = async (req, res, next) => {
 
     return customer
   } catch (err) {
-    res.status(err.statusCode || 500).json(err.message);
+    throw new StatusError("stripe error", 400)
+  }
+}
+
+exports.createStripeAccount = async (req, business_type ) => {
+  try {
+    const account = await stripe.accounts.create({
+      country: req.country,
+      email: req.email,
+      business_type: business_type,
+      controller: {
+        fees: {
+          payer: 'application',
+        },
+        losses: {
+          payments: 'application',
+        },
+        stripe_dashboard: {
+          type: 'express',
+        },
+      },
+    });
+    return account
+  } catch (err) {
+    throw new StatusError("stripe error", 400)
   }
 }
 

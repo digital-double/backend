@@ -13,6 +13,14 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
+      stripeId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      accountId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       companyName: {
         type: Sequelize.STRING,
         allowNull: false,

@@ -1,5 +1,5 @@
 const db = require('../models');
-const {createUser} = require('./stripe.controller')
+const {createStripeCustomer, createStripeAccount} = require('./stripe.controller')
 
 const { User } = db;
 
@@ -116,9 +116,10 @@ exports.expressSignup = async (req, res, next) => {
     body: { userName, email, password },
   } = req;
 
-    const stripeID = await createUser(req, res, next)
+    const stripeId = await createStripeCustomer(req, res, next)
+    const accountId = await createStripeAccount(req, "individual")
 
-    User.createNewUser(userName, email, password, stripeID.id)
+    User.createNewUser(userName, email, password, stripeId.id, accountId.id)
     .then((user) => {
       
       res.locals.user = user;
