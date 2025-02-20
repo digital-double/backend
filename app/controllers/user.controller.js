@@ -119,15 +119,12 @@ exports.expressSignup = async (req, res, next) => {
     const stripeId = await createStripeCustomer(req, res, next)
     const accountId = await createStripeAccount(req, "individual")
 
-    User.createNewUser(userName, email, password, stripeId.id, accountId.id)
-    .then((user) => {
-      
+    const user = await User.createNewUser(userName, email, password, stripeId.id, accountId.id)
+    
+
       res.locals.user = user;
       req.body.userCredential = userName;
       return next();
-      
-    })
-    .catch((err) => next(err));
   }
   catch(err){
     return next(err)

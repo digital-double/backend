@@ -10,6 +10,7 @@ router.get('/:userName', isLoggedIn, isAccountOwner, voidance.getAllVoidances);
 router.get('/search/:id', isLoggedIn, voidance.getVoidanceById); 
 
 router.post('/invites', isLoggedIn, isCompany, voidance.postVoidanceInvite); 
+router.post('/generate', isLoggedIn, voidance.reroute); 
 router.post('/:userName', isLoggedIn, isAccountOwner, upload.single('image'), voidance.createVoidance); 
 
 router.patch('/:userName/invite/:id', isLoggedIn, isAccountOwner, voidance.voidanceUpdateStatus);

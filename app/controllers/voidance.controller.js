@@ -23,6 +23,16 @@ exports.getAllVoidanceInvites = async (req, res, next) => {
   }
 };
 
+exports.reroute = (req, res) => {
+  const targetUrl = process.env.AI_REROUTE;
+
+  if (!targetUrl) {
+      return res.status(500).json({ error: 'AI_REROUTE environment variable is not set' });
+  }
+
+  res.redirect(targetUrl);
+};
+
 // @middleware: isLoggedIn
 exports.postVoidanceInvite = async (req, res, next) => {
   const t = await db.sequelize.transaction();

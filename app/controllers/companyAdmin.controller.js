@@ -1,7 +1,7 @@
 const db = require('../models');
 const {createStripeCustomer, createStripeAccount} = require('./stripe.controller')
 
-const { CompanyAdmin, Company, Campaign } = db;
+const { CompanyAdmin, Company } = db;
 
 
 exports.getCompanyAdmins = async (req, res, next) => {
@@ -21,7 +21,6 @@ exports.getCompanyAdmins = async (req, res, next) => {
       return next(err);
     }
 };
-
 
 exports.createCompanyAndAdmin = async (req, res, next) => {
     try{
