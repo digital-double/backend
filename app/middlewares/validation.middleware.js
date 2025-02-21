@@ -41,5 +41,5 @@ exports.validateAdvertisementRequestBody = (req, _res, next) => {
       throw new StatusError(`Missing required fields: ${missingFields.join(', ')}`, 400);
     }
 
-    return next();
+    next();
 }
