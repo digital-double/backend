@@ -21,3 +21,25 @@ exports.checkUsername = (req, _res, next) => {
       return next();
     });
 };
+
+exports.validateAdvertisementRequestBody = (req, _res, next) => {
+    const requiredFields = [
+      'campaignID',
+      'title',
+      'Status',
+      'adStart',
+      'adEnd',
+      'alocatedBudget',
+      'description',
+      'avgCPC',
+      'name',
+    ];
+  
+    const missingFields = requiredFields.filter(field => !req.body[field]);
+  
+    if (missingFields.length > 0) {
+      throw new StatusError(`Missing required fields: ${missingFields.join(', ')}`, 400);
+    }
+
+    return next();
+}

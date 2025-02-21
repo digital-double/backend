@@ -1,17 +1,8 @@
 const db = require('../models');
 const { AffiliateLink, ReferralIP  } = db;
-const crypto = require("crypto");
-
+const {hashIPAddress} = require('../util/IpHashing');
 
 require('dotenv').config();
-
-
-function hashIPAddress(ipAddress) {
-  const hash = crypto.createHash("sha256"); 
-  hash.update(ipAddress);
-  return hash.digest("hex");
-}
-
 
 exports.registerClick = async (req, res, next) => {
     try {
@@ -20,7 +11,7 @@ exports.registerClick = async (req, res, next) => {
       const hashedIP = hashIPAddress(ipAddress); 
 
       const affiliateLink = await AffiliateLink.findOne({
-        where: { link: `${process.env.BASE_URL}/affiliate/${uniqueIdentifier}` },
+        where: { link: `${process.env.BASE_URL}/affiliates/${uniqueIdentifier}` },
       });
      
       if (!affiliateLink || affiliateLink.lenght == 0) {

@@ -7,7 +7,7 @@ require('dotenv').config();
 exports.generateAffiliateLink = async (voidanceID, redirectTo) => {
   try {
     const uniqueIdentifier = crypto.randomBytes(8).toString('hex'); // Generate a unique token
-    const link = `${process.env.BASE_URL}/affiliate/${uniqueIdentifier}`;
+    const link = `${process.env.BASE_URL}/affiliates/${uniqueIdentifier}`;
 
     if(!voidanceID || !redirectTo) throw new StatusError("missing data", 400)
 

@@ -215,7 +215,7 @@ exports.createVoidance = async (req, res, next) => {
     const voidance = await Voidance.create({
       ...voidanceData,
       userID: req.user.id,
-      imagePath: req.file.path, // File path saved by multer
+      imagePath: req.file.path, 
     });
 
     const affiliateLink = await generateAffiliateLink(voidance.id, redirectTo);

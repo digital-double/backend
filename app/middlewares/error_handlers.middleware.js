@@ -51,7 +51,7 @@ global.StatusError = class extends Error {
         break;
   
       case 500:
-        message = `Internal Server Error: ${message}`;
+        message = `Internal Server Error: ${err.message}`;
         break;
   
       default:

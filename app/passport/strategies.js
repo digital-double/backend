@@ -8,7 +8,6 @@ const {
 } = db;
 
 async function checkTypeOfuser(userCredential){
-  console.log('we in check')
   const user =
             (await User.findOne({
               where: {
@@ -27,14 +26,13 @@ exports.register = async (passport) => {
   passport.use(
     new LocalStrategy(
       {
-        usernameField: 'userCredential',  // keep this for flexibility
-        passwordField: 'password', // This ensures 'password' as the field for passwords
+        usernameField: 'userCredential', 
+        passwordField: 'password', 
       },
       async (userCredential, password, done) => {
-
         try {
           const user = await checkTypeOfuser(userCredential)
-
+          
           if (!user) {
             return done(null, false, { message: 'Incorrect credentials.' });
           }
