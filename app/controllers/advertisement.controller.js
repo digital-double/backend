@@ -6,10 +6,9 @@ const { Advertisement } = db;
 
 exports.createAdvertisement = async (req, res, next) => {
   try {
-
     const advertisement = await Advertisement.create({
       ...req.body,
-      imagePath: req.file.path, S
+      imagePath: req.file.path,
     });
 
     return res.status(201).json({
@@ -17,7 +16,6 @@ exports.createAdvertisement = async (req, res, next) => {
       data: advertisement,
     });
   } catch (err) {
-    console.error(err);
     return next(err);
   }
 };
