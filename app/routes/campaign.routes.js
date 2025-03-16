@@ -7,7 +7,7 @@ const campaign = require('../controllers/campaign.controller')
 router.get('/ad/:campaignID', isLoggedIn, campaign.getAdvertisementsInCampaign);  
 router.get('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.getAllCampaigns);
 
-router.post('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.createCampaign); 
+router.post('/:userName',  campaign.createCampaign); 
 
 router.patch('/:userName', isLoggedIn, isCompany, isAccountOwner, campaign.updateCampaign); 
 

@@ -8,7 +8,7 @@ exports.createAdvertisement = async (req, res, next) => {
   try {
     const advertisement = await Advertisement.create({
       ...req.body,
-      imagePath: req.file.path,
+      // imagePath: req.file.path,
     });
 
     return res.status(201).json({
@@ -37,7 +37,7 @@ exports.downloadImage = async (req, res) => {
 
       res.sendFile(imagePath);
   } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      return next(err);
   }
 };
 

@@ -9,7 +9,8 @@ const upload = require('../middlewares/upload.middleware.js')
 router.get('/', isLoggedIn, advertisement.getAdvertisementById); 
 router.get('/:id', isLoggedIn, advertisement.downloadImage);
 
-router.post('/:userName', isLoggedIn, isAccountOwner, isCompany, upload.single('image'), validateAdvertisementRequestBody, advertisement.createAdvertisement); 
+router.post('/:userName', advertisement.createAdvertisement); 
+// isLoggedIn, isAccountOwner, isCompany, upload.single('image'), validateAdvertisementRequestBody,
 
 router.delete('/:userName', isLoggedIn, isCompany, isAccountOwner, advertisement.deleteAdvertisement)
 

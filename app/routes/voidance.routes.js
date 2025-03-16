@@ -11,7 +11,8 @@ router.get('/search/:id', isLoggedIn, voidance.getVoidanceById);
 
 router.post('/invites', isLoggedIn, isCompany, voidance.postVoidanceInvite); 
 router.post('/generate', isLoggedIn, voidance.reroute); 
-router.post('/:userName', isLoggedIn, isAccountOwner, upload.single('image'), voidance.createVoidance); 
+router.post('/:userName', voidance.createVoidance); 
+// isLoggedIn, isAccountOwner, upload.single('image'),
 
 router.patch('/:userName/invite/:id', isLoggedIn, isAccountOwner, voidance.voidanceUpdateStatus);
 
